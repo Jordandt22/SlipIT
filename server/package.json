@@ -1,0 +1,26 @@
+{
+  "name": "SlipIT- API Server",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "server": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "Jordandt22",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "express-slow-down": "^2.1.0",
+    "helmet": "^8.1.0",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.15.0",
+    "morgan": "^1.10.0",
+    "uuid": "^11.1.0",
+    "yup": "^1.6.1"
+  }
+}
