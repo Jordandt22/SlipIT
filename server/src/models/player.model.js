@@ -1,27 +1,5 @@
 const mongoose = require("mongoose");
 
-// Player Game Schema
-const PlayerGameSchema = new mongoose.Schema({
-  gameID: String,
-  stats: {
-    batting: {
-      atBats: Number,
-      hits: Number,
-      hitterStrikeouts: Number,
-      hitterWalks: Number,
-      homeruns: Number,
-      RBI: Number,
-    },
-    pitching: {
-      innningsPitched: Number,
-      pitcherStrikeouts: Number,
-      pitcherWalks: Number,
-      hitsAllowed: Number,
-      earnedRuns: Number,
-    },
-  },
-});
-
 // Player Slip Schema
 const PlayerSlipSchema = new mongoose.Schema({
   slipID: String,
@@ -49,12 +27,10 @@ const PlayerSchema = new mongoose.Schema({
     image: String,
   },
   playerStats: {
-    games: [PlayerGameSchema],
+    games: [{ gameID: String }],
   },
   slipsPlayed: [PlayerSlipSchema],
+  seasonsPlayed: [{ seasonID: String }],
 });
 
-// Collections
-module.exports = {
-  PlayerModel: mongoose.model("Player", PlayerSchema),
-};
+module.exports = mongoose.model("Player", PlayerSchema);
