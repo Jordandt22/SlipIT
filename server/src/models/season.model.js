@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // Contestant Schema
 const ContestantSchema = new mongoose.Schema({
-  playerID: String,
+  uid: String,
   result: {
     startBalance: Number,
     endBalance: Number,

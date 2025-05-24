@@ -18,7 +18,7 @@ const PickSchema = new mongoose.Schema({
     stat: String,
     value: Number,
   },
-  usersPlayed: [{ playerID: String }],
+  usersPlayed: [{ uid: String }],
 });
 
 module.exports = mongoose.model("Pick", PickSchema);
