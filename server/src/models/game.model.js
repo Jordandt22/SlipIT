@@ -2,22 +2,22 @@ const mongoose = require("mongoose");
 
 // Game Player Schema
 const GamePlayerSchema = new mongoose.Schema({
-  playedID: String,
+  playerID: String,
   stats: {
     batting: {
-      atBats: Number,
-      hits: Number,
-      hitterStrikeouts: Number,
-      hitterWalks: Number,
-      homeruns: Number,
-      RBI: Number,
+      atBats: { type: Number, default: 0 },
+      hits: { type: Number, default: 0 },
+      hitterStrikeouts: { type: Number, default: 0 },
+      hitterWalks: { type: Number, default: 0 },
+      homeruns: { type: Number, default: 0 },
+      RBI: { type: Number, default: 0 },
     },
     pitching: {
-      innningsPitched: Number,
-      pitcherStrikeouts: Number,
-      pitcherWalks: Number,
-      hitsAllowed: Number,
-      earnedRuns: Number,
+      innningsPitched: { type: Number, default: 0 },
+      pitcherStrikeouts: { type: Number, default: 0 },
+      pitcherWalks: { type: Number, default: 0 },
+      hitsAllowed: { type: Number, default: 0 },
+      earnedRuns: { type: Number, default: 0 },
     },
   },
 });
@@ -25,8 +25,8 @@ const GamePlayerSchema = new mongoose.Schema({
 // Game Schema
 const GameSchema = new mongoose.Schema({
   gameID: String,
-  datePlayed: Date,
-  status: Number, // Not-Started=0, In-Progress=1, Ended=2
+  eventDate: Date,
+  status: { type: Number, default: 0 }, // Not-Started=0, In-Progress=1, Ended=2
   players: [GamePlayerSchema],
 });
 

@@ -65,6 +65,12 @@ app.use(
   require("./routes/players.routes")
 );
 
+// Routes for Games
+app.use(
+  `/v${process.env.API_VERSION}/api/games`,
+  require("./routes/games.routes")
+);
+
 // PORT and Sever
 const PORT = process.env.PORT || 8000;
 const server = http.createServer(app);

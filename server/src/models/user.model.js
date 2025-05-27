@@ -10,7 +10,7 @@ const UserSlipSchema = new mongoose.Schema({
     {
       pickID: String,
       isUnder: Boolean,
-      result: Number, // 0 = Not-Started, 1 = Success, 2 = Failed
+      result: { type: Number, default: 0 }, // 0 = Not-Started, 1 = Success, 2 = Failed
     },
   ],
 });
