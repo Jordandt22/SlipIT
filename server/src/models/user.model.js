@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // User Slip Schema
-const PlayerSlipSchema = new mongoose.Schema({
+const UserSlipSchema = new mongoose.Schema({
   slipID: String,
   betAmount: Number,
   multiplier: Number,
@@ -10,6 +10,7 @@ const PlayerSlipSchema = new mongoose.Schema({
     {
       pickID: String,
       isUnder: Boolean,
+      result: Number, // 0 = Not-Started, 1 = Success, 2 = Failed
     },
   ],
 });
@@ -18,7 +19,7 @@ const PlayerSlipSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
   uid: String,
   playerInfo: {
-    playerID: String,
+    playerID: { type: String, default: null },
     isPlayer: Boolean,
   },
   userInfo: {
@@ -27,8 +28,10 @@ const UserSchema = new mongoose.Schema({
     currentPoints: Number,
     currentBalance: Number,
   },
-  slipsPlayed: [PlayerSlipSchema],
-  seasonsPlayed: [{ seasonID: String }],
+  slipsPlayed: [UserSlipSchema],
+  leagueInfo: {
+    played: [{ leagueID: String }],
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

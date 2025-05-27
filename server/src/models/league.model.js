@@ -12,13 +12,13 @@ const ContestantSchema = new mongoose.Schema({
   },
 });
 
-// Season Schema
-const SeasonSchema = new mongoose.Schema({
-  seasonID: String,
+// League Schema 
+const LeagueSchema = new mongoose.Schema({
+  leagueID: String,
   startDate: Date,
   endDate: Date,
   status: Number, // Not-Started=0, In-Progress=1, Ended=2
   contestants: [ContestantSchema],
 });
 
-module.exports = mongoose.model("Season", SeasonSchema);
+module.exports = mongoose.model("League", LeagueSchema);

@@ -25,7 +25,6 @@ const GamePlayerSchema = new mongoose.Schema({
 // Game Schema
 const GameSchema = new mongoose.Schema({
   gameID: String,
-  seasonID: String,
   datePlayed: Date,
   status: Number, // Not-Started=0, In-Progress=1, Ended=2
   players: [GamePlayerSchema],

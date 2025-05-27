@@ -4,9 +4,6 @@ const mongoose = require("mongoose");
 const PickSchema = new mongoose.Schema({
   pickID: String,
   uploadDate: Date,
-  season: {
-    seasonID: String,
-  },
   game: {
     gameID: String,
   },

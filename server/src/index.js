@@ -53,7 +53,13 @@ app.get("/", (req, res) => {
 
 // ---- API Routes ----
 
-// Routes for Jobs
+// Routes for Users
+app.use(
+  `/v${process.env.API_VERSION}/api/users`,
+  require("./routes/users.routes")
+);
+
+// Routes for Players
 app.use(
   `/v${process.env.API_VERSION}/api/players`,
   require("./routes/players.routes")

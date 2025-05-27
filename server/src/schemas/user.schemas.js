@@ -1,33 +1,33 @@
 const Yup = require("yup");
 
-// PlayerID Schema
-const PlayerIDSchema = Yup.object({
-  playerID: Yup.string()
-    .trim()
-    .min(1)
-    .max(500)
-    .required("A PlayerID is required."),
-});
-
-// Player Schema
-const PlayerSchema = Yup.object({
+// User Schema
+const UserSchema = Yup.object({
   userInfo: Yup.object({
     username: Yup.string()
       .trim()
       .min(3, "Username MUST be atleast 3 characters.")
       .max(100, "Username exceeds the max character limit (100).")
       .required("A username is required."),
+    email: Yup.string()
+      .trim()
+      .min(1, "Please enter a valid email.")
+      .max(200, "Email exceeds the character limit (200).")
+      .email("Please enter a valid email.")
+      .required("Please enter a valid email."),
+    password: Yup.string()
+      .trim()
+      .min(8, "Password must be atleast 8 characters.")
+      .max(300, "Password exceeds the character limit (300).")
+      .matches(
+        /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+        "Must contain atleast 1 upper and lower case letter, 1 number, and 1 special symbol."
+      )
+      .required("Must create a password."),
   }),
   playerInfo: Yup.object({
-    name: Yup.string()
-      .trim()
-      .min(1, "Player Name MUST be atleast 3 characters.")
-      .max(100, "Player Name exceeds the max character limit (100).")
-      .required("A Player Name is required."),
-    image: Yup.string()
-      .url("Must be a valid URL.")
-      .required("Image CDN URL is required."),
+    isPlayer: Yup.boolean().required(),
+    playerID: Yup.string().trim().max(500),
   }),
 });
 
-module.exports = { PlayerSchema, PlayerIDSchema };
+module.exports = { UserSchema };
