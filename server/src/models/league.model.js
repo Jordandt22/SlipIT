@@ -15,10 +15,13 @@ const ContestantSchema = new mongoose.Schema({
 // League Schema
 const LeagueSchema = new mongoose.Schema({
   leagueID: String,
-  name: String,
-  startDate: Date,
-  endDate: Date,
   status: { type: Number, default: 0 }, // Not-Started=0, In-Progress=1, Ended=2
+  leagueInfo: {
+    name: String,
+    startDate: Date,
+    endDate: Date,
+    startingBalance: Number,
+  },
   contestants: [ContestantSchema],
 });
 

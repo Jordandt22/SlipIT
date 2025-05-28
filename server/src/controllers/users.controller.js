@@ -154,4 +154,5 @@ module.exports = {
 
     res.status(200).json({ data: { user, accessToken }, error: null });
   },
+  joinLeague: async (req, res, next) => {},
 };

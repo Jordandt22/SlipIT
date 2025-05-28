@@ -7,6 +7,6 @@ const { UserSchema } = require("../schemas/user.schemas");
 usersRouter.post("/", bodyValidator(UserSchema), createUser);
 
 // A user joins a league
-usersRouter.post("/:uid/leagues/:leagueID", bodyValidator(UserSchema), createUser);
+// usersRouter.post("/:uid/leagues/:leagueID", createUser);
 
 module.exports = usersRouter;

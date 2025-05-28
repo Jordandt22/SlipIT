@@ -7,7 +7,7 @@ const {
 
 module.exports = {
   createLeague: async (req, res, next) => {
-    const { name, startDate, endDate } = req.body;
+    const { name, startingBalance, startDate, endDate } = req.body;
 
     try {
       // Check for Duplicate League Name
@@ -30,9 +30,12 @@ module.exports = {
       nextWeek.setDate(today.getDate() + 7);
       const league = await LeagueModel.create({
         leagueID: uuid.v4(),
-        name,
-        startDate: startDate ? startDate : today,
-        endDate: endDate ? endDate : nextWeek,
+        leagueInfo: {
+          name,
+          startingBalance,
+          startDate: startDate ? startDate : today,
+          endDate: endDate ? endDate : nextWeek,
+        },
       });
 
       res.status(200).json({ data: { league }, error: null });
