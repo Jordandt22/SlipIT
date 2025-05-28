@@ -3,10 +3,15 @@ const errorCodes = {
   SERVER_ERROR: "server-error",
   YUP_ERROR: "form-error",
 
+  // AUTH
+  NO_ACCESS_TOKEN: "no-access-token",
+  INVALID_ACCESS_TOKEN: "invalid-access-token",
+
   // Users
   EMAIL_USED: "email-used",
   USERNAME_TAKEN: "username-taken",
   USER_CREATION_ERROR: "user-creation-error",
+  USER_NOT_FOUND: "user-not-found",
 
   // Players
   PLAYER_NOT_FOUND: "player-not-found",

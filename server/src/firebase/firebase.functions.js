@@ -1,7 +1,7 @@
 const { auth } = require("./firebase.app");
 
 module.exports = {
-  verifyAccessToken: async (accessToken, cb) => {
+  verifyAccessToken: async (accessToken) => {
     try {
       const decodedToken = await auth.verifyIdToken(accessToken);
 

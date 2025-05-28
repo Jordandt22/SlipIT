@@ -138,7 +138,7 @@ module.exports = {
         );
     }
 
-    // Generate Access Token
+    // Generate Custom Access Token: Will Be used to sign in the user on the CLIENT SIDE
     const { accessToken, error: acccessTokenError } = await getFirebaseToken(
       uid
     );
@@ -152,7 +152,14 @@ module.exports = {
           )
         );
 
-    res.status(200).json({ data: { user, accessToken }, error: null });
+    res
+      .status(200)
+      .json({ data: { user, customAccessToken: accessToken }, error: null });
+  },
+  getUser: async (req, res, next) => {
+    const user = req.user;
+
+    res.status(200).json({ data: { user }, error: null });
   },
   joinLeague: async (req, res, next) => {},
 };

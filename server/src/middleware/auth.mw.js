@@ -1,41 +1,52 @@
 const { verifyAccessToken } = require("../firebase/firebase.functions");
-const PlayerModel = require("../models/player.model");
+const {
+  errorCodes: { NO_ACCESS_TOKEN },
+  customErrorHandler,
+} = require("../helpers/customErrorHandler");
+const UserModel = require("../models/user.model");
 
 module.exports = {
-  authPlayer: async (req, res, next) => {
-    const { playerID } = req.params;
+  authUser: async (req, res, next) => {
+    const { uid } = req.params;
 
     // FIREBASE AUTH
     const accessToken = req.headers?.authorization?.replace("Bearer ", "");
     if (!accessToken)
-      return res.status(422).json({
-        player: null,
-        error: { message: "Must provide credentials." },
-      });
+      return res
+        .status(422)
+        .json(customErrorHandler(NO_ACCESS_TOKEN, "MUST provide credentials."));
 
-    const decodedToken = await verifyAccessToken(accessToken);
-    if (playerID !== decodedToken?.uid)
-      return res.status(401).json({
-        player: null,
-        error: { message: "Must provide valid credentials." },
-      });
+    const { decodedToken, error } = await verifyAccessToken(accessToken);
+    if (!decodedToken || error)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(error.errorInfo.code, error.errorInfo.message)
+        );
 
-    req.playerID = playerID;
+    // Check if the access token is valid
+    if (uid !== decodedToken?.uid)
+      return res
+        .status(401)
+        .json(
+          customErrorHandler(
+            INVALID_ACCESS_TOKEN,
+            "Invalid credentials provided."
+          )
+        );
+
+    // Check if the User Exists
+    const user = await UserModel.findOne({ uid });
+    if (!user)
+      return res
+        .status(404)
+        .json(
+          customErrorHandler(USER_NOT_FOUND, "The user could NOT be found.")
+        );
+
+    req.user = user;
+    req.params = { ...req.params };
     req.body = { ...req.body };
     return next();
   },
-  // checkIfUserExist: async (req, res, next) => {
-  //   const uid = req.uid;
-
-  //   // Find the user document by UID
-  //   const user = await UserModel.findOne({ uid });
-
-  //   // User not found
-  //   if (!user)
-  //     return res.status(404).json({ user: null, error: "User not found" });
-
-  //   req.user = user;
-  //   req.body = { ...req.body };
-  //   return next();
-  // },
 };

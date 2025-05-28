@@ -30,4 +30,9 @@ const UserSchema = Yup.object({
   }),
 });
 
-module.exports = { UserSchema };
+// UID Schema
+const UIDSchema = Yup.object({
+  uid: Yup.string().trim().min(1).max(150).required(),
+});
+
+module.exports = { UserSchema, UIDSchema };
