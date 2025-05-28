@@ -76,4 +76,16 @@ module.exports = {
 
     res.status(200).json({ data: { game }, error: null });
   },
+  updateGameStatus: async (req, res, next) => {
+    const { gameID } = req.params;
+    const { status } = req.body;
+
+    const updatedGame = await GameModel.findOneAndUpdate(
+      { gameID },
+      { status },
+      { new: true }
+    );
+
+    res.status(200).json({ data: { game: updatedGame }, error: null });
+  },
 };

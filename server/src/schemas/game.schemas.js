@@ -14,4 +14,14 @@ const GameSchema = Yup.object({
   eventDate: Yup.date().min(new Date(), "Date must be after today."),
 });
 
-module.exports = { GameSchema };
+// GameID Schema
+const GameIDSchema = Yup.object({
+  gameID: Yup.string().trim().min(1).max(150).required(),
+});
+
+// Game Status Schema
+const GameStatusSchema = Yup.object({
+  status: Yup.number().min(0).max(2).required(),
+});
+
+module.exports = { GameSchema, GameIDSchema, GameStatusSchema };
