@@ -1,3 +1,8 @@
+const {
+  errorCodes: { YUP_ERROR },
+  customErrorHandler,
+} = require("../helpers/customErrorHandler");
+
 module.exports = {
   bodyValidator: (schema) => async (req, res, next) => {
     try {
@@ -10,7 +15,7 @@ module.exports = {
           errors[e.path] = e.message;
         }
       }
-      res.status(422).json({ errors });
+      res.status(422).json(customErrorHandler(YUP_ERROR, errors));
     }
   },
   paramsValidator: (schema) => async (req, res, next) => {
@@ -24,7 +29,7 @@ module.exports = {
           errors[e.path] = e.message;
         }
       }
-      res.status(422).json({ errors });
+      res.status(422).json(customErrorHandler(YUP_ERROR, errors));
     }
   },
 };

@@ -1,6 +1,7 @@
 const errorCodes = {
-  // Server
+  // Server & Validation
   SERVER_ERROR: "server-error",
+  YUP_ERROR: "form-error",
 
   // Users
   EMAIL_USED: "email-used",
@@ -14,6 +15,9 @@ const errorCodes = {
   // Games
   GAME_PLAYER_DUPLICATES: "game-player-duplicates",
   GAME_PLAYER_NOT_FOUND: "game-player-not-found",
+
+  // Leagues
+  LEAGUE_NAME_TAKEN: "league-name-taken",
 };
 
 module.exports = {
