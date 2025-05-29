@@ -174,4 +174,57 @@ module.exports = {
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
+  removePlayersFromGame: async (req, res, next) => {
+    const { gameID } = req.params;
+    const { players } = req.body;
+    const { players: curPlayers } = req.game;
+
+    // Check for Duplicate Players and Checks if All Players Exist
+    const { playerDuplicates, allPlayersExist } =
+      await checkForDupPlayersAndExist(players);
+    if (playerDuplicates)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            GAME_PLAYER_DUPLICATES,
+            "There are duplicate players."
+          )
+        );
+
+    if (!allPlayersExist)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            GAME_PLAYER_NOT_FOUND,
+            "Could NOT find one or more of the players."
+          )
+        );
+
+    // Check if some players are already added
+    const updatedPlayers = [...curPlayers].filter((player) => {
+      let shouldRemove = players.some(
+        (removePlayer) => removePlayer.playerID === player.playerID
+      );
+      return !shouldRemove;
+    });
+
+    // Update Game Players
+    const updatedGame = await GameModel.findOneAndUpdate(
+      { gameID },
+      { players: updatedPlayers },
+      { new: true }
+    );
+
+    // Update the New Players' Game Logs
+    const regexString = players.map((player) => player.playerID).join("|");
+    var regex = new RegExp(regexString, "gi");
+    await PlayerModel.updateMany(
+      { playerID: regex },
+      { $pull: { "playerStats.games": { gameID } } }
+    );
+
+    res.status(200).json({ data: { game: updatedGame }, error: null });
+  },
 };
