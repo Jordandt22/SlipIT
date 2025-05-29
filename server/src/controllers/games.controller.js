@@ -246,4 +246,41 @@ module.exports = {
       .status(200)
       .json({ data: { message: "Game Deletion Successful." }, error: null });
   },
+  updateGamePlayerStats: async (req, res, next) => {
+    const { gameID, playerID } = req.params;
+    const { stats } = req.body;
+    const game = req.game;
+
+    // Check if Player Exist
+    const playerExists = game.players.some(
+      (player) => player.playerID === playerID
+    );
+    if (!playerExists)
+      return res
+        .status(404)
+        .json(
+          customErrorHandler(
+            GAME_PLAYER_NOT_FOUND,
+            "Could NOT find this players."
+          )
+        );
+
+    // Update the Player's Stats
+    const updatedPlayers = [...game.players].map((player) => {
+      if (playerID === player.playerID) {
+        player.stats = stats;
+      }
+
+      return player;
+    });
+
+    // Update Game
+    const updatedGame = await GameModel.findOneAndUpdate(
+      { gameID },
+      { players: updatedPlayers },
+      { new: true }
+    );
+
+    res.status(200).json({ data: { game: updatedGame }, error: null });
+  },
 };
