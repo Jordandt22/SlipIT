@@ -1,5 +1,16 @@
 const Yup = require("yup");
 
+// ---- Request Query Schemas ----
+
+// Get Games Schema
+const GetGamesSchema = Yup.object({
+  limit: Yup.number().min(1).max(20).required(),
+  page: Yup.number().min(1).max(50).required(),
+  recent: Yup.boolean().required(),
+});
+
+// ---- Request Params Schemas ----
+
 // GameID Schema
 const GameIDSchema = Yup.object({
   gameID: Yup.string().trim().min(1).max(100).required(),
@@ -10,6 +21,8 @@ const GameIDAndPlayerIDSchema = Yup.object({
   gameID: Yup.string().trim().min(1).max(100).required(),
   playerID: Yup.string().trim().min(1).max(100).required(),
 });
+
+// ---- Request Body Schemas ----
 
 // Game Schema
 const GameSchema = Yup.object({
@@ -77,4 +90,5 @@ module.exports = {
   GamePlayersSchema,
   GamePlayerStatsSchema,
   GameIDAndPlayerIDSchema,
+  GetGamesSchema,
 };

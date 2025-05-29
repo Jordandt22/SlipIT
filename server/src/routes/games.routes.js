@@ -8,9 +8,14 @@ const {
   deleteGame,
   updateGamePlayerStats,
   getGame,
+  getGames,
 } = require("../controllers/games.controller");
 const { checkIfGameExists } = require("../middleware/game.mw");
-const { bodyValidator, paramsValidator } = require("../middleware/validators");
+const {
+  bodyValidator,
+  paramsValidator,
+  queryValidator,
+} = require("../middleware/validators");
 const {
   GameSchema,
   GameIDSchema,
@@ -19,18 +24,22 @@ const {
   GamePlayersSchema,
   GamePlayerStatsSchema,
   GameIDAndPlayerIDSchema,
+  GetGamesSchema,
 } = require("../schemas/game.schemas");
 
-// Create a Game
-gamesRouter.post("/", bodyValidator(GameSchema), createGame);
+// Get Games - Query Params: ?limit=[val]&page=[val]
+gamesRouter.get("/", queryValidator(GetGamesSchema), getGames);
 
-// Create a Game
+// Get Game
 gamesRouter.get(
   "/:gameID",
   paramsValidator(GameIDSchema),
   checkIfGameExists,
   getGame
 );
+
+// Create a Game
+gamesRouter.post("/", bodyValidator(GameSchema), createGame);
 
 // Update Game Status
 gamesRouter.patch(

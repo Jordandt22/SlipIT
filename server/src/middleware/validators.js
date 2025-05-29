@@ -32,4 +32,18 @@ module.exports = {
       res.status(422).json(customErrorHandler(YUP_ERROR, errors));
     }
   },
+  queryValidator: (schema) => async (req, res, next) => {
+    try {
+      await schema.validate(req.query, { abortEarly: false });
+      next();
+    } catch (err) {
+      const errors = {};
+      for (const e of err.inner) {
+        if (!errors[e.path]) {
+          errors[e.path] = e.message;
+        }
+      }
+      res.status(422).json(customErrorHandler(YUP_ERROR, errors));
+    }
+  },
 };
