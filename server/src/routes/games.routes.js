@@ -4,7 +4,8 @@ const {
   updateGameStatus,
   updateGameDate,
   addPlayersToGame,
-  removePlayersFromGame
+  removePlayersFromGame,
+  deleteGame,
 } = require("../controllers/games.controller");
 const { checkIfGameExists } = require("../middleware/game.mw");
 const { bodyValidator, paramsValidator } = require("../middleware/validators");
@@ -53,6 +54,14 @@ gamesRouter.delete(
   bodyValidator(GamePlayersSchema),
   checkIfGameExists,
   removePlayersFromGame
+);
+
+// Delete Game
+gamesRouter.delete(
+  "/:gameID",
+  paramsValidator(GameIDSchema),
+  checkIfGameExists,
+  deleteGame
 );
 
 module.exports = gamesRouter;

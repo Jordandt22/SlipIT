@@ -217,7 +217,7 @@ module.exports = {
       { new: true }
     );
 
-    // Update the New Players' Game Logs
+    // Delete Game from Players' Game Logs
     const regexString = players.map((player) => player.playerID).join("|");
     var regex = new RegExp(regexString, "gi");
     await PlayerModel.updateMany(
@@ -226,5 +226,24 @@ module.exports = {
     );
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
+  },
+  deleteGame: async (req, res, next) => {
+    const { gameID } = req.params;
+    const { players } = req.game;
+
+    // Delete Game
+    await GameModel.findOneAndDelete({ gameID });
+
+    // Delete Game from Players' Game Logs
+    const regexString = players.map((player) => player.playerID).join("|");
+    var regex = new RegExp(regexString, "gi");
+    await PlayerModel.updateMany(
+      { playerID: regex },
+      { $pull: { "playerStats.games": { gameID } } }
+    );
+
+    res
+      .status(200)
+      .json({ data: { message: "Game Deletion Successful." }, error: null });
   },
 };
