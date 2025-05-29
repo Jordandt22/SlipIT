@@ -6,15 +6,17 @@ const {
 } = require("../helpers/customErrorHandler");
 const PlayerModel = require("../models/player.model");
 
-module.exports = {
-  createGame: async (req, res, next) => {
-    const { players, eventDate } = req.body;
-    const gameID = uuid.v4();
+// Check for Duplicate Players and Checks if All Players Exist
+const checkForDupPlayersAndExist = async (players) => {
+  // Check for duplicate players
+  let playerDuplicates = false;
+  let allPlayersExist = true;
 
-    // Check for duplicate players
-    let playerDuplicates = false;
-    for (let i = 0; i < players.length - 1; i++) {
-      const curPlayer = players[i];
+  for (let i = 0; i < players.length; i++) {
+    const curPlayer = players[i];
+
+    // Next Players
+    if (i < players.length - 1) {
       for (let j = i + 1; j < players.length; j++) {
         const nextPlayer = players[j];
         if (curPlayer.playerID === nextPlayer.playerID) {
@@ -22,11 +24,34 @@ module.exports = {
           break;
         }
       }
-
-      if (playerDuplicates) {
-        break;
-      }
     }
+
+    // Checks if either condition has been met
+    if (playerDuplicates || !allPlayersExist) {
+      break;
+    }
+
+    // Checks if the current player exists
+    const playerExist = await PlayerModel.exists({
+      playerID: curPlayer.playerID,
+    });
+    if (!playerExist) {
+      allPlayersExist = false;
+      break;
+    }
+  }
+
+  return { playerDuplicates, allPlayersExist };
+};
+
+module.exports = {
+  createGame: async (req, res, next) => {
+    const { players, eventDate } = req.body;
+    const gameID = uuid.v4();
+
+    // Check for Duplicate Players and Checks if All Players Exist
+    const { playerDuplicates, allPlayersExist } =
+      await checkForDupPlayersAndExist(players);
     if (playerDuplicates)
       return res
         .status(422)
@@ -37,18 +62,6 @@ module.exports = {
           )
         );
 
-    // Check if each player exists
-    let allPlayersExist = true;
-    for (let k = 0; k < players.length; k++) {
-      const curPlayer = players[k];
-      const playerExist = await PlayerModel.exists({
-        playerID: curPlayer.playerID,
-      });
-      if (!playerExist) {
-        allPlayersExist = false;
-        break;
-      }
-    }
     if (!allPlayersExist)
       return res
         .status(422)
@@ -84,6 +97,79 @@ module.exports = {
       { gameID },
       { status },
       { new: true }
+    );
+
+    res.status(200).json({ data: { game: updatedGame }, error: null });
+  },
+  updateGameDate: async (req, res, next) => {
+    const { gameID } = req.params;
+    const { eventDate } = req.body;
+
+    const updatedGame = await GameModel.findOneAndUpdate(
+      { gameID },
+      { eventDate },
+      { new: true }
+    );
+
+    res.status(200).json({ data: { game: updatedGame }, error: null });
+  },
+  addPlayersToGame: async (req, res, next) => {
+    const { gameID } = req.params;
+    const { players } = req.body;
+    const { players: curPlayers } = req.game;
+
+    // Check for Duplicate Players and Checks if All Players Exist
+    const { playerDuplicates, allPlayersExist } =
+      await checkForDupPlayersAndExist(players);
+    if (playerDuplicates)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            GAME_PLAYER_DUPLICATES,
+            "There are duplicate players."
+          )
+        );
+
+    if (!allPlayersExist)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            GAME_PLAYER_NOT_FOUND,
+            "Could NOT find one or more of the players."
+          )
+        );
+
+    // Check if some players are already added
+    const updatedPlayers = [...curPlayers];
+    const newAddedPlayers = [];
+    for (let i = 0; i < players.length; i++) {
+      const curPlayer = players[i];
+      const alrAdded = updatedPlayers.some(
+        (player) => player.playerID === curPlayer.playerID
+      );
+      if (!alrAdded) {
+        updatedPlayers.push(curPlayer);
+        newAddedPlayers.push(curPlayer);
+      }
+    }
+
+    // Update Game Players
+    const updatedGame = await GameModel.findOneAndUpdate(
+      { gameID },
+      { players: updatedPlayers },
+      { new: true }
+    );
+
+    // Update the New Players' Game Logs
+    const regexString = newAddedPlayers
+      .map((player) => player.playerID)
+      .join("|");
+    var regex = new RegExp(regexString, "gi");
+    await PlayerModel.updateMany(
+      { playerID: regex },
+      { $push: { "playerStats.games": { gameID } } }
     );
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
