@@ -1,5 +1,10 @@
 const Yup = require("yup");
 
+// PlayerID Schema
+const PlayerIDSchema = Yup.object({
+  playerID: Yup.string().trim().min(1).max(100).required(),
+});
+
 // Player Schema
 const PlayerSchema = Yup.object({
   playerInfo: Yup.object({
@@ -14,4 +19,4 @@ const PlayerSchema = Yup.object({
   }),
 });
 
-module.exports = { PlayerSchema };
+module.exports = { PlayerSchema, PlayerIDSchema };

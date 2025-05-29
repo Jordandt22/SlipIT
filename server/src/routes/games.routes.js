@@ -7,6 +7,7 @@ const {
   removePlayersFromGame,
   deleteGame,
   updateGamePlayerStats,
+  getGame,
 } = require("../controllers/games.controller");
 const { checkIfGameExists } = require("../middleware/game.mw");
 const { bodyValidator, paramsValidator } = require("../middleware/validators");
@@ -22,6 +23,14 @@ const {
 
 // Create a Game
 gamesRouter.post("/", bodyValidator(GameSchema), createGame);
+
+// Create a Game
+gamesRouter.get(
+  "/:gameID",
+  paramsValidator(GameIDSchema),
+  checkIfGameExists,
+  getGame
+);
 
 // Update Game Status
 gamesRouter.patch(

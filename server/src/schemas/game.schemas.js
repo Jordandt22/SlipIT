@@ -2,13 +2,13 @@ const Yup = require("yup");
 
 // GameID Schema
 const GameIDSchema = Yup.object({
-  gameID: Yup.string().trim().min(1).max(150).required(),
+  gameID: Yup.string().trim().min(1).max(100).required(),
 });
 
 // GameID and PlayerID Schema
 const GameIDAndPlayerIDSchema = Yup.object({
-  gameID: Yup.string().trim().min(1).max(150).required(),
-  playerID: Yup.string().trim().min(1).max(500).required(),
+  gameID: Yup.string().trim().min(1).max(100).required(),
+  playerID: Yup.string().trim().min(1).max(100).required(),
 });
 
 // Game Schema
@@ -16,7 +16,7 @@ const GameSchema = Yup.object({
   players: Yup.array()
     .of(
       Yup.object({
-        playerID: Yup.string().trim().min(1).max(500).required(),
+        playerID: Yup.string().trim().min(1).max(100).required(),
       })
     )
     .min(1)
@@ -40,7 +40,7 @@ const GamePlayersSchema = Yup.object({
   players: Yup.array()
     .of(
       Yup.object({
-        playerID: Yup.string().trim().min(1).max(500).required(),
+        playerID: Yup.string().trim().min(1).max(100).required(),
       })
     )
     .min(1)

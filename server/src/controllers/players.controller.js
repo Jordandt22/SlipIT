@@ -26,4 +26,9 @@ module.exports = {
         );
     }
   },
+  getPlayer: async (req, res, next) => {
+    const player = req.player;
+
+    res.status(200).json({ data: { player }, error: null });
+  },
 };

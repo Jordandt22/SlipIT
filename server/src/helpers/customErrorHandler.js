@@ -22,7 +22,6 @@ const errorCodes = {
   GAME_PLAYER_NOT_FOUND: "game-player-not-found",
   GAME_NOT_FOUND: "game-not-found",
 
-
   // Leagues
   LEAGUE_NAME_TAKEN: "league-name-taken",
 };

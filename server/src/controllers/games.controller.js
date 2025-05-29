@@ -89,6 +89,11 @@ module.exports = {
 
     res.status(200).json({ data: { game }, error: null });
   },
+  getGame: async (req, res, next) => {
+    const game = req.game;
+
+    res.status(200).json({ data: { game }, error: null });
+  },
   updateGameStatus: async (req, res, next) => {
     const { gameID } = req.params;
     const { status } = req.body;
