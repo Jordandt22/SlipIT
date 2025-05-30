@@ -30,8 +30,8 @@ if (notProduction) {
 }
 
 // Rate & Speed Limiter Info
-const timeLimit = 1000 * 60 * 15;
-const maxReq = 200;
+const timeLimit = 1000 * 60;
+const maxReq = 300;
 const limiter = rateLimiter({
   windowMs: timeLimit,
   max: maxReq,
@@ -39,7 +39,7 @@ const limiter = rateLimiter({
 const speedLimiter = slowDown({
   windowMs: timeLimit,
   delayAfter: maxReq / 2,
-  delayMs: () => 500,
+  delayMs: () => 250,
 });
 
 // Rate & Speed Limiters

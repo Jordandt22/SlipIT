@@ -1,0 +1,65 @@
+// Home Page Styles
+
+// Games Section
+.games-section {
+  &__title {
+    color: white;
+    font-weight: normal;
+    font-size: $main-fs * 1.25;
+  }
+
+  &__games {
+    margin-top: $spacer;
+  }
+
+  &__game {
+    margin-bottom: $spacer;
+    background: $dark-bg;
+    padding: $spacer-small;
+    border-radius: 10px;
+  }
+
+  &__game-title {
+    color: white;
+    margin-bottom: $spacer-small;
+    font-size: $main-fs * 0.8;
+
+    span {
+      font-size: $main-fs * 0.65;
+      color: $grey;
+    }
+  }
+
+  &__game-info {
+    color: white;
+    margin-bottom: $spacer-small;
+    font-size: $main-fs * 0.55;
+
+    span {
+      color: $grey;
+    }
+  }
+
+  .status-0 {
+    color: $red;
+  }
+
+  .status-1 {
+    color: $primary;
+  }
+
+  .status-2 {
+    color: $lime;
+  }
+
+  &__btn {
+    outline: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    color: $primary;
+    font-weight: bold;
+    font-size: $main-fs * 0.65;
+    text-decoration: none;
+  }
+}

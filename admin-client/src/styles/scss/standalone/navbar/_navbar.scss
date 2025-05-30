@@ -1,0 +1,10 @@
+// Navbar Styles
+.navbar {
+  &__title {
+    font-size: $main-fs;
+    color: $primary;
+    font-family: $sec-font;
+  }
+
+  margin-bottom: $spacer;
+}

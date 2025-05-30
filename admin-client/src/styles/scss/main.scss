@@ -1,0 +1,17 @@
+// Setup
+@import "setup/reset";
+@import "setup/vars";
+@import "utils/alignments";
+
+// Standalones
+@import "./standalone/navbar/navbar";
+
+// Pages
+@import "./pages/home/home.mobile";
+
+body {
+  font-family: $pri-font;
+  overflow-x: hidden;
+  background: $pri-bg;
+  padding: $spacer-small * 1.5;
+}
