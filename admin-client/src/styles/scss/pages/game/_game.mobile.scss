@@ -1,0 +1,151 @@
+// Game Page Styles
+.game-container {
+  &__title {
+    color: white;
+    margin-bottom: $spacer-small * 1.5;
+    font-size: $main-fs * 0.85;
+
+    span {
+      color: $grey;
+      font-weight: normal;
+      font-size: $main-fs * 0.65;
+    }
+  }
+}
+
+.game-info {
+  &__info {
+    color: white;
+    margin-bottom: $spacer-small;
+
+    span {
+      color: $grey;
+    }
+
+    .status-0 {
+      color: $red;
+    }
+
+    .status-1 {
+      color: $primary;
+    }
+
+    .status-2 {
+      color: $lime;
+    }
+  }
+
+  &__title {
+    color: $primary;
+    margin-bottom: $spacer-small * 1.5;
+    font-size: $main-fs * 0.85;
+    margin-top: $spacer * 1.5;
+  }
+
+  &__not-started,
+  &__in-progress,
+  &__ended {
+    outline: none;
+    border: none;
+    padding: $spacer-small * 0.5 $spacer;
+    border-radius: 25px;
+    margin-right: $spacer-small;
+    font-size: $main-fs * 0.55;
+    color: white;
+  }
+
+  &__not-started {
+    background: $red;
+  }
+
+  &__in-progress {
+    background: $primary;
+  }
+
+  &__ended {
+    background: $lime;
+  }
+}
+
+.player-info {
+  &__img-box {
+    $s: 10rem;
+    width: $s;
+    height: $s;
+    background: $primary;
+    border-radius: 50%;
+    margin: 0 $spacer;
+    margin-bottom: $spacer-small;
+  }
+
+  &__name {
+    color: white;
+    font-size: $main-fs * 0.75;
+    margin-bottom: $spacer;
+  }
+
+  &__title {
+    color: $orange;
+    font-size: $main-fs * 0.75;
+    margin-bottom: $spacer-small;
+  }
+
+  &__box {
+    background: $dark-bg;
+    padding: $spacer-small;
+    border-radius: 10px;
+    margin-bottom: $spacer;
+  }
+
+  &__stat {
+    margin-bottom: $spacer-small * 1.5;
+    color: white;
+
+    span {
+      color: $grey;
+    }
+  }
+
+  &__dec,
+  &__inc {
+    outline: none;
+    border: none;
+    background: $red;
+    border-radius: 5px;
+    padding: $spacer-small * 0.5;
+
+    svg {
+      transform: scale(1.5);
+    }
+  }
+
+  &__dec {
+    svg {
+      transform: scale(1.5) rotate(180deg);
+    }
+  }
+
+  &__inc {
+    background: $lime;
+    margin-left: $spacer-small;
+  }
+
+  &__prev,
+  &__next {
+    outline: none;
+    border: none;
+    background: transparent;
+  }
+
+  &__prev {
+    svg {
+      transform: scale(4) rotate(-90deg);
+    }
+  }
+
+  &__next {
+    svg {
+      transform: scale(4) rotate(90deg);
+    }
+  }
+}

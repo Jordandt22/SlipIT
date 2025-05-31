@@ -86,7 +86,10 @@ module.exports = {
   getGame: async (req, res, next) => {
     const game = req.game;
 
-    res.status(200).json({ data: { game }, error: null });
+    res.status(200).json({
+      data: { game },
+      error: null,
+    });
   },
   createGame: async (req, res, next) => {
     const { players, eventDate } = req.body;

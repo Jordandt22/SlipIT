@@ -281,6 +281,118 @@ html {
   text-decoration: none;
 }
 
+.game-container__title {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.275rem;
+}
+.game-container__title span {
+  color: #b3b3b3;
+  font-weight: normal;
+  font-size: 0.975rem;
+}
+
+.game-info__info {
+  color: white;
+  margin-bottom: 1rem;
+}
+.game-info__info span {
+  color: #b3b3b3;
+}
+.game-info__info .status-0 {
+  color: #ff3939;
+}
+.game-info__info .status-1 {
+  color: #81d2c7;
+}
+.game-info__info .status-2 {
+  color: #32cd32;
+}
+.game-info__title {
+  color: #81d2c7;
+  margin-bottom: 1.5rem;
+  font-size: 1.275rem;
+  margin-top: 3rem;
+}
+.game-info__not-started, .game-info__in-progress, .game-info__ended {
+  outline: none;
+  border: none;
+  padding: 0.5rem 2rem;
+  border-radius: 25px;
+  margin-right: 1rem;
+  font-size: 0.825rem;
+  color: white;
+}
+.game-info__not-started {
+  background: #ff3939;
+}
+.game-info__in-progress {
+  background: #81d2c7;
+}
+.game-info__ended {
+  background: #32cd32;
+}
+
+.player-info__img-box {
+  width: 10rem;
+  height: 10rem;
+  background: #81d2c7;
+  border-radius: 50%;
+  margin: 0 2rem;
+  margin-bottom: 1rem;
+}
+.player-info__name {
+  color: white;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+.player-info__title {
+  color: #ffac14;
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+.player-info__box {
+  background: #19313a;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+.player-info__stat {
+  margin-bottom: 1.5rem;
+  color: white;
+}
+.player-info__stat span {
+  color: #b3b3b3;
+}
+.player-info__dec, .player-info__inc {
+  outline: none;
+  border: none;
+  background: #ff3939;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+.player-info__dec svg, .player-info__inc svg {
+  transform: scale(1.5);
+}
+.player-info__dec svg {
+  transform: scale(1.5) rotate(180deg);
+}
+.player-info__inc {
+  background: #32cd32;
+  margin-left: 1rem;
+}
+.player-info__prev, .player-info__next {
+  outline: none;
+  border: none;
+  background: transparent;
+}
+.player-info__prev svg {
+  transform: scale(4) rotate(-90deg);
+}
+.player-info__next svg {
+  transform: scale(4) rotate(90deg);
+}
+
 body {
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;

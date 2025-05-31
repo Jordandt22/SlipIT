@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { GAMES_KEY } from "../../../context/API/QueryKeys";
+import { GET_GAMES_KEY } from "../../../context/API/QueryKeys";
 
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
@@ -12,7 +12,7 @@ function GamesSection() {
   const limit = 10;
   const recent = false;
   const { isPending, isError, error, data } = useQuery({
-    queryKey: [GAMES_KEY(limit, page, recent)],
+    queryKey: [GET_GAMES_KEY(limit, page, recent)],
     queryFn: async () => await getGames(limit, page, recent),
     retry: 3,
   });
@@ -30,53 +30,60 @@ function GamesSection() {
 
       {/* Games */}
       <div className="games-section__games">
-        {games.map((game) => {
-          const { gameID, eventDate, status, players } = game;
-          const formattedDate = new Date(eventDate).toLocaleDateString(
-            "en-US",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-            }
-          );
+        {totalGames > 0 ? (
+          games.map((game) => {
+            const { gameID, eventDate, status, players } = game;
+            const formattedDate = new Date(eventDate).toLocaleDateString(
+              "en-US",
+              {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+              }
+            );
 
-          return (
-            <div key={gameID} className="games-section__game">
-              <p className="games-section__game-title">
-                Game<span>#{gameID}</span>
-              </p>
-              <p className="games-section__game-info">
-                Date: <span>{formattedDate}</span>
-              </p>
-              {status === 0 ? (
-                <p className="games-section__game-info">
-                  Status: <span className="status-0">Not Started</span>
+            return (
+              <div key={gameID} className="games-section__game">
+                <p className="games-section__game-title">
+                  Game<span>#{gameID}</span>
                 </p>
-              ) : status === 1 ? (
                 <p className="games-section__game-info">
-                  Status: <span className="status-1">In-Progress</span>
+                  Date: <span>{formattedDate}</span>
                 </p>
-              ) : (
+                {status === 0 ? (
+                  <p className="games-section__game-info">
+                    Status: <span className="status-0">Not Started</span>
+                  </p>
+                ) : status === 1 ? (
+                  <p className="games-section__game-info">
+                    Status: <span className="status-1">In-Progress</span>
+                  </p>
+                ) : (
+                  <p className="games-section__game-info">
+                    Status: <span className="status-2">Ended</span>
+                  </p>
+                )}
                 <p className="games-section__game-info">
-                  Status: <span className="status-2">Ended</span>
+                  Total Players: <span>{players.length}</span>
                 </p>
-              )}
-              <p className="games-section__game-info">
-                Total Players: <span>{players.length}</span>
-              </p>
 
-              {/* Btns */}
-              <div className="row">
-                <NavLink to={`/game/${gameID}`} className="games-section__btn">
-                  View
-                </NavLink>
+                {/* Btns */}
+                <div className="row">
+                  <NavLink
+                    to={`/game/${gameID}`}
+                    className="games-section__btn"
+                  >
+                    View
+                  </NavLink>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <p>No Games</p>
+        )}
       </div>
     </div>
   );
