@@ -1,5 +1,7 @@
 // Game Page Styles
 .game-container {
+  padding-bottom: $spacer;
+
   &__title {
     color: white;
     margin-bottom: $spacer-small * 1.5;
@@ -37,9 +39,9 @@
 
   &__title {
     color: $primary;
+    margin-top: $spacer * 1.5;
     margin-bottom: $spacer-small * 1.5;
     font-size: $main-fs * 0.85;
-    margin-top: $spacer * 1.5;
   }
 
   &__not-started,
@@ -65,6 +67,18 @@
   &__ended {
     background: $lime;
   }
+
+  &__delete {
+    display: block;
+    outline: none;
+    border: none;
+    background: $red;
+    color: white;
+    border-radius: 25px;
+    padding: $spacer-small * 0.5 $spacer-md;
+    font-weight: bold;
+    margin: 0 auto;
+  }
 }
 
 .player-info {
@@ -74,14 +88,25 @@
     height: $s;
     background: $primary;
     border-radius: 50%;
-    margin: 0 $spacer;
+    margin: $spacer $spacer;
     margin-bottom: $spacer-small;
   }
 
   &__name {
     color: white;
     font-size: $main-fs * 0.75;
+    margin-bottom: $spacer-small * 1.5;
+  }
+
+  &__remove {
+    outline: none;
+    border: none;
+    background: $red;
+    color: white;
     margin-bottom: $spacer;
+    border-radius: 25px;
+    padding: $spacer-small * 0.5 $spacer * 1.5;
+    font-weight: bold;
   }
 
   &__title {
@@ -148,4 +173,11 @@
       transform: scale(4) rotate(90deg);
     }
   }
+}
+
+// Swiper
+.players-swiper {
+  width: 100%;
+  height: fit-content;
+  --swiper-pagination-color: #81d2c7;
 }

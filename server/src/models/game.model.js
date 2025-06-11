@@ -13,7 +13,7 @@ const GamePlayerSchema = new mongoose.Schema({
       RBI: { type: Number, default: 0 },
     },
     pitching: {
-      innningsPitched: { type: Number, default: 0 },
+      inningsPitched: { type: Number, default: 0 },
       pitcherStrikeouts: { type: Number, default: 0 },
       pitcherWalks: { type: Number, default: 0 },
       hitsAllowed: { type: Number, default: 0 },

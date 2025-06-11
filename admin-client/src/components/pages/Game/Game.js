@@ -1,18 +1,25 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { GET_GAME_KEY } from "../../../context/API/QueryKeys";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
 
 // Components
 import PlayerInfo from "./PlayerInfo";
+import GameStatus from "./GameStatus";
 
 function Game() {
   const { gameID } = useParams();
-  const { getGame } = useAPI();
-  const [curPlayerIndex, setCurPlayerIndex] = useState(0);
+  const { getGame, deleteGame } = useAPI();
+  const navigate = useNavigate();
   const { isPending, isError, error, data, refetch } = useQuery({
     queryKey: [GET_GAME_KEY(gameID)],
     queryFn: async () => await getGame(gameID),
@@ -33,26 +40,6 @@ function Game() {
     hour: "numeric",
     minute: "2-digit",
   });
-
-  const nextPlayer = () => {
-    setCurPlayerIndex((curIndex) => {
-      if (curIndex >= players.length - 1) {
-        return 0;
-      } else {
-        return curIndex + 1;
-      }
-    });
-  };
-
-  const prevPlayer = () => {
-    setCurPlayerIndex((curIndex) => {
-      if (curIndex <= 0) {
-        return players.length - 1;
-      } else {
-        return curIndex - 1;
-      }
-    });
-  };
 
   return (
     <div className="game-container">
@@ -81,36 +68,38 @@ function Game() {
       </p>
 
       {/* Change Status */}
-      <p className="game-info__title">Update Status</p>
-      <div className="row">
-        {status !== 0 && (
-          <button type="button" className="game-info__not-started">
-            Not Started
-          </button>
-        )}
-
-        {status !== 1 && (
-          <button type="button" className="game-info__in-progress">
-            In-Progress
-          </button>
-        )}
-
-        {status !== 2 && (
-          <button type="button" className="game-info__ended">
-            Ended
-          </button>
-        )}
-      </div>
+      <GameStatus gameID={gameID} status={status} refetch={refetch} />
 
       {/* Players */}
       <p className="game-info__title">Update Players</p>
-      <PlayerInfo
-        gameID={gameID}
-        player={players[curPlayerIndex]}
-        refetch={refetch}
-        nextPlayer={nextPlayer}
-        prevPlayer={prevPlayer}
-      />
+      <Swiper
+        pagination={{
+          dynamicBullets: true,
+          clickable: true,
+        }}
+        modules={[Pagination]}
+        className="players-swiper"
+      >
+        {players.map((player) => {
+          return (
+            <SwiperSlide key={player.playerID}>
+              <PlayerInfo gameID={gameID} player={player} refetch={refetch} />
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+
+      {/* Delete Game */}
+      <button
+        type="button"
+        className="game-info__delete"
+        onClick={async () => {
+          await deleteGame(gameID);
+          navigate("/");
+        }}
+      >
+        Delete Game
+      </button>
     </div>
   );
 }

@@ -69,8 +69,8 @@ gamesRouter.patch(
 );
 
 // Remove Players
-gamesRouter.delete(
-  "/:gameID/players",
+gamesRouter.patch(
+  "/:gameID/players/remove",
   paramsValidator(GameIDSchema),
   bodyValidator(GamePlayersSchema),
   checkIfGameExists,

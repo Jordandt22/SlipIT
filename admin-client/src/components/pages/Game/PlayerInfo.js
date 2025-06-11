@@ -4,19 +4,15 @@ import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
 
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
-
-// Components
-import Arrow from "../../SVG/Arrow";
+import PlayerStats from "./PlayerStats";
 
 function PlayerInfo(props) {
   const {
     gameID,
     player: { playerID, stats },
     refetch,
-    nextPlayer,
-    prevPlayer,
   } = props;
-  const { getPlayer, updateGameStats } = useAPI();
+  const { getPlayer, updateGameStats, removeGamePlayer } = useAPI();
   const { isPending, isError, error, data } = useQuery({
     queryKey: [GET_PLAYER_KEY(playerID)],
     queryFn: async () => await getPlayer(playerID),
@@ -62,109 +58,38 @@ function PlayerInfo(props) {
     <div className="player-info">
       <div className="center-vertical">
         <div className="row">
-          <button
-            type="button"
-            className="player-info__prev"
-            onClick={prevPlayer}
-          >
-            <Arrow />
-          </button>
           <div className="player-info__img-box">
             {/* <img src={image} alt={name} /> */}
           </div>
-          <button
-            type="button"
-            className="player-info__next"
-            onClick={nextPlayer}
-          >
-            <Arrow />
-          </button>
         </div>
 
         <p className="player-info__name">{name}</p>
+
+        <button
+          type="button"
+          className="player-info__remove"
+          onClick={async () => {
+            await removeGamePlayer(gameID, { players: [{ playerID }] });
+            refetch();
+          }}
+        >
+          Remove Player
+        </button>
       </div>
 
       {/* Stats */}
-      <div className="player-info__box">
-        <p className="player-info__title">Batting</p>
-        <div className="player-info__stats">
-          {Object.keys(stats.batting).map((key) => {
-            const stat = stats.batting[key];
-
-            return (
-              <div
-                key={playerID + key}
-                className="player-info__stat between-row"
-              >
-                <p>
-                  {key}: <span>{stat}</span>
-                </p>
-
-                <div className="row">
-                  <button
-                    type="button"
-                    className="player-info__dec"
-                    onClick={async () =>
-                      await updateStat(key, stat, true, true)
-                    }
-                  >
-                    <Arrow />
-                  </button>
-                  <button
-                    type="button"
-                    className="player-info__inc"
-                    onClick={async () =>
-                      await updateStat(key, stat, true, false)
-                    }
-                  >
-                    <Arrow />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="player-info__box">
-        <p className="player-info__title">Pitching</p>
-        <div className="player-info__stats">
-          {Object.keys(stats.pitching).map((key) => {
-            const stat = stats.pitching[key];
-
-            return (
-              <div
-                key={playerID + key}
-                className="player-info__stat between-row"
-              >
-                <p>
-                  {key}: <span>{stat}</span>
-                </p>
-
-                <div className="row">
-                  <button
-                    type="button"
-                    className="player-info__dec"
-                    onClick={async () =>
-                      await updateStat(key, stat, false, true)
-                    }
-                  >
-                    <Arrow />
-                  </button>
-                  <button
-                    type="button"
-                    className="player-info__inc"
-                    onClick={async () =>
-                      await updateStat(key, stat, false, false)
-                    }
-                  >
-                    <Arrow />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <PlayerStats
+        title="Batting"
+        playerID={playerID}
+        stats={stats.batting}
+        updateStat={updateStat}
+      />
+      <PlayerStats
+        title="Pitching"
+        playerID={playerID}
+        stats={stats.pitching}
+        updateStat={updateStat}
+      />
     </div>
   );
 }

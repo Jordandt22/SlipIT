@@ -281,6 +281,9 @@ html {
   text-decoration: none;
 }
 
+.game-container {
+  padding-bottom: 2rem;
+}
 .game-container__title {
   color: white;
   margin-bottom: 1.5rem;
@@ -310,9 +313,9 @@ html {
 }
 .game-info__title {
   color: #81d2c7;
+  margin-top: 3rem;
   margin-bottom: 1.5rem;
   font-size: 1.275rem;
-  margin-top: 3rem;
 }
 .game-info__not-started, .game-info__in-progress, .game-info__ended {
   outline: none;
@@ -332,19 +335,40 @@ html {
 .game-info__ended {
   background: #32cd32;
 }
+.game-info__delete {
+  display: block;
+  outline: none;
+  border: none;
+  background: #ff3939;
+  color: white;
+  border-radius: 25px;
+  padding: 0.5rem 4rem;
+  font-weight: bold;
+  margin: 0 auto;
+}
 
 .player-info__img-box {
   width: 10rem;
   height: 10rem;
   background: #81d2c7;
   border-radius: 50%;
-  margin: 0 2rem;
+  margin: 2rem 2rem;
   margin-bottom: 1rem;
 }
 .player-info__name {
   color: white;
   font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+}
+.player-info__remove {
+  outline: none;
+  border: none;
+  background: #ff3939;
+  color: white;
   margin-bottom: 2rem;
+  border-radius: 25px;
+  padding: 0.5rem 3rem;
+  font-weight: bold;
 }
 .player-info__title {
   color: #ffac14;
@@ -391,6 +415,12 @@ html {
 }
 .player-info__next svg {
   transform: scale(4) rotate(90deg);
+}
+
+.players-swiper {
+  width: 100%;
+  height: fit-content;
+  --swiper-pagination-color: #81d2c7;
 }
 
 body {
