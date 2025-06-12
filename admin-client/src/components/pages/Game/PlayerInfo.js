@@ -4,6 +4,8 @@ import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
 
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
+
+// Components
 import PlayerStats from "./PlayerStats";
 
 function PlayerInfo(props) {

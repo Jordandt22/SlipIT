@@ -1,10 +1,25 @@
 // Navbar Styles
 .navbar {
+  margin-bottom: $spacer;
+
   &__title {
     font-size: $main-fs;
     color: $primary;
     font-family: $sec-font;
   }
 
-  margin-bottom: $spacer;
+  &__prev {
+    margin-right: $spacer-small;
+    outline: none;
+    border: none;
+    background: transparent;
+    transform: scale(2) rotate(-90deg);
+    padding: 0;
+  }
+
+  &__prev-disabled {
+    svg path {
+      fill: rgb($grey, 0.5);
+    }
+  }
 }

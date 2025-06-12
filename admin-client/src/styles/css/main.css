@@ -229,6 +229,17 @@ html {
   color: #81d2c7;
   font-family: "Poetsen One", sans-serif;
 }
+.navbar__prev {
+  margin-right: 1rem;
+  outline: none;
+  border: none;
+  background: transparent;
+  transform: scale(2) rotate(-90deg);
+  padding: 0;
+}
+.navbar__prev-disabled svg path {
+  fill: rgba(179, 179, 179, 0.5);
+}
 
 .games-section__title {
   color: white;
