@@ -13,12 +13,12 @@ const app = express();
 require("./models/db");
 
 // Middleware
-const { NODE_ENV, WEB_URL } = process.env;
+const { NODE_ENV, WEB_URL, ADMIN_URL } = process.env;
 const notProduction = NODE_ENV !== "production";
 app.use(helmet());
 app.use(
   cors({
-    origin: notProduction ? "http://localhost:3000" : WEB_URL,
+    origin: [notProduction ? "http://localhost:3000" : WEB_URL, ADMIN_URL],
   })
 );
 app.use(express.json());
