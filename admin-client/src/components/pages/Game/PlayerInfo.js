@@ -83,12 +83,14 @@ function PlayerInfo(props) {
         playerID={playerID}
         stats={stats.batting}
         updateStat={updateStat}
+        isBatting={true}
       />
       <PlayerStats
         title="Pitching"
         playerID={playerID}
         stats={stats.pitching}
         updateStat={updateStat}
+        isBatting={false}
       />
     </div>
   );

@@ -31,6 +31,10 @@ export const APIContextProvider = (props) => {
       data
     );
 
+  // Add Game Player
+  const addGamePlayer = async (gameID, data) =>
+    await axios.patch(getURIPath(`/games/${gameID}/players`, ""), data);
+
   // Remove Game Player
   const removeGamePlayer = async (gameID, data) =>
     await axios.patch(getURIPath(`/games/${gameID}/players/remove`, ""), data);
@@ -45,16 +49,27 @@ export const APIContextProvider = (props) => {
   const getPlayer = async (playerID) =>
     await axios.get(getURIPath(`/players/${playerID}`, ""));
 
+  // Get Players
+  const getPlayers = async (limit, page, recent) =>
+    await axios.get(
+      getURIPath("/players", `?limit=${limit}&page=${page}&recent=${recent}`)
+    );
+
   return (
     <APIContext.Provider
       value={{
+        // Games
         getGames,
         getGame,
-        getPlayer,
         updateGameStats,
         updateGameStatus,
+        addGamePlayer,
         removeGamePlayer,
         deleteGame,
+
+        // Players
+        getPlayer,
+        getPlayers,
       }}
     >
       {props.children}

@@ -317,6 +317,22 @@ html {
   margin-bottom: 1.5rem;
   font-size: 1.275rem;
 }
+.game-info__players {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+.game-info__players .game-info__title {
+  margin: 0;
+  margin-right: 1rem;
+}
+.game-info__add {
+  outline: none;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  padding: 0.35rem 2rem;
+  border-radius: 25px;
+}
 .game-info__not-started, .game-info__in-progress, .game-info__ended {
   outline: none;
   border: none;
@@ -345,6 +361,7 @@ html {
   padding: 0.5rem 4rem;
   font-weight: bold;
   margin: 0 auto;
+  margin-top: 2rem;
 }
 
 .player-info__img-box {
@@ -423,9 +440,74 @@ html {
   --swiper-pagination-color: #81d2c7;
 }
 
+.ap-popup {
+  background: #0c3747;
+  width: 90%;
+  height: fit-content;
+  max-height: 70%;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.15);
+}
+.ap-popup__title {
+  color: white;
+  font-size: 1.275rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+.ap-popup__player {
+  background: #19313a;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  color: #81d2c7;
+}
+.ap-popup__add, .ap-popup__added {
+  outline: none;
+  padding: 0.25rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+.ap-popup__add {
+  background: transparent;
+  border: 2px solid #ffac14;
+  color: #ffac14;
+  font-weight: bold;
+}
+.ap-popup__added {
+  background: #32cd32;
+  border: 2px solid #32cd32;
+  color: white;
+}
+.ap-popup__btns {
+  margin-top: 3rem;
+}
+.ap-popup__cancel, .ap-popup__save {
+  outline: none;
+  border: none;
+  background: #ff3939;
+  color: white;
+  padding: 0.35rem 2rem;
+  border-radius: 25px;
+}
+.ap-popup__save {
+  background: #81d2c7;
+  margin-left: 1rem;
+}
+
 body {
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;
   background: #003d53;
   padding: 1.5rem;
+}
+
+.shadow-container {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
 }/*# sourceMappingURL=main.css.map */

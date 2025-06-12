@@ -2,10 +2,19 @@ const playersRouter = require("express").Router();
 const {
   createPlayer,
   getPlayer,
+  getPlayers,
 } = require("../controllers/players.controller");
 const { checkIfPlayerExists } = require("../middleware/player.mw");
-const { bodyValidator, paramsValidator } = require("../middleware/validators");
-const { PlayerSchema, PlayerIDSchema } = require("../schemas/player.schemas");
+const {
+  bodyValidator,
+  paramsValidator,
+  queryValidator,
+} = require("../middleware/validators");
+const {
+  PlayerSchema,
+  PlayerIDSchema,
+  GetPlayersSchema,
+} = require("../schemas/player.schemas");
 
 // Create a Player
 playersRouter.post("/", bodyValidator(PlayerSchema), createPlayer);
@@ -17,5 +26,8 @@ playersRouter.get(
   checkIfPlayerExists,
   getPlayer
 );
+
+// Get Players- Query Params: ?limit=[val]&page=[val]
+playersRouter.get("/", queryValidator(GetPlayersSchema), getPlayers);
 
 module.exports = playersRouter;

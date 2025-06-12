@@ -73,7 +73,7 @@ const GamePlayerStatsSchema = Yup.object({
       RBI: Yup.number().min(0).max(20).required(),
     }),
     pitching: Yup.object({
-      innningsPitched: Yup.number().min(0).max(10).required(),
+      inningsPitched: Yup.number().min(0).max(10).required(),
       pitcherStrikeouts: Yup.number().min(0).max(20).required(),
       pitcherWalks: Yup.number().min(0).max(20).required(),
       hitsAllowed: Yup.number().min(0).max(20).required(),

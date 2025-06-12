@@ -44,6 +44,25 @@
     font-size: $main-fs * 0.85;
   }
 
+  &__players {
+    margin-top: $spacer * 1.5;
+    margin-bottom: $spacer-small * 1.5;
+
+    .game-info__title {
+      margin: 0;
+      margin-right: $spacer-small;
+    }
+  }
+
+  &__add {
+    outline: none;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+    padding: $spacer-small * 0.35 $spacer;
+    border-radius: 25px;
+  }
+
   &__not-started,
   &__in-progress,
   &__ended {
@@ -78,6 +97,7 @@
     padding: $spacer-small * 0.5 $spacer-md;
     font-weight: bold;
     margin: 0 auto;
+    margin-top: $spacer;
   }
 }
 
@@ -180,4 +200,70 @@
   width: 100%;
   height: fit-content;
   --swiper-pagination-color: #81d2c7;
+}
+
+// Add Players Popup
+.ap-popup {
+  background: $sec-bg;
+  width: 90%;
+  height: fit-content;
+  max-height: 70%;
+  border-radius: 10px;
+  padding: $spacer;
+  box-shadow: 0 0 15px 3px rgba(black, 0.15);
+
+  &__title {
+    color: white;
+    font-size: $main-fs * 0.85;
+    font-weight: 500;
+    margin-bottom: $spacer;
+  }
+
+  &__player {
+    background: $dark-bg;
+    padding: $spacer-small * 0.5 $spacer-small;
+    border-radius: 5px;
+    margin-bottom: $spacer-small;
+    color: $primary;
+  }
+
+  &__add,
+  &__added {
+    outline: none;
+    padding: $spacer-small * 0.25 $spacer-small * 1.5;
+    border-radius: 20px;
+    font-size: $main-fs * 0.5;
+  }
+
+  &__add {
+    background: transparent;
+    border: 2px solid $orange;
+    color: $orange;
+    font-weight: bold;
+  }
+
+  &__added {
+    background: $lime;
+    border: 2px solid $lime;
+    color: white;
+  }
+
+  &__btns {
+    margin-top: $spacer * 1.5;
+  }
+
+  &__cancel,
+  &__save {
+    outline: none;
+    border: none;
+    background: $red;
+    color: white;
+    padding: $spacer-small * 0.35 $spacer;
+    border-radius: 25px;
+  }
+
+  &__save {
+    background: $primary;
+    margin-left: $spacer-small;
+  }
 }
