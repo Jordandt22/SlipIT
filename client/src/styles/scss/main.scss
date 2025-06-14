@@ -1,0 +1,28 @@
+// Setup
+@import "setup/reset";
+@import "setup/vars";
+@import "utils/alignments";
+
+// Standalones
+@import "./standalone/navbar/navbar";
+
+// Pages
+@import "./pages/home/home.mobile";
+
+body {
+  font-family: $pri-font;
+  overflow-x: hidden;
+  background: $pri-bg;
+  padding: $spacer-small * 1.5;
+}
+
+// Shadow
+.shadow-container {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(black, 0.5);
+}
