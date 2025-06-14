@@ -8,7 +8,12 @@ function FormInput(props) {
   return (
     <div
       className={
-        "auth-form__input-box" + (isError ? " auth-form__input-box-error" : isValid ? " auth-form__input-box-valid" : "")
+        "auth-form__input-box" +
+        (isError
+          ? " auth-form__input-box-error"
+          : isValid
+          ? " auth-form__input-box-valid"
+          : "")
       }
     >
       <label className="auth-form__label" htmlFor={name}>
@@ -18,7 +23,7 @@ function FormInput(props) {
         name={name}
         type={type}
         onChange={formik.handleChange}
-        value={formik.values.firstName}
+        value={formik.values[name]}
         placeholder={placeholder}
         className="auth-form__input"
         autoComplete="off"

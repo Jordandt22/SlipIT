@@ -9,7 +9,7 @@ const { bodyValidator, paramsValidator } = require("../middleware/validators");
 const { UserSchema, UIDSchema } = require("../schemas/user.schemas");
 
 // Create a User
-usersRouter.post("/", bodyValidator(UserSchema), createUser);
+usersRouter.post("/signup", bodyValidator(UserSchema), createUser);
 
 // Get User Data
 usersRouter.get("/:uid", paramsValidator(UIDSchema), authUser, getUser);
