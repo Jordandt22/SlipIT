@@ -6,6 +6,7 @@ import { LoginSchema } from "../../../schemas/User.schemas";
 import SecondaryBackground from "../../standalone/backgrounds/SecondaryBackground";
 import LargeLogo from "../../standalone/images/LargeLogo";
 import AuthForm from "../../standalone/auth/AuthForm";
+import AuthRedirect from "../../wrappers/AuthRedirect";
 
 function Login() {
   const inputs = [
@@ -36,10 +37,12 @@ function Login() {
   });
 
   return (
-    <SecondaryBackground className="auth-container center-vertical">
-      <LargeLogo className="auth-container__logo" />
-      <AuthForm inputs={inputs} formik={formik} isSignUp={false} />
-    </SecondaryBackground>
+    <AuthRedirect>
+      <SecondaryBackground className="auth-container center-vertical">
+        <LargeLogo className="auth-container__logo" />
+        <AuthForm inputs={inputs} formik={formik} isSignUp={false} />
+      </SecondaryBackground>
+    </AuthRedirect>
   );
 }
 
