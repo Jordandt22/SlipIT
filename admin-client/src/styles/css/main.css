@@ -371,6 +371,65 @@ html {
   margin-top: 1rem;
 }
 
+.players-section {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.player-card {
+  width: 80%;
+  background: #19313a;
+  border-radius: 5px;
+  padding: 1.5rem;
+  margin-bottom: 3rem;
+}
+.player-card__img-box {
+  width: 10rem;
+  height: 10rem;
+  background: #81d2c7;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+.player-card__name {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.player-card__name span {
+  font-size: 0.975rem;
+  color: #b3b3b3;
+}
+.player-card__title {
+  width: fit-content;
+  color: #ffac14;
+  background: #0c3747;
+  text-align: center;
+  padding: 0.35rem 4rem;
+  font-weight: 500;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.player-card__game {
+  width: 90%;
+  color: #81d2c7;
+  background: #81d2c7;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  background: #003d53;
+  margin-bottom: 0.75rem;
+  text-decoration: none;
+}
+.player-card__game span {
+  font-size: 0.75rem;
+  color: white;
+}
+
+.player-cards-swiper {
+  width: 100%;
+  height: fit-content;
+  --swiper-pagination-color: #81d2c7;
+}
+
 .game-container {
   padding-bottom: 2rem;
 }

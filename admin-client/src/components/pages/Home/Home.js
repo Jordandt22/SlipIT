@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 // Components
 import GamesSection from "./Games/GamesSection";
-import PlayersSection from "./PlayersSection";
+import PlayersSection from "./Players/PlayersSection";
 
 function Home() {
   const [activeTab, setActiveTab] = useState(0);

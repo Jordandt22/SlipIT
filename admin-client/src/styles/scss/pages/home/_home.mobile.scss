@@ -154,3 +154,71 @@
     margin-top: $spacer-small;
   }
 }
+
+// Players Section
+.players-section {
+  width: 100%;
+  margin-top: $spacer;
+}
+
+.player-card {
+  width: 80%;
+  background: $dark-bg;
+  border-radius: 5px;
+  padding: $spacer-small * 1.5;
+  margin-bottom: $spacer * 1.5;
+
+  &__img-box {
+    $s: 10rem;
+    width: $s;
+    height: $s;
+    background: $primary;
+    border-radius: 50%;
+    margin-bottom: $spacer-small;
+  }
+
+  &__name {
+    color: white;
+    font-size: $main-fs * 0.8;
+    margin-bottom: $spacer-small;
+
+    span {
+      font-size: $main-fs * 0.65;
+      color: $grey;
+    }
+  }
+
+  &__title {
+    width: fit-content;
+    color: $orange;
+    background: $sec-bg;
+    text-align: center;
+    padding: $spacer-small * 0.35 $spacer-md;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-bottom: $spacer-small;
+  }
+
+  &__game {
+    width: 90%;
+    color: $primary;
+    background: $primary;
+    padding: $spacer-small * 0.75 $spacer-small;
+    border-radius: 5px;
+    background: $pri-bg;
+    margin-bottom: $spacer-small * 0.75;
+    text-decoration: none;
+
+    span {
+      font-size: $main-fs * 0.5;
+      color: white;
+    }
+  }
+}
+
+// Swiper
+.player-cards-swiper {
+  width: 100%;
+  height: fit-content;
+  --swiper-pagination-color: #81d2c7;
+}

@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
 import { GET_PLAYERS_KEY } from "../../../context/API/QueryKeys";
+
+// Components
 import AddPlayersForm from "../../standalone/players/AddPlayersForm";
 
 function AddPlayersPopup(props) {

@@ -5,9 +5,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Arrow from "../SVG/Arrow";
 
 function Navbar() {
-  const { key } = useLocation();
+  const { key, pathname } = useLocation();
   const navigate = useNavigate();
-  const isFirstPage = key === "default";
+  const isFirstPage = key === "default" || pathname === "/";
 
   return (
     <header className="navbar row">
