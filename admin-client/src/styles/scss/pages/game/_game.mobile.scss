@@ -207,7 +207,6 @@
   background: $sec-bg;
   width: 90%;
   height: fit-content;
-  max-height: 70%;
   border-radius: 10px;
   padding: $spacer;
   box-shadow: 0 0 15px 3px rgba(black, 0.15);
@@ -265,5 +264,9 @@
   &__save {
     background: $primary;
     margin-left: $spacer-small;
+  }
+
+  &__no-players {
+    color: $primary;
   }
 }

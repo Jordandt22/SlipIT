@@ -241,16 +241,42 @@ html {
   fill: rgba(179, 179, 179, 0.5);
 }
 
+.home-section__create {
+  width: 100%;
+  outline: none;
+  border: none;
+  background: #ffac14;
+  color: white;
+  padding: 0.5rem 2rem;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+.home-section__tabs {
+  margin-bottom: 1rem;
+}
+.home-section__tab {
+  outline: none;
+  border: 2px solid #81d2c7;
+  background: transparent;
+  color: #81d2c7;
+  padding: 0.35rem 2rem;
+  border-radius: 25px;
+  margin-right: 0.75rem;
+}
+.home-section__tab-active {
+  background: #81d2c7;
+  color: white;
+}
+
 .games-section__title {
   color: white;
   font-weight: normal;
   font-size: 1.875rem;
 }
-.games-section__games {
-  margin-top: 2rem;
-}
 .games-section__game {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   background: #19313a;
   padding: 1rem;
   border-radius: 10px;
@@ -290,6 +316,59 @@ html {
   font-weight: bold;
   font-size: 0.975rem;
   text-decoration: none;
+}
+
+.cg-popup {
+  background: #0c3747;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  height: fit-content;
+  max-height: 70%;
+}
+.cg-popup__title {
+  color: white;
+  font-size: 1.275rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+.cg-popup__label {
+  color: #81d2c7;
+  font-size: 0.975rem;
+  margin-bottom: 1rem;
+}
+.cg-popup__box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.cg-popup__date-btn {
+  outline: none;
+  border: 2px solid #ffac14;
+  background: transparent;
+  color: #ffac14;
+  margin-bottom: 1rem;
+  border-radius: 25px;
+  padding: 0.35rem 2rem;
+}
+.cg-popup .ap-popup__player-name {
+  color: white;
+}
+.cg-popup .add-players-input {
+  margin-bottom: 2rem;
+}
+.cg-popup__submit {
+  display: block;
+  width: 100%;
+  outline: none;
+  border: none;
+  background: #81d2c7;
+  color: white;
+  padding: 0.35rem 2rem;
+  border-radius: 25px;
+  margin: 0 auto;
+  margin-top: 1rem;
 }
 
 .game-container {
@@ -455,7 +534,6 @@ html {
   background: #0c3747;
   width: 90%;
   height: fit-content;
-  max-height: 70%;
   border-radius: 10px;
   padding: 2rem;
   box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.15);
@@ -504,6 +582,9 @@ html {
 .ap-popup__save {
   background: #81d2c7;
   margin-left: 1rem;
+}
+.ap-popup__no-players {
+  color: #81d2c7;
 }
 
 body {

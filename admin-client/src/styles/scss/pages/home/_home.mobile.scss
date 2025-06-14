@@ -1,5 +1,39 @@
 // Home Page Styles
 
+.home-section {
+  &__create {
+    width: 100%;
+    outline: none;
+    border: none;
+    background: $orange;
+    color: white;
+    padding: $spacer-small * 0.5 $spacer;
+    border-radius: 25px;
+    font-size: $main-fs * 0.5;
+    font-weight: bold;
+    margin-bottom: $spacer-small * 1.5;
+  }
+
+  &__tabs {
+    margin-bottom: $spacer * 0.5;
+  }
+
+  &__tab {
+    outline: none;
+    border: 2px solid $primary;
+    background: transparent;
+    color: $primary;
+    padding: $spacer-small * 0.35 $spacer;
+    border-radius: 25px;
+    margin-right: $spacer-small * 0.75;
+  }
+
+  &__tab-active {
+    background: $primary;
+    color: white;
+  }
+}
+
 // Games Section
 .games-section {
   &__title {
@@ -8,12 +42,8 @@
     font-size: $main-fs * 1.25;
   }
 
-  &__games {
-    margin-top: $spacer;
-  }
-
   &__game {
-    margin-bottom: $spacer;
+    margin-bottom: $spacer-small;
     background: $dark-bg;
     padding: $spacer-small;
     border-radius: 10px;
@@ -61,5 +91,66 @@
     font-weight: bold;
     font-size: $main-fs * 0.65;
     text-decoration: none;
+  }
+}
+
+// Create Game Popup
+.cg-popup {
+  background: $sec-bg;
+  border-radius: 10px;
+  padding: $spacer;
+  box-shadow: 0 0 15px 3px rgba(black, 0.15);
+  width: 90%;
+  height: fit-content;
+  max-height: 70%;
+
+  &__title {
+    color: white;
+    font-size: $main-fs * 0.85;
+    font-weight: 500;
+    margin-bottom: $spacer;
+  }
+
+  &__label {
+    color: $primary;
+    font-size: $main-fs * 0.65;
+    margin-bottom: $spacer-small;
+  }
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $spacer-small;
+  }
+
+  &__date-btn {
+    outline: none;
+    border: 2px solid $orange;
+    background: transparent;
+    color: $orange;
+    margin-bottom: $spacer-small;
+    border-radius: 25px;
+    padding: $spacer-small * 0.35 $spacer;
+  }
+
+  .ap-popup__player-name {
+    color: white;
+  }
+
+  .add-players-input {
+    margin-bottom: $spacer;
+  }
+
+  &__submit {
+    display: block;
+    width: 100%;
+    outline: none;
+    border: none;
+    background: $primary;
+    color: white;
+    padding: $spacer-small * 0.35 $spacer;
+    border-radius: 25px;
+    margin: 0 auto;
+    margin-top: $spacer-small;
   }
 }

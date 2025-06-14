@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { GET_GAME_KEY } from "../../../context/API/QueryKeys";
-import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
+// Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 
 // Contexts
+import { GET_GAME_KEY } from "../../../context/API/QueryKeys";
 import { useAPI } from "../../../context/API/API.context";
 
 // Components

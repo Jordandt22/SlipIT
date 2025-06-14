@@ -10,6 +10,10 @@ export const APIContextProvider = (props) => {
 
   // ---- Games ----
 
+  // Create Game
+  const createGame = async (data) =>
+    await axios.post(getURIPath(`/games`, ""), data);
+
   // Get Games
   const getGames = async (limit, page, recent) =>
     await axios.get(
@@ -61,6 +65,7 @@ export const APIContextProvider = (props) => {
         // Games
         getGames,
         getGame,
+        createGame,
         updateGameStats,
         updateGameStatus,
         addGamePlayer,

@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { GET_GAMES_KEY } from "../../../context/API/QueryKeys";
 
 // Contexts
-import { useAPI } from "../../../context/API/API.context";
+import { useAPI } from "../../../../context/API/API.context";
+import { GET_GAMES_KEY } from "../../../../context/API/QueryKeys";
+
+// Components
+import CreateGamePopup from "./CreateGamePopup";
 
 function GamesSection() {
   const { getGames } = useAPI();
   const [page, setPage] = useState(1);
   const limit = 10;
   const recent = false;
-  const { isPending, isError, error, data } = useQuery({
+  const [createGamePopup, setCreateGamePopup] = useState({ show: false });
+  const { isPending, isError, error, data, refetch } = useQuery({
     queryKey: [GET_GAMES_KEY(limit, page, recent)],
     queryFn: async () => await getGames(limit, page, recent),
     retry: 3,
@@ -25,8 +29,14 @@ function GamesSection() {
 
   const { games, totalGames } = data.data.data;
   return (
-    <div className="games-section">
-      <h2 className="games-section__title">Games</h2>
+    <div className="games-section home-section">
+      <button
+        type="button"
+        className="home-section__create"
+        onClick={() => setCreateGamePopup({ show: true })}
+      >
+        Create a Game
+      </button>
 
       {/* Games */}
       <div className="games-section__games">
@@ -85,6 +95,14 @@ function GamesSection() {
           <p>No Games</p>
         )}
       </div>
+
+      {/* Create Game Popup */}
+      {createGamePopup.show && (
+        <CreateGamePopup
+          setCreateGamePopup={setCreateGamePopup}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 }

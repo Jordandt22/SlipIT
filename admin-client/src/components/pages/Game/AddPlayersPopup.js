@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
 import { GET_PLAYERS_KEY } from "../../../context/API/QueryKeys";
+import AddPlayersForm from "../../standalone/players/AddPlayersForm";
 
 function AddPlayersPopup(props) {
   const { gameID, gamePlayers, closePopup, refetch } = props;
@@ -49,44 +50,12 @@ function AddPlayersPopup(props) {
         <h1 className="ap-popup__title">Add Players</h1>
 
         {/* Players */}
-        {filteredPlayers.length > 0 ? (
-          <>
-            {filteredPlayers.map((player) => {
-              const {
-                playerID,
-                playerInfo: { name },
-              } = player;
-              const alreadyAdded = addedPlayers.some(
-                (addedPlayer) => addedPlayer.playerID === playerID
-              );
-              return (
-                <div key={playerID} className="ap-popup__player between-row">
-                  <p className="ap-popup__player-name">{name}</p>
-
-                  {alreadyAdded ? (
-                    <button
-                      type="button"
-                      className="ap-popup__added"
-                      onClick={() => removePlayer(playerID)}
-                    >
-                      Added
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="ap-popup__add"
-                      onClick={() => addPlayer(playerID)}
-                    >
-                      Add
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </>
-        ) : (
-          <p>No Players</p>
-        )}
+        <AddPlayersForm
+          players={filteredPlayers}
+          addedPlayers={addedPlayers}
+          addPlayer={addPlayer}
+          removePlayer={removePlayer}
+        />
 
         {/* Form Buttons */}
         <div className="ap-popup__btns row">
