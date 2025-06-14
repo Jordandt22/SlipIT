@@ -8,6 +8,7 @@
 
 // Pages
 @import "./pages/home/home.mobile";
+@import "./pages/auth/auth.mobile";
 
 body {
   font-family: $pri-font;
@@ -24,4 +25,17 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(black, 0.5);
+}
+
+// Primary & Secondary Background
+.primary-background,
+.secondary-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
 }

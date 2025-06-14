@@ -248,6 +248,93 @@ html {
   color: white;
 }
 
+.auth-container {
+  width: 100vw;
+  min-height: 100vh;
+  overflow-y: scroll;
+  padding-top: 2rem;
+  padding-bottom: 6rem;
+}
+
+.auth-form {
+  width: 80%;
+}
+.auth-form__title {
+  position: relative;
+  color: white;
+  font-size: 1.275rem;
+  margin-bottom: 3rem;
+  font-weight: 500;
+}
+.auth-form__title::after {
+  content: "";
+  position: absolute;
+  width: 45%;
+  height: 2px;
+  background-color: #005a7a;
+  bottom: -1rem;
+  left: 0;
+}
+.auth-form__input-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+.auth-form__label {
+  margin-bottom: 0.75rem;
+  color: #81d2c7;
+}
+.auth-form__input {
+  outline: none;
+  border: 2px solid #005a7a;
+  background: #005a7a;
+  padding: 0.45rem;
+  border-radius: 5px;
+  color: white;
+}
+.auth-form__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.auth-form__input-box-error input {
+  border-color: rgba(255, 57, 57, 0.75);
+}
+.auth-form__input-box-valid input {
+  border-color: rgba(50, 205, 50, 0.75);
+}
+.auth-form__error {
+  color: #ff3939;
+  background: rgba(255, 57, 57, 0.35);
+  font-size: 0.825rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  line-height: 1rem;
+}
+.auth-form__submit {
+  display: block;
+  outline: none;
+  border: none;
+  background: #81d2c7;
+  color: white;
+  padding: 0.35rem 4rem;
+  border-radius: 25px;
+  margin: 2rem auto;
+  margin-bottom: 1.25rem;
+}
+.auth-form__link {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.975rem;
+  font-weight: 300;
+}
+.auth-form__link span {
+  color: #81d2c7;
+  font-weight: 500;
+}
+
 body {
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;
@@ -262,4 +349,16 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+}
+
+.primary-background,
+.secondary-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
 }/*# sourceMappingURL=main.css.map */

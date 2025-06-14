@@ -1,19 +1,14 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-// Images
-import mainPageBg from "../../../assets/backgrounds/main-page-bg.jpg";
-import mainPageLogo from "../../../assets/logos/main-page-logo.png";
+// Components
+import PrimaryBackground from "../../standalone/backgrounds/PrimaryBackground";
+import LargeLogo from "../../standalone/images/LargeLogo";
 
 function Home() {
   return (
-    <div
-      style={{
-        backgroundImage: `url("${mainPageBg}")`,
-      }}
-      className="home-container center"
-    >
-      <img className="home-container__img" src={mainPageLogo} alt="SlipIT" />
+    <PrimaryBackground className="home-container center">
+      <LargeLogo className="home-container__logo" />
       <div className="home-container__links center-vertical">
         <NavLink to="/signup" className="home-container__link-filled">
           Sign Up
@@ -22,7 +17,7 @@ function Home() {
           Login
         </NavLink>
       </div>
-    </div>
+    </PrimaryBackground>
   );
 }
 
