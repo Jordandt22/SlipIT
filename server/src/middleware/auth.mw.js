@@ -1,6 +1,6 @@
 const { verifyAccessToken } = require("../firebase/firebase.functions");
 const {
-  errorCodes: { NO_ACCESS_TOKEN },
+  errorCodes: { NO_ACCESS_TOKEN, INVALID_ACCESS_TOKEN, USER_NOT_FOUND },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
@@ -12,7 +12,7 @@ module.exports = {
 
     // FIREBASE AUTH
     const accessToken = req.headers?.authorization?.replace("Bearer ", "");
-    if (!accessToken)
+    if (!accessToken || accessToken === "null")
       return res
         .status(422)
         .json(customErrorHandler(NO_ACCESS_TOKEN, "MUST provide credentials."));

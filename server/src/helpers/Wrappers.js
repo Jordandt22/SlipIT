@@ -9,6 +9,7 @@ module.exports = {
       try {
         return await controller.call(this, req, res, next);
       } catch (e) {
+        console.error(e);
         return res
           .status(500)
           .json(

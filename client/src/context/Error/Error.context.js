@@ -1,7 +1,11 @@
 import React, { createContext, useContext } from "react";
 
 // Error Handlers
-import { errorCodes, signupErrorHandler } from "./ErrorHandlers";
+import {
+  errorCodes,
+  signupErrorHandler,
+  loginErrorHandler,
+} from "./ErrorHandlers";
 
 // Contexts
 import { useGlobal } from "../Global/Global.context";
@@ -34,6 +38,7 @@ export const ErrorContextProvider = ({ children }) => {
       value={{
         errorHandlers: {
           signupErrorHandler: errorHandlerWrapper(signupErrorHandler),
+          loginErrorHandler: errorHandlerWrapper(loginErrorHandler),
         },
       }}
     >

@@ -27,6 +27,15 @@ export const errorCodes = {
   LEAGUE_NAME_TAKEN: "league-name-taken",
 };
 
+// Firebase Error Codes
+export const firebaseErrorCodes = {
+  INVALID_EMAIL: "auth/invalid-email",
+  MISSING_PASSWORD: "auth/missing-password",
+  INVALID_PASSWORD: "auth/invalid-password",
+  INVALID_CRED: "auth/invalid-credential",
+  ARGUMENT_ERROR: "auth/argument-error",
+};
+
 // Sign Up Error Handler
 export const signupErrorHandler = (error, setFormErrors) => {
   const { code, message } = error;
@@ -47,6 +56,51 @@ export const signupErrorHandler = (error, setFormErrors) => {
     case errorCodes.PLAYER_NOT_FOUND:
     case errorCodes.PLAYER_ALREADY_CONNECTED:
       setFormErrors({ playerID: message });
+      break;
+
+    default:
+      break;
+  }
+};
+
+// Login Error Handler
+export const loginErrorHandler = (error, setFormErrors, showError) => {
+  const { code, message } = error;
+
+  switch (code) {
+    // Client Errors
+    case firebaseErrorCodes.INVALID_EMAIL:
+      setFormErrors({ email: "Please enter a valid email." });
+      break;
+
+    case firebaseErrorCodes.MISSING_PASSWORD:
+      setFormErrors({ password: "Please enter your password." });
+      break;
+
+    case firebaseErrorCodes.INVALID_PASSWORD:
+      setFormErrors({ password: "Please enter a valid password." });
+      break;
+
+    case firebaseErrorCodes.INVALID_CRED:
+      setFormErrors({
+        email:
+          "There are no accounts that match this email and password combination.",
+      });
+      break;
+
+    case firebaseErrorCodes.ARGUMENT_ERROR:
+    case errorCodes.INVALID_ACCESS_TOKEN:
+    case errorCodes.NO_ACCESS_TOKEN:
+      showError("Sorry, a problem occured. Please try again.");
+      break;
+
+    // Server Errors
+    case errorCodes.YUP_ERROR:
+      setFormErrors({ ...message });
+      break;
+
+    case errorCodes.USER_NOT_FOUND:
+      showError("Your account could not be found.");
       break;
 
     default:

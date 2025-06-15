@@ -57,7 +57,7 @@ function Signup() {
   ];
   const { createUser } = useUserAPI();
   const { showLoading, hideLoading } = useGlobal();
-  const { loginUser } = useAuth();
+  const { getAccessTokenWithCustomToken } = useAuth();
   const { updateUserState } = useUser();
   const { signupErrorHandler } = useError().errorHandlers;
   const formik = useFormik({
@@ -89,8 +89,8 @@ function Signup() {
           customAccessToken,
         } = data;
 
-        // Login User to Firebase
-        await loginUser(customAccessToken);
+        // Get Access Token from Firebase
+        await getAccessTokenWithCustomToken(customAccessToken);
 
         // Update User State
         updateUserState({ leagueInfo, playerInfo, slipsPlayed, userInfo, uid });

@@ -8,6 +8,7 @@ import {
   signOut,
   getAuth,
   signInWithCustomToken,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -35,14 +36,22 @@ export const FirebaseContextProvider = (props) => {
   // Sign in User with Custom Access Token
   const authUserWithCustomToken = async (customAccessToken) => {
     try {
-      const userCredential = await signInWithCustomToken(
-        Auth,
-        customAccessToken
-      );
+      const user = await signInWithCustomToken(Auth, customAccessToken);
 
-      return userCredential;
+      return user;
     } catch (error) {
       console.error("Error signing in with custom token:", error);
+    }
+  };
+
+  // Login User
+  const loginFirebaseUser = async (email, password, errorCB) => {
+    try {
+      const user = await signInWithEmailAndPassword(Auth, email, password);
+      
+      return user;
+    } catch (error) {
+      return errorCB({ code: error.code, message: error.message });
     }
   };
 
@@ -74,6 +83,7 @@ export const FirebaseContextProvider = (props) => {
           authUserWithCustomToken,
           logoutFirebaseUser,
           deleteFirebaseUser,
+          loginFirebaseUser,
         },
       }}
     >

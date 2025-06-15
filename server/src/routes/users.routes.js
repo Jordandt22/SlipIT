@@ -9,9 +9,9 @@ const { authUser } = require("../middleware/auth.mw");
 const { bodyValidator, paramsValidator } = require("../middleware/validators");
 const { UserSchema, UIDSchema } = require("../schemas/user.schemas");
 
-// Create a User
+// Create User
 usersRouter.post(
-  "/signup",
+  "/",
   bodyValidator(UserSchema),
   serverErrorCatcherWrapper(createUser)
 );
