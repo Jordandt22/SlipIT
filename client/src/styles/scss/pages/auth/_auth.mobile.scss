@@ -5,10 +5,16 @@
   overflow-y: scroll;
   padding-top: $spacer;
   padding-bottom: $spacer-md * 1.5;
+
+  &__logo {
+    animation: largeLogoFadeIn 2000ms ease;
+  }
 }
 
 .auth-form {
   width: 80%;
+  opacity: 0;
+  animation: authFormFadeIn 1500ms ease forwards;
 
   &__title {
     position: relative;
@@ -103,5 +109,14 @@
       color: $primary;
       font-weight: 500;
     }
+  }
+}
+
+@keyframes authFormFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

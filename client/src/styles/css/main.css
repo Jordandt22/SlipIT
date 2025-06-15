@@ -227,6 +227,9 @@ html {
   background-size: cover;
   flex-direction: column;
 }
+.home-container__logo {
+  animation: largeLogoFadeIn 2000ms ease;
+}
 .home-container__links {
   width: 100%;
   margin-bottom: 8rem;
@@ -243,11 +246,50 @@ html {
   text-align: center;
   font-size: 0.975rem;
 }
+.home-container__link {
+  opacity: 0;
+  animation: slideInFromRight 1000ms ease forwards 500ms;
+}
 .home-container__link-filled {
   background: #81d2c7;
   color: white;
+  opacity: 0;
+  animation: slideInFromLeft 1000ms ease forwards;
 }
 
+@keyframes largeLogoFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate3d(2, -1, -1, -0.2turn);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35) rotate3d(1, 1, 1, 45deg);
+  }
+  100% {
+    transform: scale(1) rotate3d(1, 1, 1, 0deg);
+  }
+}
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50vw);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50vw);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 .auth-container {
   width: 100vw;
   min-height: 100vh;
@@ -255,9 +297,14 @@ html {
   padding-top: 2rem;
   padding-bottom: 6rem;
 }
+.auth-container__logo {
+  animation: largeLogoFadeIn 2000ms ease;
+}
 
 .auth-form {
   width: 80%;
+  opacity: 0;
+  animation: authFormFadeIn 1500ms ease forwards;
 }
 .auth-form__title {
   position: relative;
@@ -338,6 +385,14 @@ html {
   font-weight: 500;
 }
 
+@keyframes authFormFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 body {
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;
