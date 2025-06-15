@@ -20,8 +20,8 @@ export const UserAPIContextProvider = (props) => {
     await axios.post(getURIPath(`/`, ""), data);
 
   // Get User
-  const getUser = async (uid) =>
-    await axios.get(getURIPath(`/${uid}`, ""), getAuthHeader());
+  const getUser = async (uid, accessToken) =>
+    await axios.get(getURIPath(`/${uid}`, ""), getAuthHeader(accessToken));
 
   return (
     <UserAPIContext.Provider value={{ createUser, getUser }}>

@@ -16,9 +16,11 @@ export const AuthContextProvider = ({ children }) => {
   });
 
   // Send Auth Header
-  const getAuthHeader = () => ({
+  const getAuthHeader = (accessToken) => ({
     headers: {
-      Authorization: `Bearer ${authState.accessToken}`,
+      Authorization: `Bearer ${
+        accessToken ? accessToken : authState.accessToken
+      }`,
     },
   });
 
@@ -38,15 +40,6 @@ export const AuthContextProvider = ({ children }) => {
     });
   };
 
-  // Set Access Token
-  const setAccessToken = (accessToken) =>
-    setAuthState({
-      isLoggedIn: false,
-      customAccessToken: null,
-      uid: null,
-      accessToken,
-    });
-
   // Login User
   const setAuthStateToLoggedIn = (uid) =>
     setAuthState((curAuthState) => ({
@@ -61,7 +54,6 @@ export const AuthContextProvider = ({ children }) => {
         authState,
         getAccessTokenWithCustomToken,
         getAuthHeader,
-        setAccessToken,
         setAuthStateToLoggedIn,
       }}
     >

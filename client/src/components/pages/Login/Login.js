@@ -38,7 +38,7 @@ function Login() {
   const { showLoading, hideLoading, showError } = useGlobal();
   const { getUser } = useUserAPI();
   const { loginFirebaseUser } = useFirebase().functions;
-  const { setAccessToken, setAuthStateToLoggedIn } = useAuth();
+  const { setAuthStateToLoggedIn } = useAuth();
   const { updateUserState } = useUser();
   const { loginErrorHandler } = useError().errorHandlers;
 
@@ -65,14 +65,13 @@ function Login() {
         } = await loginFirebaseUser(email, password, (firebaseError) => {
           loginErrorHandlerWrapper(firebaseError, setErrors);
         });
-        setAccessToken(accessToken);
 
         // Get Databse User Data
         const {
           data: {
             data: { leagueInfo, playerInfo, slipsPlayed, userInfo },
           },
-        } = await getUser(uid);
+        } = await getUser(uid, accessToken);
 
         // Update State
         updateUserState({ leagueInfo, playerInfo, slipsPlayed, userInfo, uid });
