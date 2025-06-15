@@ -7,7 +7,6 @@ const {
     PLAYER_NOT_FOUND,
     PLAYER_ALREADY_CONNECTED,
     USER_CREATION_ERROR,
-    SERVER_ERROR,
   },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
@@ -72,7 +71,7 @@ module.exports = {
           .json(
             customErrorHandler(
               PLAYER_ALREADY_CONNECTED,
-              "The player is already connected to."
+              "This player has already been connected to."
             )
           );
 
@@ -119,23 +118,12 @@ module.exports = {
           )
         );
 
-    try {
-      // If the user is a player, Connect User to Player
-      if (isPlayer) {
-        await PlayerModel.updateOne(
-          { playerID },
-          { $set: { userInfo: { uid } } }
-        );
-      }
-    } catch (error) {
-      return res
-        .status(500)
-        .json(
-          customErrorHandler(
-            SERVER_ERROR,
-            "Sorry, there was an error with the server."
-          )
-        );
+    // If the user is a player, Connect User to Player
+    if (isPlayer) {
+      await PlayerModel.updateOne(
+        { playerID },
+        { $set: { userInfo: { uid } } }
+      );
     }
 
     // Generate Custom Access Token: Will Be used to sign in the user on the CLIENT SIDE

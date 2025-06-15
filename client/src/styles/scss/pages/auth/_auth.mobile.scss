@@ -38,6 +38,10 @@
   &__label {
     margin-bottom: $spacer-small * 0.75;
     color: $primary;
+
+    span {
+      color: $red;
+    }
   }
 
   &__input {

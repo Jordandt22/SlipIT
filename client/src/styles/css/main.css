@@ -285,6 +285,9 @@ html {
   margin-bottom: 0.75rem;
   color: #81d2c7;
 }
+.auth-form__label span {
+  color: #ff3939;
+}
 .auth-form__input {
   outline: none;
   border: 2px solid #005a7a;
@@ -443,4 +446,36 @@ body {
   87% {
     box-shadow: 0.2em -0.2em 0 0 currentcolor;
   }
+}
+.toast-container {
+  background: transparent;
+}
+
+.error-message {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 100;
+  width: 90%;
+  background: #fbdddd;
+  padding: 0.65rem;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 57, 57, 0.75);
+}
+.error-message__triangle {
+  margin-right: 0.5rem;
+}
+.error-message p {
+  color: #ff3939;
+  font-size: 0.975rem;
+  line-height: 1rem;
+}
+.error-message__close {
+  outline: none;
+  border: none;
+  background: transparent;
+}
+.error-message__close path {
+  fill: #ff3939;
 }/*# sourceMappingURL=main.css.map */

@@ -26,7 +26,7 @@ const UserSchema = Yup.object({
   }),
   playerInfo: Yup.object({
     isPlayer: Yup.boolean().required(),
-    playerID: Yup.string().trim().max(500),
+    playerID: Yup.string().trim().max(150),
   }),
 });
 

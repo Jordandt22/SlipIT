@@ -51,37 +51,26 @@ module.exports = {
     const parsedPage = Number(page);
     const parsedRecent = JSON.parse(recent);
 
-    try {
-      // Determine Skip
-      const skip = (parsedPage - 1) * parsedLimit;
+    // Determine Skip
+    const skip = (parsedPage - 1) * parsedLimit;
 
-      // Get a Batch of Games
-      const games = await GameModel.find({})
-        .sort({ eventDate: parsedRecent ? -1 : 1 })
-        .skip(skip)
-        .limit(parsedLimit);
+    // Get a Batch of Games
+    const games = await GameModel.find({})
+      .sort({ eventDate: parsedRecent ? -1 : 1 })
+      .skip(skip)
+      .limit(parsedLimit);
 
-      res.status(200).json({
-        data: {
-          games,
-          totalGames: games.length,
-          limit: parsedLimit,
-          page: parsedPage,
-          skipped: skip,
-          recent: parsedRecent,
-        },
-        error: null,
-      });
-    } catch (error) {
-      return res
-        .status(500)
-        .json(
-          customErrorHandler(
-            SERVER_ERROR,
-            "Sorry, there was an error with the server."
-          )
-        );
-    }
+    res.status(200).json({
+      data: {
+        games,
+        totalGames: games.length,
+        limit: parsedLimit,
+        page: parsedPage,
+        skipped: skip,
+        recent: parsedRecent,
+      },
+      error: null,
+    });
   },
   getGame: async (req, res, next) => {
     const game = req.game;

@@ -3,10 +3,11 @@ const {
   errorCodes: { NO_ACCESS_TOKEN },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
+const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const UserModel = require("../models/user.model");
 
 module.exports = {
-  authUser: async (req, res, next) => {
+  authUser: serverErrorCatcherWrapper(async (req, res, next) => {
     const { uid } = req.params;
 
     // FIREBASE AUTH
@@ -48,5 +49,5 @@ module.exports = {
     req.params = { ...req.params };
     req.body = { ...req.body };
     return next();
-  },
+  }),
 };

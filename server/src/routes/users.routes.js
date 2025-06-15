@@ -4,15 +4,25 @@ const {
   getUser,
   joinLeague,
 } = require("../controllers/users.controller");
+const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const { authUser } = require("../middleware/auth.mw");
 const { bodyValidator, paramsValidator } = require("../middleware/validators");
 const { UserSchema, UIDSchema } = require("../schemas/user.schemas");
 
 // Create a User
-usersRouter.post("/signup", bodyValidator(UserSchema), createUser);
+usersRouter.post(
+  "/signup",
+  bodyValidator(UserSchema),
+  serverErrorCatcherWrapper(createUser)
+);
 
 // Get User Data
-usersRouter.get("/:uid", paramsValidator(UIDSchema), authUser, getUser);
+usersRouter.get(
+  "/:uid",
+  paramsValidator(UIDSchema),
+  authUser,
+  serverErrorCatcherWrapper(getUser)
+);
 
 // A user joins a league
 // usersRouter.post("/:uid/leagues/:leagueID", joinLeague);

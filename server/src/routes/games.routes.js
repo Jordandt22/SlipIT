@@ -10,6 +10,7 @@ const {
   getGame,
   getGames,
 } = require("../controllers/games.controller");
+const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const { checkIfGameExists } = require("../middleware/game.mw");
 const {
   bodyValidator,
@@ -28,18 +29,26 @@ const {
 } = require("../schemas/game.schemas");
 
 // Get Games - Query Params: ?limit=[val]&page=[val]
-gamesRouter.get("/", queryValidator(GetGamesSchema), getGames);
+gamesRouter.get(
+  "/",
+  queryValidator(GetGamesSchema),
+  serverErrorCatcherWrapper(getGames)
+);
 
 // Get Game
 gamesRouter.get(
   "/:gameID",
   paramsValidator(GameIDSchema),
   checkIfGameExists,
-  getGame
+  serverErrorCatcherWrapper(getGame)
 );
 
 // Create a Game
-gamesRouter.post("/", bodyValidator(GameSchema), createGame);
+gamesRouter.post(
+  "/",
+  bodyValidator(GameSchema),
+  serverErrorCatcherWrapper(createGame)
+);
 
 // Update Game Status
 gamesRouter.patch(
@@ -47,7 +56,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GameStatusSchema),
   checkIfGameExists,
-  updateGameStatus
+  serverErrorCatcherWrapper(updateGameStatus)
 );
 
 // Update Game Event Date
@@ -56,7 +65,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GameDateSchema),
   checkIfGameExists,
-  updateGameDate
+  serverErrorCatcherWrapper(updateGameDate)
 );
 
 // Add Players
@@ -65,7 +74,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GamePlayersSchema),
   checkIfGameExists,
-  addPlayersToGame
+  serverErrorCatcherWrapper(addPlayersToGame)
 );
 
 // Remove Players
@@ -74,7 +83,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GamePlayersSchema),
   checkIfGameExists,
-  removePlayersFromGame
+  serverErrorCatcherWrapper(removePlayersFromGame)
 );
 
 // Update Game Player Stats
@@ -83,7 +92,7 @@ gamesRouter.patch(
   paramsValidator(GameIDAndPlayerIDSchema),
   bodyValidator(GamePlayerStatsSchema),
   checkIfGameExists,
-  updateGamePlayerStats
+  serverErrorCatcherWrapper(updateGamePlayerStats)
 );
 
 // Delete Game
@@ -91,7 +100,7 @@ gamesRouter.delete(
   "/:gameID",
   paramsValidator(GameIDSchema),
   checkIfGameExists,
-  deleteGame
+  serverErrorCatcherWrapper(deleteGame)
 );
 
 module.exports = gamesRouter;

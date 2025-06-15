@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { ToastContainer, Bounce } from "react-toastify";
 
 // Contexts
 import { useGlobal } from "./context/Global/Global.context";
@@ -27,6 +28,19 @@ function App() {
 
       {/* Loading Spinner */}
       {loadingState.show && <LoadingSpinner />}
+
+      {/* Error Message */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        pauseOnHover
+        transition={Bounce}
+      />
     </div>
   );
 }

@@ -3,9 +3,10 @@ const {
   errorCodes: { PLAYER_NOT_FOUND },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
+const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 
 module.exports = {
-  checkIfPlayerExists: async (req, res, next) => {
+  checkIfPlayerExists: serverErrorCatcherWrapper(async (req, res, next) => {
     const { playerID } = req.params;
     const player = await PlayerModel.findOne({ playerID });
     if (!player)
@@ -20,5 +21,5 @@ module.exports = {
 
     req.player = player;
     next();
-  },
+  }),
 };

@@ -31,6 +31,9 @@ export const SignUpSchema = Yup.object({
       "You confirmation password does NOT match."
     )
     .required("You must confirm your password."),
+  playerID: Yup.string()
+    .trim()
+    .max(150, "Your player ID exceeds the character limit (150)."),
 });
 
 // Login Schema

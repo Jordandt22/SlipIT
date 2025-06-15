@@ -39,6 +39,7 @@ export const FirebaseContextProvider = (props) => {
         Auth,
         customAccessToken
       );
+
       return userCredential;
     } catch (error) {
       console.error("Error signing in with custom token:", error);

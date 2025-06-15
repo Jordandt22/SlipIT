@@ -4,6 +4,7 @@ const {
   getPlayer,
   getPlayers,
 } = require("../controllers/players.controller");
+const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const { checkIfPlayerExists } = require("../middleware/player.mw");
 const {
   bodyValidator,
@@ -17,17 +18,25 @@ const {
 } = require("../schemas/player.schemas");
 
 // Create a Player
-playersRouter.post("/", bodyValidator(PlayerSchema), createPlayer);
+playersRouter.post(
+  "/",
+  bodyValidator(PlayerSchema),
+  serverErrorCatcherWrapper(createPlayer)
+);
 
 // Get Player
 playersRouter.get(
   "/:playerID",
   paramsValidator(PlayerIDSchema),
   checkIfPlayerExists,
-  getPlayer
+  serverErrorCatcherWrapper(getPlayer)
 );
 
 // Get Players- Query Params: ?limit=[val]&page=[val]
-playersRouter.get("/", queryValidator(GetPlayersSchema), getPlayers);
+playersRouter.get(
+  "/",
+  queryValidator(GetPlayersSchema),
+  serverErrorCatcherWrapper(getPlayers)
+);
 
 module.exports = playersRouter;

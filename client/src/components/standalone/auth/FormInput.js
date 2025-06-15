@@ -1,7 +1,7 @@
 import React from "react";
 
 function FormInput(props) {
-  const { formik, placeholder, name, type, label } = props;
+  const { formik, placeholder, name, type, label, required } = props;
   const isError = formik.touched[name] && formik.errors[name];
   const isValid = formik.touched[name] && !formik.errors[name];
 
@@ -18,6 +18,7 @@ function FormInput(props) {
     >
       <label className="auth-form__label" htmlFor={name}>
         {label}
+        {required && <span>*</span>}
       </label>
       <input
         name={name}

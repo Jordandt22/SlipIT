@@ -3,9 +3,10 @@ const {
   errorCodes: { GAME_NOT_FOUND },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
+const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 
 module.exports = {
-  checkIfGameExists: async (req, res, next) => {
+  checkIfGameExists: serverErrorCatcherWrapper(async (req, res, next) => {
     const { gameID } = req.params;
     const game = await GameModel.findOne({ gameID });
     if (!game)
@@ -20,5 +21,5 @@ module.exports = {
 
     req.game = game;
     next();
-  },
+  }),
 };
