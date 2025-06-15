@@ -12,6 +12,7 @@ function PlayerInfo(props) {
   const {
     gameID,
     player: { playerID, stats },
+    status,
     refetch,
   } = props;
   const { getPlayer, updateGameStats, removeGamePlayer } = useAPI();
@@ -60,8 +61,8 @@ function PlayerInfo(props) {
     <div className="player-info">
       <div className="center-vertical">
         <div className="row">
-          <div className="player-info__img-box">
-            {/* <img src={image} alt={name} /> */}
+          <div className="player-info__img-box center">
+            <img src={image} alt={name} />
           </div>
         </div>
 
@@ -86,6 +87,7 @@ function PlayerInfo(props) {
         stats={stats.batting}
         updateStat={updateStat}
         isBatting={true}
+        status={status}
       />
       <PlayerStats
         title="Pitching"
@@ -93,6 +95,7 @@ function PlayerInfo(props) {
         stats={stats.pitching}
         updateStat={updateStat}
         isBatting={false}
+        status={status}
       />
     </div>
   );

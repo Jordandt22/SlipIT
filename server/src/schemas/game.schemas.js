@@ -26,6 +26,7 @@ const GameIDAndPlayerIDSchema = Yup.object({
 
 // Game Schema
 const GameSchema = Yup.object({
+  name: Yup.string().trim().min(3).max(20).required(),
   players: Yup.array()
     .of(
       Yup.object({

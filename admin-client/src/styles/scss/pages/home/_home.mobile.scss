@@ -36,12 +36,6 @@
 
 // Games Section
 .games-section {
-  &__title {
-    color: white;
-    font-weight: normal;
-    font-size: $main-fs * 1.25;
-  }
-
   &__game {
     margin-bottom: $spacer-small;
     background: $dark-bg;
@@ -50,14 +44,9 @@
   }
 
   &__game-title {
-    color: white;
+    color: $primary;
     margin-bottom: $spacer-small;
     font-size: $main-fs * 0.8;
-
-    span {
-      font-size: $main-fs * 0.65;
-      color: $grey;
-    }
   }
 
   &__game-info {
@@ -87,7 +76,7 @@
     border: none;
     background: transparent;
     padding: 0;
-    color: $primary;
+    color: $orange;
     font-weight: bold;
     font-size: $main-fs * 0.65;
     text-decoration: none;
@@ -172,9 +161,21 @@
     $s: 10rem;
     width: $s;
     height: $s;
-    background: $primary;
-    border-radius: 50%;
+    border-radius: 5px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+
+    border-bottom: 5px solid $primary;
+    margin: $spacer $spacer;
     margin-bottom: $spacer-small;
+
+    img {
+      $s: 100%;
+      width: $s;
+      height: $s;
+      object-fit: cover;
+      filter: drop-shadow(5px 5px 5px rgba(black, 0.5));
+    }
   }
 
   &__name {
@@ -213,6 +214,10 @@
       font-size: $main-fs * 0.5;
       color: white;
     }
+  }
+
+  &__none {
+    color: $primary;
   }
 }
 

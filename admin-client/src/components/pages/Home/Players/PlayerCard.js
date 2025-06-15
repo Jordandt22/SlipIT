@@ -15,7 +15,7 @@ function PlayerCard(props) {
       <div className="player-card__profile center-vertical">
         <div className="row">
           <div className="player-card__img-box">
-            {/* <img src={image} alt={name} /> */}
+            <img src={image} alt={name} />
           </div>
         </div>
 
@@ -24,20 +24,26 @@ function PlayerCard(props) {
 
       {/* Games Played */}
       <p className="player-card__title">Games Played</p>
-      {games
-        .slice(games.length - numOfRecentGames, games.length)
-        .map((game) => {
-          const { gameID } = game;
-          return (
-            <NavLink
-              key={gameID}
-              to={`/game/${gameID}`}
-              className="player-card__game"
-            >
-              Game<span>#{gameID}</span>
-            </NavLink>
-          );
-        })}
+      {games.length > 0 ? (
+        <>
+          {games
+            .slice(games.length - numOfRecentGames, games.length)
+            .map((game) => {
+              const { gameID } = game;
+              return (
+                <NavLink
+                  key={gameID}
+                  to={`/game/${gameID}`}
+                  className="player-card__game"
+                >
+                  Game<span>#{gameID}</span>
+                </NavLink>
+              );
+            })}
+        </>
+      ) : (
+        <p className="player-card__none">No games Played</p>
+      )}
     </div>
   );
 }

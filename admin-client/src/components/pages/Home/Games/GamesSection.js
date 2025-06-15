@@ -42,7 +42,7 @@ function GamesSection() {
       <div className="games-section__games">
         {totalGames > 0 ? (
           games.map((game) => {
-            const { gameID, eventDate, status, players } = game;
+            const { gameID, name, eventDate, status, players } = game;
             const formattedDate = new Date(eventDate).toLocaleDateString(
               "en-US",
               {
@@ -56,8 +56,9 @@ function GamesSection() {
 
             return (
               <div key={gameID} className="games-section__game">
-                <p className="games-section__game-title">
-                  Game<span>#{gameID}</span>
+                <p className="games-section__game-title">{name}</p>
+                <p className="games-section__game-info">
+                  Game ID: <span>{gameID}</span>
                 </p>
                 <p className="games-section__game-info">
                   Date: <span>{formattedDate}</span>

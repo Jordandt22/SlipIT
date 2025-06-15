@@ -26,6 +26,7 @@ const GamePlayerSchema = new mongoose.Schema({
 const GameSchema = new mongoose.Schema({
   gameID: String,
   eventDate: Date,
+  name: String,
   status: { type: Number, default: 0 }, // Not-Started=0, In-Progress=1, Ended=2
   players: [GamePlayerSchema],
 });

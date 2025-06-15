@@ -5,7 +5,7 @@ import { statNameFormatter } from "../../../utils/formatter.util";
 import Arrow from "../../SVG/Arrow";
 
 function PlayerStats(props) {
-  const { title, playerID, stats, updateStat, isBatting } = props;
+  const { title, playerID, stats, updateStat, isBatting, status } = props;
 
   return (
     <div className="player-info__box">
@@ -21,26 +21,28 @@ function PlayerStats(props) {
                 {statName}: <span>{stat}</span>
               </p>
 
-              <div className="row">
-                <button
-                  type="button"
-                  className="player-info__dec"
-                  onClick={async () =>
-                    await updateStat(key, stat, isBatting, true)
-                  }
-                >
-                  <Arrow />
-                </button>
-                <button
-                  type="button"
-                  className="player-info__inc"
-                  onClick={async () =>
-                    await updateStat(key, stat, isBatting, false)
-                  }
-                >
-                  <Arrow />
-                </button>
-              </div>
+              {status === 1 && (
+                <div className="row">
+                  <button
+                    type="button"
+                    className="player-info__dec"
+                    onClick={async () =>
+                      await updateStat(key, stat, isBatting, true)
+                    }
+                  >
+                    <Arrow />
+                  </button>
+                  <button
+                    type="button"
+                    className="player-info__inc"
+                    onClick={async () =>
+                      await updateStat(key, stat, isBatting, false)
+                    }
+                  >
+                    <Arrow />
+                  </button>
+                </div>
+              )}
             </div>
           );
         })}

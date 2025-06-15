@@ -81,7 +81,7 @@ module.exports = {
     });
   },
   createGame: async (req, res, next) => {
-    const { players, eventDate } = req.body;
+    const { name, players, eventDate } = req.body;
     const gameID = uuid.v4();
 
     // Check for Duplicate Players and Checks if All Players Exist
@@ -111,6 +111,7 @@ module.exports = {
     const game = await GameModel.create({
       gameID,
       eventDate: eventDate ? eventDate : new Date(),
+      name,
       players,
     });
 

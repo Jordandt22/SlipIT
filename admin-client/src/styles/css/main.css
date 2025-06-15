@@ -270,11 +270,6 @@ html {
   color: white;
 }
 
-.games-section__title {
-  color: white;
-  font-weight: normal;
-  font-size: 1.875rem;
-}
 .games-section__game {
   margin-bottom: 1rem;
   background: #19313a;
@@ -282,13 +277,9 @@ html {
   border-radius: 10px;
 }
 .games-section__game-title {
-  color: white;
+  color: #81d2c7;
   margin-bottom: 1rem;
   font-size: 1.2rem;
-}
-.games-section__game-title span {
-  font-size: 0.975rem;
-  color: #b3b3b3;
 }
 .games-section__game-info {
   color: white;
@@ -312,7 +303,7 @@ html {
   border: none;
   background: transparent;
   padding: 0;
-  color: #81d2c7;
+  color: #ffac14;
   font-weight: bold;
   font-size: 0.975rem;
   text-decoration: none;
@@ -386,9 +377,18 @@ html {
 .player-card__img-box {
   width: 10rem;
   height: 10rem;
-  background: #81d2c7;
-  border-radius: 50%;
+  border-radius: 5px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom: 5px solid #81d2c7;
+  margin: 2rem 2rem;
   margin-bottom: 1rem;
+}
+.player-card__img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5));
 }
 .player-card__name {
   color: white;
@@ -422,6 +422,9 @@ html {
 .player-card__game span {
   font-size: 0.75rem;
   color: white;
+}
+.player-card__none {
+  color: #81d2c7;
 }
 
 .player-cards-swiper {
@@ -516,10 +519,19 @@ html {
 .player-info__img-box {
   width: 10rem;
   height: 10rem;
-  background: #81d2c7;
-  border-radius: 50%;
+  background: #19313a;
+  border-radius: 5px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom: 5px solid #81d2c7;
   margin: 2rem 2rem;
   margin-bottom: 1rem;
+}
+.player-info__img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.25));
 }
 .player-info__name {
   color: white;

@@ -106,10 +106,22 @@
     $s: 10rem;
     width: $s;
     height: $s;
-    background: $primary;
-    border-radius: 50%;
+    background: $dark-bg;
+    border-radius: 5px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+
+    border-bottom: 5px solid $primary;
     margin: $spacer $spacer;
     margin-bottom: $spacer-small;
+
+    img {
+      $s: 100%;
+      width: $s;
+      height: $s;
+      object-fit: cover;
+      filter: drop-shadow(5px 5px 5px rgba(black, 0.25));
+    }
   }
 
   &__name {
