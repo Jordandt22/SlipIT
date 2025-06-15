@@ -41,11 +41,12 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   // Login User
-  const setAuthStateToLoggedIn = (uid) =>
+  const setAuthStateToLoggedIn = (uid, accessToken) =>
     setAuthState((curAuthState) => ({
       ...curAuthState,
       uid,
       isLoggedIn: true,
+      accessToken,
     }));
 
   return (

@@ -29,9 +29,7 @@ export const FirebaseContextProvider = (props) => {
   const Auth = getAuth();
 
   // Get Current User
-  const getCurrentUser = (cb) => {
-    onAuthStateChanged(Auth, (user) => cb(user));
-  };
+  const getCurrentUser = (cb) => onAuthStateChanged(Auth, cb);
 
   // Sign in User with Custom Access Token
   const authUserWithCustomToken = async (customAccessToken) => {
@@ -48,7 +46,7 @@ export const FirebaseContextProvider = (props) => {
   const loginFirebaseUser = async (email, password, errorCB) => {
     try {
       const user = await signInWithEmailAndPassword(Auth, email, password);
-      
+
       return user;
     } catch (error) {
       return errorCB({ code: error.code, message: error.message });

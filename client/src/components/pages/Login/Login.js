@@ -75,7 +75,7 @@ function Login() {
 
         // Update State
         updateUserState({ leagueInfo, playerInfo, slipsPlayed, userInfo, uid });
-        setAuthStateToLoggedIn(uid);
+        setAuthStateToLoggedIn(uid, accessToken);
 
         // Go back to Home Page
         resetForm();

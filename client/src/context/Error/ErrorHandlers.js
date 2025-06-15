@@ -107,3 +107,23 @@ export const loginErrorHandler = (error, setFormErrors, showError) => {
       break;
   }
 };
+
+// Auth Session Error Handler
+export const authSessionErrorHandler = (error, showError) => {
+  const { code } = error;
+
+  switch (code) {
+    case firebaseErrorCodes.ARGUMENT_ERROR:
+    case errorCodes.INVALID_ACCESS_TOKEN:
+    case errorCodes.NO_ACCESS_TOKEN:
+      showError("Sorry, a problem occured. Please try again.");
+      break;
+
+    case errorCodes.USER_NOT_FOUND:
+      showError("Your account could not be found.");
+      break;
+
+    default:
+      break;
+  }
+};
