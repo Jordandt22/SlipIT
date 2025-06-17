@@ -122,6 +122,20 @@
     padding: $spacer-small * 0.35 $spacer;
   }
 
+  &__input {
+    outline: none;
+    border: 2px solid $dark-bg;
+    background: $dark-bg;
+    color: white;
+    padding: $spacer-small * 0.5;
+    border-radius: 5px;
+    transition: all 200ms ease-out;
+
+    &:focus {
+      border: 2px solid $primary;
+    }
+  }
+
   .ap-popup__player-name {
     color: white;
   }
