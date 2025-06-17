@@ -60,21 +60,23 @@ function CreateGamePopup(props) {
           </div>
         )}
         {/* Submit Btn */}
-        <button
-          type="button"
-          className="cg-popup__submit"
-          onClick={async () => {
-            await createGame({
-              name: inputVal,
-              eventDate,
-              players: addedPlayers,
-            });
-            setCreateGamePopup({ show: false });
-            refetch();
-          }}
-        >
-          Create
-        </button>
+        {addedPlayers.length > 0 && (
+          <button
+            type="button"
+            className="cg-popup__submit"
+            onClick={async () => {
+              await createGame({
+                name: inputVal,
+                eventDate,
+                players: addedPlayers,
+              });
+              setCreateGamePopup({ show: false });
+              refetch();
+            }}
+          >
+            Create
+          </button>
+        )}
         <button
           type="button"
           className="cg-popup__cancel"
