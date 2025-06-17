@@ -77,6 +77,12 @@ app.use(
   require("./routes/leagues.routes")
 );
 
+// Routes for Picks
+app.use(
+  `/v${process.env.API_VERSION}/api/picks`,
+  require("./routes/picks.routes")
+);
+
 // PORT and Sever
 const PORT = process.env.PORT || 8000;
 const server = http.createServer(app);

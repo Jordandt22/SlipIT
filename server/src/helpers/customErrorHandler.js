@@ -24,6 +24,9 @@ const errorCodes = {
 
   // Leagues
   LEAGUE_NAME_TAKEN: "league-name-taken",
+
+  // Picks
+  INVALID_GAME: "invalid-game",
 };
 
 module.exports = {
