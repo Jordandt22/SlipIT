@@ -75,6 +75,15 @@ function CreateGamePopup(props) {
         >
           Create
         </button>
+        <button
+          type="button"
+          className="cg-popup__cancel"
+          onClick={() => {
+            setCreateGamePopup({ show: false });
+          }}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

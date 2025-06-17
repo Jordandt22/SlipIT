@@ -316,7 +316,6 @@ html {
   box-shadow: 0 0 15px 3px rgba(0, 0, 0, 0.15);
   width: 90%;
   height: fit-content;
-  max-height: 70%;
 }
 .cg-popup__title {
   color: white;
@@ -361,7 +360,7 @@ html {
 .cg-popup .add-players-input {
   margin-bottom: 2rem;
 }
-.cg-popup__submit {
+.cg-popup__submit, .cg-popup__cancel {
   display: block;
   width: 100%;
   outline: none;
@@ -372,6 +371,9 @@ html {
   border-radius: 25px;
   margin: 0 auto;
   margin-top: 1rem;
+}
+.cg-popup__cancel {
+  background: #ff3939;
 }
 
 .players-section {
