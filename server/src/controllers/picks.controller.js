@@ -262,4 +262,7 @@ module.exports = {
       error: null,
     });
   },
+  deletePick: async (req, res, next) => {
+    console.log(req.params);
+  },
 };

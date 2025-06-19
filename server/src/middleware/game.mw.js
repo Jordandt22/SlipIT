@@ -7,7 +7,7 @@ const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 
 module.exports = {
   checkIfGameExists: serverErrorCatcherWrapper(async (req, res, next) => {
-    const { gameID } = req.params;
+    const gameID = req.params.gameID || req.gameID;
     const game = await GameModel.findOne({ gameID });
     if (!game)
       return res
