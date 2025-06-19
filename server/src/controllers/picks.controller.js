@@ -2,10 +2,10 @@ const PickModel = require("../models/pick.model");
 const uuid = require("uuid");
 const {
   errorCodes: {
-    INVALID_GAME,
     GAME_PLAYER_DUPLICATES,
     GAME_PLAYER_NOT_FOUND,
     PICKS_ALREADY_GENERATED,
+    PLAYER_NOT_ADDED,
   },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
@@ -17,6 +17,7 @@ const {
 } = require("../helpers/game.util");
 const PlayerModel = require("../models/player.model");
 const GameModel = require("../models/game.model");
+const UserModel = require("../models/user.model");
 
 // Helpers for Get AVG Stats
 const getSumOfStatsHelper = (specificStats, specificSumOfStats) => {
@@ -163,29 +164,18 @@ module.exports = {
     const { players } = req.body;
     const {
       gameID,
-      status,
       sport: { name: sportName },
-      isPicksGenerated,
+      picksData,
+      players: gamePlayers,
     } = req.game;
 
-    if (isPicksGenerated)
+    if (picksData.isGenerated)
       return res
         .status(422)
         .json(
           customErrorHandler(
             PICKS_ALREADY_GENERATED,
             "There are already picks generated for this game."
-          )
-        );
-
-    // Check to make sure the game has NOT started yet
-    if (status !== 0)
-      return res
-        .status(422)
-        .json(
-          customErrorHandler(
-            INVALID_GAME,
-            "Invalid Game: Game is in-progress or has ended."
           )
         );
 
@@ -209,6 +199,24 @@ module.exports = {
           customErrorHandler(
             GAME_PLAYER_NOT_FOUND,
             "Could NOT find one or more of the players."
+          )
+        );
+
+    // Check if the players are in the Game
+    let areAllPlayersInGame = true;
+    players.map((player) => {
+      const isInGame = gamePlayers.some(
+        (gamePlayer) => gamePlayer.playerID === player.playerID
+      );
+      if (!isInGame) areAllPlayersInGame = false;
+    });
+    if (!areAllPlayersInGame)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            PLAYER_NOT_ADDED,
+            "One or more of the players are not in the game."
           )
         );
 
@@ -253,25 +261,48 @@ module.exports = {
     }
 
     // Get Total Game Picks
-    let totalGamePicks = 0;
+    let totalPicks = 0;
     picks.map((pick) => {
-      totalGamePicks += pick.totalPicks;
+      totalPicks += pick.totalPicks;
     });
 
     // Update Game
     await GameModel.findOneAndUpdate(
       { gameID },
       {
-        isPicksGenerated: true,
+        picksData: { isGenerated: true, totalPicks },
       }
     );
 
     res.status(200).json({
-      data: { gameID, players, picks, totalGamePicks },
+      data: { gameID, players, picks, totalPicks },
       error: null,
     });
   },
-  deletePick: async (req, res, next) => {
-    console.log(req.params);
+  deletePicks: async (req, res, next) => {
+    const { gameID } = req.game;
+
+    // Delete Picks
+    await PickModel.deleteMany({ "game.gameID": gameID });
+
+    // Update Game
+    await GameModel.findOneAndUpdate(
+      { gameID },
+      {
+        picksData: { isGenerated: false, totalPicks: 0 },
+      }
+    );
+
+    // ! REMOVE PICKS FROM USERS
+    // if (usersPlayed.length > 0) {
+    //   const regexString = usersPlayed.map((user) => user.uid).join("|");
+    //   var regex = new RegExp(regexString, "gi");
+    //   await UserModel.updateMany(
+    //     { uid: regex },
+    //     { $pull: { [`slipsPlayed.$.picks`]: { pickID } } }
+    //   );
+    // }
+
+    res.status(200).json({ data: "success", error: null });
   },
 };

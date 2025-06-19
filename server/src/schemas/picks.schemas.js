@@ -1,5 +1,12 @@
 const Yup = require("yup");
 
+// ---- Request Params Schemas ----
+
+// PickID Schema
+const PickIDSchema = Yup.object({
+  pickID: Yup.string().trim().min(1).max(100).required(),
+});
+
 // ---- Request Body Schemas ----
 
 // Generate Picks Schema Schema
@@ -17,5 +24,6 @@ const GeneratePicksSchema = Yup.object({
 });
 
 module.exports = {
+  PickIDSchema,
   GeneratePicksSchema,
 };

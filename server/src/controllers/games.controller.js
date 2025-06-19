@@ -9,6 +9,7 @@ const {
   checkForDupPlayersAndExist,
   validateSport,
 } = require("../helpers/game.util");
+const PickModel = require("../models/pick.model");
 
 module.exports = {
   getGames: async (req, res, next) => {
@@ -195,7 +196,7 @@ module.exports = {
   removePlayersFromGame: async (req, res, next) => {
     const { gameID } = req.params;
     const { players } = req.body;
-    const { players: curPlayers, sport } = req.game;
+    const { players: curPlayers, sport, picksData } = req.game;
 
     // Check for Duplicate Players and Checks if All Players Exist
     const { playerDuplicates, allPlayersExist } =
@@ -228,19 +229,35 @@ module.exports = {
       return !shouldRemove;
     });
 
-    // Update Game Players
-    const updatedGame = await GameModel.findOneAndUpdate(
-      { gameID },
-      { players: updatedPlayers },
-      { new: true }
-    );
-
     // Delete Game from Players' Game Logs
     const regexString = players.map((player) => player.playerID).join("|");
     var regex = new RegExp(regexString, "gi");
     await PlayerModel.updateMany(
       { playerID: regex },
       { $pull: { [`playerStats.${sport.name}.games`]: { gameID } } }
+    );
+
+    // Remove all the picks for this player for this specific game
+    let deletedCount = 0;
+    if (picksData.isGenerated) {
+      const deleteResult = await PickModel.deleteMany({
+        "game.gameID": gameID,
+        "player.playerID": { $regex: regex },
+      });
+      deletedCount = deleteResult.deletedCount;
+    }
+
+    // Update Game Players
+    const updatedGame = await GameModel.findOneAndUpdate(
+      { gameID },
+      {
+        players: updatedPlayers,
+        picksData: {
+          isGenerated: picksData.totalPicks - deletedCount > 0,
+          totalPicks: picksData.totalPicks - deletedCount,
+        },
+      },
+      { new: true }
     );
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
@@ -259,6 +276,11 @@ module.exports = {
       { playerID: regex },
       { $pull: { [`playerStats.${sport.name}.games`]: { gameID } } }
     );
+
+    // Delete all the picks for this game
+    await PickModel.deleteMany({
+      "game.gameID": gameID,
+    });
 
     res
       .status(200)

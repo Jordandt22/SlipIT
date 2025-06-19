@@ -1,13 +1,13 @@
 const GameModel = require("../models/game.model");
 const {
-  errorCodes: { GAME_NOT_FOUND },
+  errorCodes: { GAME_NOT_FOUND, INVALID_GAME },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 
 module.exports = {
   checkIfGameExists: serverErrorCatcherWrapper(async (req, res, next) => {
-    const gameID = req.params.gameID || req.gameID;
+    const { gameID } = req.params;
     const game = await GameModel.findOne({ gameID });
     if (!game)
       return res
@@ -20,6 +20,22 @@ module.exports = {
         );
 
     req.game = game;
+    next();
+  }),
+  checkIfGameIsValid: serverErrorCatcherWrapper(async (req, res, next) => {
+    const { status } = req.game;
+
+    // Check to make sure the game has NOT started yet
+    if (status !== 0)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            INVALID_GAME,
+            "Invalid Game: Game is in-progress or has ended."
+          )
+        );
+
     next();
   }),
 };

@@ -1,26 +1,20 @@
 const picksRouter = require("express").Router();
 const {
   generatePicks,
-  deletePick,
+  deletePicks,
 } = require("../controllers/picks.controller");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
-const { checkIfGameExists } = require("../middleware/game.mw");
-const { bodyValidator, paramsValidator } = require("../middleware/validators");
+const { bodyValidator } = require("../middleware/validators");
 const { GeneratePicksSchema } = require("../schemas/picks.schemas");
 
 // Generate Picks
 picksRouter.post(
   "/generate",
   bodyValidator(GeneratePicksSchema),
-  checkIfGameExists,
   serverErrorCatcherWrapper(generatePicks)
 );
 
-// Delete Pick
-picksRouter.delete(
-  "/:pickID",
-  checkIfGameExists,
-  serverErrorCatcherWrapper(deletePick)
-);
+// Delete All Picks for a Specific Game
+picksRouter.delete("/", serverErrorCatcherWrapper(deletePicks));
 
 module.exports = picksRouter;

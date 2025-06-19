@@ -23,12 +23,14 @@ const errorCodes = {
   GAME_NOT_FOUND: "game-not-found",
   INVALID_SPORT: "invalid-sport",
   PICKS_ALREADY_GENERATED: "picks-already-generated",
+  PLAYER_NOT_ADDED: "player-not-added",
 
   // Leagues
   LEAGUE_NAME_TAKEN: "league-name-taken",
 
   // Picks
   INVALID_GAME: "invalid-game",
+  PICK_NOT_FOUND: "pick-not-found",
 };
 
 module.exports = {

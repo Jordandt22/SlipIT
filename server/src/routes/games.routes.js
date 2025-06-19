@@ -11,7 +11,10 @@ const {
   getGames,
 } = require("../controllers/games.controller");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
-const { checkIfGameExists } = require("../middleware/game.mw");
+const {
+  checkIfGameExists,
+  checkIfGameIsValid,
+} = require("../middleware/game.mw");
 const {
   bodyValidator,
   paramsValidator,
@@ -66,6 +69,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GameDateSchema),
   checkIfGameExists,
+  checkIfGameIsValid,
   serverErrorCatcherWrapper(updateGameDate)
 );
 
@@ -75,6 +79,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GamePlayersSchema),
   checkIfGameExists,
+  checkIfGameIsValid,
   serverErrorCatcherWrapper(addPlayersToGame)
 );
 
@@ -84,6 +89,7 @@ gamesRouter.patch(
   paramsValidator(GameIDSchema),
   bodyValidator(GamePlayersSchema),
   checkIfGameExists,
+  checkIfGameIsValid,
   serverErrorCatcherWrapper(removePlayersFromGame)
 );
 
