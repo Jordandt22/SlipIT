@@ -1,10 +1,19 @@
 const PickModel = require("../models/pick.model");
 const uuid = require("uuid");
 const {
-  errorCodes: { INVALID_GAME, GAME_PLAYER_DUPLICATES, GAME_PLAYER_NOT_FOUND },
+  errorCodes: {
+    INVALID_GAME,
+    GAME_PLAYER_DUPLICATES,
+    GAME_PLAYER_NOT_FOUND,
+    PICKS_ALREADY_GENERATED,
+  },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
-const { checkForDupPlayersAndExist } = require("../helpers/game.util");
+const { BLITZBALL } = require("../misc/sports");
+const {
+  checkForDupPlayersAndExist,
+  getSportCategory,
+} = require("../helpers/game.util");
 const PlayerModel = require("../models/player.model");
 const GameModel = require("../models/game.model");
 
@@ -36,27 +45,47 @@ const getAVGStatsHelper = (
 };
 
 // Get AVG Stats
-const getAVGStats = async (type, games, playerID, gamesPlayed) => {
-  let sumOfStats = { batting: {}, pitching: {} };
-  let avgStats = { batting: {}, pitching: {} };
+const getAVGStats = async (type, games, playerID, gamesPlayed, sportName) => {
+  const firstCategory = getSportCategory(sportName, 0);
+  const secondCategory = getSportCategory(sportName, 1);
+  let sumOfStats = { [firstCategory]: {}, [secondCategory]: {} };
+  let avgStats = { [firstCategory]: {}, [secondCategory]: {} };
   for (let i = 0; i <= games.length - 1; i++) {
     const gameData = await GameModel.findOne({ gameID: games[i].gameID });
     const playerStats = gameData.players.filter(
       (p) => p.playerID === playerID
-    )[0]?.stats;
+    )[0]?.stats[sportName];
+
+    // Remove At Bats & Innings Pitched Stats for Blitzball from Picks
+    if (sportName === BLITZBALL) {
+      delete playerStats.batting.atBats;
+      delete playerStats.pitching.inningsPitched;
+    }
 
     // Batting Stats
     if (type === 0 || type === 2) {
-      delete playerStats.batting.atBats;
-      getSumOfStatsHelper(playerStats.batting, sumOfStats.batting);
-      getAVGStatsHelper(sumOfStats.batting, avgStats.batting, gamesPlayed);
+      getSumOfStatsHelper(
+        playerStats[firstCategory],
+        sumOfStats[firstCategory]
+      );
+      getAVGStatsHelper(
+        sumOfStats[firstCategory],
+        avgStats[firstCategory],
+        gamesPlayed
+      );
     }
 
     // Pitching Stats
     if (type === 1 || type === 2) {
-      delete playerStats.pitching.inningsPitched;
-      getSumOfStatsHelper(playerStats.pitching, sumOfStats.pitching);
-      getAVGStatsHelper(sumOfStats.pitching, avgStats.pitching, gamesPlayed);
+      getSumOfStatsHelper(
+        playerStats[secondCategory],
+        sumOfStats[secondCategory]
+      );
+      getAVGStatsHelper(
+        sumOfStats[secondCategory],
+        avgStats[secondCategory],
+        gamesPlayed
+      );
     }
   }
 
@@ -67,7 +96,6 @@ const getAVGStats = async (type, games, playerID, gamesPlayed) => {
 const generateLinesHelper = async (
   picks,
   specificAVGStats,
-  isBatting,
   gameID,
   playerID
 ) => {
@@ -86,7 +114,6 @@ const generateLinesHelper = async (
         playerID,
       },
       line: {
-        isBatting,
         stat: key,
         value: Number(specificAVGStats[key].toString().split(".")[0]) + 0.5,
       },
@@ -97,14 +124,17 @@ const generateLinesHelper = async (
 };
 
 // Generate Lines
-const generateLines = async (type, avgStats, gameID, playerID) => {
-  const battingPicks = [];
-  const pitchingPicks = [];
+const generateLines = async (type, avgStats, gameID, playerID, sportName) => {
+  const firstCategory = getSportCategory(sportName, 0);
+  const firstCategoryPicks = [];
+
+  const secondCategory = getSportCategory(sportName, 1);
+  const secondCategoryPicks = [];
+
   if (type === 0 || type === 2) {
     await generateLinesHelper(
-      battingPicks,
-      avgStats.batting,
-      true,
+      firstCategoryPicks,
+      avgStats[firstCategory],
       gameID,
       playerID
     );
@@ -112,27 +142,39 @@ const generateLines = async (type, avgStats, gameID, playerID) => {
 
   if (type === 1 || type === 2) {
     await generateLinesHelper(
-      pitchingPicks,
-      avgStats.pitching,
-      false,
+      secondCategoryPicks,
+      avgStats[secondCategory],
       gameID,
       playerID
     );
   }
 
   return {
-    batting: battingPicks,
-    pitching: pitchingPicks,
-    totalBattingPicks: battingPicks.length,
-    totalPitchingPicks: pitchingPicks.length,
-    totalPicks: battingPicks.length + pitchingPicks.length,
+    [firstCategory]: firstCategoryPicks,
+    [secondCategory]: secondCategoryPicks,
+    totalPicks: firstCategoryPicks.length + secondCategoryPicks.length,
   };
 };
 
 module.exports = {
   generatePicks: async (req, res, next) => {
     const { players } = req.body;
-    const { gameID, status } = req.game;
+    const {
+      gameID,
+      status,
+      sport: { name: sportName },
+      isPicksGenerated,
+    } = req.game;
+
+    if (isPicksGenerated)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            PICKS_ALREADY_GENERATED,
+            "There are already picks generated for this game."
+          )
+        );
 
     // Check to make sure the game has NOT started yet
     if (status !== 0)
@@ -172,9 +214,8 @@ module.exports = {
     let picks = [];
     for (let i = 0; i <= players.length - 1; i++) {
       const { type, playerID } = players[i];
-      const {
-        playerStats: { games },
-      } = await PlayerModel.findOne({ playerID });
+      const { playerStats } = await PlayerModel.findOne({ playerID });
+      const games = playerStats[sportName].games;
 
       // Filter out the current game
       const filteredGames = games.filter((g) => g.gameID !== gameID);
@@ -185,7 +226,8 @@ module.exports = {
         type,
         filteredGames,
         playerID,
-        gamesPlayed
+        gamesPlayed,
+        sportName
       );
 
       // Loop Through All Stats and Create Lines
@@ -193,7 +235,8 @@ module.exports = {
         type,
         avgStats,
         gameID,
-        playerID
+        playerID,
+        sportName
       );
 
       // Add the picks for this specific player to the total game picks
@@ -205,6 +248,14 @@ module.exports = {
     picks.map((pick) => {
       totalGamePicks += pick.totalPicks;
     });
+
+    // Update Game
+    await GameModel.findOneAndUpdate(
+      { gameID },
+      {
+        isPicksGenerated: true,
+      }
+    );
 
     res.status(200).json({
       data: { gameID, players, picks, totalGamePicks },

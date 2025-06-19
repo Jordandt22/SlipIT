@@ -45,7 +45,30 @@ const validateSport = (sport) => {
   return validSports[sport.name];
 };
 
+// Get Category
+const getSportCategory = (sportName, type) => {
+  switch (sportName) {
+    case BLITZBALL:
+      if (type === 0) {
+        return "batting";
+      } else {
+        return "pitching";
+      }
+
+    case SOCCER:
+      if (type === 0) {
+        return "attacker";
+      } else {
+        return "defender";
+      }
+
+    default:
+      return "";
+  }
+};
+
 module.exports = {
   checkForDupPlayersAndExist,
   validateSport,
+  getSportCategory,
 };
