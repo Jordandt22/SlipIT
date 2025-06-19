@@ -11,7 +11,6 @@ const PickSchema = new mongoose.Schema({
     playerID: String,
   },
   line: {
-    isBattingStat: Boolean,
     stat: String,
     value: Number,
   },

@@ -23,7 +23,8 @@ const {
   GameStatusSchema,
   GameDateSchema,
   GamePlayersSchema,
-  GamePlayerStatsSchema,
+  BlitzballStatsSchema,
+  SoccerStatsSchema,
   GameIDAndPlayerIDSchema,
   GetGamesSchema,
 } = require("../schemas/game.schemas");
@@ -86,11 +87,20 @@ gamesRouter.patch(
   serverErrorCatcherWrapper(removePlayersFromGame)
 );
 
-// Update Game Player Stats
+// Update Game Player Stats - Blitzball
 gamesRouter.patch(
-  "/:gameID/players/:playerID/stats",
+  "/:gameID/players/:playerID/stats/blitzball",
   paramsValidator(GameIDAndPlayerIDSchema),
-  bodyValidator(GamePlayerStatsSchema),
+  bodyValidator(BlitzballStatsSchema),
+  checkIfGameExists,
+  serverErrorCatcherWrapper(updateGamePlayerStats)
+);
+
+// Update Game Player Stats - Soccer
+gamesRouter.patch(
+  "/:gameID/players/:playerID/stats/soccer",
+  paramsValidator(GameIDAndPlayerIDSchema),
+  bodyValidator(SoccerStatsSchema),
   checkIfGameExists,
   serverErrorCatcherWrapper(updateGamePlayerStats)
 );

@@ -1,11 +1,14 @@
 const uuid = require("uuid");
 const GameModel = require("../models/game.model");
 const {
-  errorCodes: { GAME_PLAYER_DUPLICATES, GAME_PLAYER_NOT_FOUND },
+  errorCodes: { GAME_PLAYER_DUPLICATES, GAME_PLAYER_NOT_FOUND, INVALID_SPORT },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const PlayerModel = require("../models/player.model");
-const { checkForDupPlayersAndExist } = require("../helpers/game.util");
+const {
+  checkForDupPlayersAndExist,
+  validateSport,
+} = require("../helpers/game.util");
 
 module.exports = {
   getGames: async (req, res, next) => {
@@ -44,8 +47,20 @@ module.exports = {
     });
   },
   createGame: async (req, res, next) => {
-    const { name, players, eventDate } = req.body;
+    const { name, players, eventDate, sport } = req.body;
     const gameID = uuid.v4();
+
+    // Check to see if the sport is valid
+    const isSportValid = validateSport(sport);
+    if (!isSportValid)
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            INVALID_SPORT,
+            "The sport you provided is invalid."
+          )
+        );
 
     // Check for Duplicate Players and Checks if All Players Exist
     const { playerDuplicates, allPlayersExist } =
@@ -71,11 +86,15 @@ module.exports = {
         );
 
     // Create Game
+    const sportName = sport.name;
     const game = await GameModel.create({
       gameID,
       eventDate: eventDate ? eventDate : new Date(),
       name,
       players,
+      sport: {
+        name: sportName,
+      },
     });
 
     // Add gameID to every player
@@ -83,7 +102,7 @@ module.exports = {
     var regex = new RegExp(regexString, "gi");
     await PlayerModel.updateMany(
       { playerID: regex },
-      { $push: { "playerStats.games": { gameID } } }
+      { $push: { [`playerStats.${sportName}.games`]: { gameID } } }
     );
 
     res.status(200).json({ data: { game }, error: null });
@@ -115,7 +134,7 @@ module.exports = {
   addPlayersToGame: async (req, res, next) => {
     const { gameID } = req.params;
     const { players } = req.body;
-    const { players: curPlayers } = req.game;
+    const { players: curPlayers, sport } = req.game;
 
     // Check for Duplicate Players and Checks if All Players Exist
     const { playerDuplicates, allPlayersExist } =
@@ -168,7 +187,7 @@ module.exports = {
     var regex = new RegExp(regexString, "gi");
     await PlayerModel.updateMany(
       { playerID: regex },
-      { $push: { "playerStats.games": { gameID } } }
+      { $push: { [`playerStats.${sport.name}.games`]: { gameID } } }
     );
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
@@ -176,7 +195,7 @@ module.exports = {
   removePlayersFromGame: async (req, res, next) => {
     const { gameID } = req.params;
     const { players } = req.body;
-    const { players: curPlayers } = req.game;
+    const { players: curPlayers, sport } = req.game;
 
     // Check for Duplicate Players and Checks if All Players Exist
     const { playerDuplicates, allPlayersExist } =
@@ -221,14 +240,14 @@ module.exports = {
     var regex = new RegExp(regexString, "gi");
     await PlayerModel.updateMany(
       { playerID: regex },
-      { $pull: { "playerStats.games": { gameID } } }
+      { $pull: { [`playerStats.${sport.name}.games`]: { gameID } } }
     );
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
   deleteGame: async (req, res, next) => {
     const { gameID } = req.params;
-    const { players } = req.game;
+    const { players, sport } = req.game;
 
     // Delete Game
     await GameModel.findOneAndDelete({ gameID });
@@ -238,7 +257,7 @@ module.exports = {
     var regex = new RegExp(regexString, "gi");
     await PlayerModel.updateMany(
       { playerID: regex },
-      { $pull: { "playerStats.games": { gameID } } }
+      { $pull: { [`playerStats.${sport.name}.games`]: { gameID } } }
     );
 
     res
@@ -248,12 +267,10 @@ module.exports = {
   updateGamePlayerStats: async (req, res, next) => {
     const { gameID, playerID } = req.params;
     const { stats } = req.body;
-    const game = req.game;
+    const { players, sport } = req.game;
 
     // Check if Player Exist
-    const playerExists = game.players.some(
-      (player) => player.playerID === playerID
-    );
+    const playerExists = players.some((player) => player.playerID === playerID);
     if (!playerExists)
       return res
         .status(404)
@@ -265,9 +282,9 @@ module.exports = {
         );
 
     // Update the Player's Stats
-    const updatedPlayers = [...game.players].map((player) => {
+    const updatedPlayers = [...players].map((player) => {
       if (playerID === player.playerID) {
-        player.stats = stats;
+        player.stats[sport.name] = { ...player.stats[sport.name], ...stats };
       }
 
       return player;

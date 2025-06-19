@@ -1,23 +1,33 @@
 const mongoose = require("mongoose");
 
-// Game Player Schema
+// Game Player
 const GamePlayerSchema = new mongoose.Schema({
   playerID: String,
   stats: {
-    batting: {
-      atBats: { type: Number, default: 0 },
-      hits: { type: Number, default: 0 },
-      hitterStrikeouts: { type: Number, default: 0 },
-      hitterWalks: { type: Number, default: 0 },
-      homeruns: { type: Number, default: 0 },
-      RBI: { type: Number, default: 0 },
+    blitzball: {
+      batting: {
+        atBats: { type: Number, default: 0 },
+        hits: { type: Number, default: 0 },
+        hitterStrikeouts: { type: Number, default: 0 },
+        hitterWalks: { type: Number, default: 0 },
+        homeruns: { type: Number, default: 0 },
+        RBI: { type: Number, default: 0 },
+      },
+      pitching: {
+        inningsPitched: { type: Number, default: 0 },
+        pitcherStrikeouts: { type: Number, default: 0 },
+        pitcherWalks: { type: Number, default: 0 },
+        hitsAllowed: { type: Number, default: 0 },
+        earnedRuns: { type: Number, default: 0 },
+      },
     },
-    pitching: {
-      inningsPitched: { type: Number, default: 0 },
-      pitcherStrikeouts: { type: Number, default: 0 },
-      pitcherWalks: { type: Number, default: 0 },
-      hitsAllowed: { type: Number, default: 0 },
-      earnedRuns: { type: Number, default: 0 },
+    soccer: {
+      attacker: {
+        goalsScored: { type: Number, default: 0 },
+      },
+      defender: {
+        goalsBlocked: { type: Number, default: 0 },
+      },
     },
   },
 });
@@ -28,6 +38,9 @@ const GameSchema = new mongoose.Schema({
   eventDate: Date,
   name: String,
   status: { type: Number, default: 0 }, // Not-Started=0, In-Progress=1, Ended=2
+  sport: {
+    name: String,
+  },
   players: [GamePlayerSchema],
 });
 

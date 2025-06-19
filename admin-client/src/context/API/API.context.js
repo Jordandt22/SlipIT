@@ -28,10 +28,17 @@ export const APIContextProvider = (props) => {
   const updateGameStatus = async (gameID, data) =>
     await axios.patch(getURIPath(`/games/${gameID}/status`, ""), data);
 
-  // Update Game Players
-  const updateGameStats = async (gameID, playerID, data) =>
+  // Update Game Players Blitzball Stats
+  const updateGameBlitzballStats = async (gameID, playerID, data) =>
     await axios.patch(
-      getURIPath(`/games/${gameID}/players/${playerID}/stats`, ""),
+      getURIPath(`/games/${gameID}/players/${playerID}/stats/blitzball`, ""),
+      data
+    );
+
+  // Update Game Players Soccer Stats
+  const updateGameSoccerStats = async (gameID, playerID, data) =>
+    await axios.patch(
+      getURIPath(`/games/${gameID}/players/${playerID}/stats/soccer`, ""),
       data
     );
 
@@ -66,7 +73,8 @@ export const APIContextProvider = (props) => {
         getGames,
         getGame,
         createGame,
-        updateGameStats,
+        updateGameBlitzballStats,
+        updateGameSoccerStats,
         updateGameStatus,
         addGamePlayer,
         removeGamePlayer,

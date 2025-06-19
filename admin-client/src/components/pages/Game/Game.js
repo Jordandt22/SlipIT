@@ -35,8 +35,8 @@ function Game() {
   } else if (isError) {
     return <div>{error.message}</div>;
   }
-
-  const { name, eventDate, players, status } = data.data.data.game;
+  const game = data.data.data.game;
+  const { name, eventDate, players, status, sport } = game;
   const formattedDate = new Date(eventDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -47,7 +47,9 @@ function Game() {
 
   return (
     <div className="game-container">
-      <h2 className="game-container__title">{name}</h2>
+      <h2 className="game-container__title">
+        {name} <span>({sport.name})</span>
+      </h2>
       <p className="game-info__info">
         Game ID: <span>{gameID}</span>
       </p>
@@ -96,12 +98,7 @@ function Game() {
         {players.map((player) => {
           return (
             <SwiperSlide key={player.playerID}>
-              <PlayerInfo
-                gameID={gameID}
-                player={player}
-                refetch={refetch}
-                status={status}
-              />
+              <PlayerInfo player={player} refetch={refetch} game={game} />
             </SwiperSlide>
           );
         })}

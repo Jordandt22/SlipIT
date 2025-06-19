@@ -281,6 +281,10 @@ html {
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
+.games-section__game-title span {
+  color: white;
+  text-transform: capitalize;
+}
 .games-section__game-info {
   color: white;
   margin-bottom: 1rem;
@@ -307,6 +311,24 @@ html {
   font-weight: bold;
   font-size: 0.975rem;
   text-decoration: none;
+}
+.games-section__tabs {
+  margin-bottom: 1rem;
+}
+.games-section__tab {
+  outline: none;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  margin-right: 1rem;
+  border-radius: 5ch;
+  padding: 0.25rem 2rem;
+  text-transform: capitalize;
+  transition: all 200ms ease-out;
+}
+.games-section__tab-active {
+  background: #19313a;
+  border-color: #81d2c7;
 }
 
 .cg-popup {
@@ -440,6 +462,24 @@ html {
 .player-card__none {
   color: #81d2c7;
 }
+.player-card__tabs {
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.player-card__tab {
+  outline: none;
+  border: 2px solid white;
+  color: white;
+  background: transparent;
+  border-radius: 5px;
+  padding: 0.25rem 2rem;
+  text-transform: capitalize;
+  transition: all 200ms ease-out;
+}
+.player-card__tab-active {
+  border-color: #81d2c7;
+  background: #81d2c7;
+}
 
 .player-cards-swiper {
   width: 100%;
@@ -459,6 +499,7 @@ html {
   color: #b3b3b3;
   font-weight: normal;
   font-size: 0.975rem;
+  text-transform: capitalize;
 }
 
 .game-info__info {

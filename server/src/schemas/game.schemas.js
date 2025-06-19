@@ -37,6 +37,9 @@ const GameSchema = Yup.object({
     .max(20)
     .required(),
   eventDate: Yup.date().min(new Date(), "Date must be after today."),
+  sport: Yup.object({
+    name: Yup.string().min(1).max(50).required(),
+  }),
 });
 
 // Game Status Schema
@@ -62,8 +65,8 @@ const GamePlayersSchema = Yup.object({
     .required(),
 });
 
-// Game Player Stats Schema
-const GamePlayerStatsSchema = Yup.object({
+// Blitzball Game Stats Schema
+const BlitzballStatsSchema = Yup.object({
   stats: Yup.object({
     batting: Yup.object({
       atBats: Yup.number().min(0).max(10).required(),
@@ -83,13 +86,25 @@ const GamePlayerStatsSchema = Yup.object({
   }),
 });
 
+const SoccerStatsSchema = Yup.object({
+  stats: Yup.object({
+    attacker: Yup.object({
+      goalsScored: Yup.number().min(0).max(20).required(),
+    }),
+    defender: Yup.object({
+      goalsBlocked: Yup.number().min(0).max(20).required(),
+    }),
+  }),
+});
+
 module.exports = {
   GameSchema,
   GameIDSchema,
   GameStatusSchema,
   GameDateSchema,
   GamePlayersSchema,
-  GamePlayerStatsSchema,
+  BlitzballStatsSchema,
+  SoccerStatsSchema,
   GameIDAndPlayerIDSchema,
   GetGamesSchema,
 };

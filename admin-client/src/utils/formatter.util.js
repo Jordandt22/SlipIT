@@ -1,5 +1,6 @@
 export const statNameFormatter = (stat) => {
   const stats = {
+    // Blitzball
     atBats: "At Bats",
     hits: "Hits",
     hitterStrikeouts: "Hitter Strikeouts",
@@ -11,6 +12,10 @@ export const statNameFormatter = (stat) => {
     inningsPitched: "Innings Pitched",
     pitcherStrikeouts: "Pitcher Strikeouts",
     pitcherWalks: "Pitcher Walks",
+
+    // Soccer
+    goalsScored: "Goals Scored",
+    goalsBlocked: "Goals Blocked",
   };
 
   return stats[stat];

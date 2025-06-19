@@ -1,21 +1,24 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
+
+// Misc
+import { sports } from "../../../misc/Sports";
 
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
+import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
 
 // Components
-import PlayerStats from "./PlayerStats";
+import BlitzballStats from "./blitzball/BlitzballStats";
+import SoccerStats from "./soccer/SoccerStats";
 
 function PlayerInfo(props) {
   const {
-    gameID,
-    player: { playerID, stats },
-    status,
+    player: { playerID },
+    game: { gameID, sport },
     refetch,
   } = props;
-  const { getPlayer, updateGameStats, removeGamePlayer } = useAPI();
+  const { getPlayer, removeGamePlayer } = useAPI();
   const { isPending, isError, error, data } = useQuery({
     queryKey: [GET_PLAYER_KEY(playerID)],
     queryFn: async () => await getPlayer(playerID),
@@ -27,32 +30,6 @@ function PlayerInfo(props) {
   } else if (isError) {
     return <div>{error.message}</div>;
   }
-
-  const updateStat = async (key, val, isBatting, isDec) => {
-    if (isBatting) {
-      await updateGameStats(gameID, playerID, {
-        stats: {
-          ...stats,
-          batting: {
-            ...stats.batting,
-            [key]: isDec ? val - 1 : val + 1,
-          },
-        },
-      });
-    } else {
-      await updateGameStats(gameID, playerID, {
-        stats: {
-          ...stats,
-          pitching: {
-            ...stats.pitching,
-            [key]: isDec ? val - 1 : val + 1,
-          },
-        },
-      });
-    }
-
-    refetch();
-  };
 
   const {
     playerInfo: { name, image },
@@ -81,22 +58,11 @@ function PlayerInfo(props) {
       </div>
 
       {/* Stats */}
-      <PlayerStats
-        title="Batting"
-        playerID={playerID}
-        stats={stats.batting}
-        updateStat={updateStat}
-        isBatting={true}
-        status={status}
-      />
-      <PlayerStats
-        title="Pitching"
-        playerID={playerID}
-        stats={stats.pitching}
-        updateStat={updateStat}
-        isBatting={false}
-        status={status}
-      />
+      {sport.name === sports.BLITZBALL ? (
+        <BlitzballStats {...props} />
+      ) : (
+        <SoccerStats {...props} />
+      )}
     </div>
   );
 }

@@ -21,6 +21,7 @@ const errorCodes = {
   GAME_PLAYER_DUPLICATES: "game-player-duplicates",
   GAME_PLAYER_NOT_FOUND: "game-player-not-found",
   GAME_NOT_FOUND: "game-not-found",
+  INVALID_SPORT: "invalid-sport",
 
   // Leagues
   LEAGUE_NAME_TAKEN: "league-name-taken",

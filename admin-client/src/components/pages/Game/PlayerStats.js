@@ -1,11 +1,13 @@
 import React from "react";
+
+// Utils
 import { statNameFormatter } from "../../../utils/formatter.util";
 
 // Components
 import Arrow from "../../SVG/Arrow";
 
 function PlayerStats(props) {
-  const { title, playerID, stats, updateStat, isBatting, status } = props;
+  const { title, playerID, stats, updateStat, status, category } = props;
 
   return (
     <div className="player-info__box">
@@ -27,7 +29,7 @@ function PlayerStats(props) {
                     type="button"
                     className="player-info__dec"
                     onClick={async () =>
-                      await updateStat(key, stat, isBatting, true)
+                      await updateStat(key, stat, true, category)
                     }
                   >
                     <Arrow />
@@ -36,7 +38,7 @@ function PlayerStats(props) {
                     type="button"
                     className="player-info__inc"
                     onClick={async () =>
-                      await updateStat(key, stat, isBatting, false)
+                      await updateStat(key, stat, false, category)
                     }
                   >
                     <Arrow />

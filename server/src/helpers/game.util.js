@@ -1,4 +1,5 @@
 const PlayerModel = require("../models/player.model");
+const { BLITZBALL, SOCCER } = require("../misc/sports");
 
 // Check for Duplicate Players and Checks if All Players Exist
 const checkForDupPlayersAndExist = async (players) => {
@@ -38,4 +39,13 @@ const checkForDupPlayersAndExist = async (players) => {
   return { playerDuplicates, allPlayersExist };
 };
 
-module.exports = { checkForDupPlayersAndExist };
+// Validate Sport
+const validateSport = (sport) => {
+  const validSports = { blitzball: true, soccer: true };
+  return validSports[sport.name];
+};
+
+module.exports = {
+  checkForDupPlayersAndExist,
+  validateSport,
+};

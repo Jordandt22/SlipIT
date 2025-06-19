@@ -8,9 +8,11 @@ import { GET_GAMES_KEY } from "../../../../context/API/QueryKeys";
 
 // Components
 import CreateGamePopup from "./CreateGamePopup";
+import { getListOfSports } from "../../../../misc/Sports";
 
 function GamesSection() {
   const { getGames } = useAPI();
+  const [activeSport, setActiveSport] = useState(0);
   const [page, setPage] = useState(1);
   const limit = 10;
   const recent = false;
@@ -27,7 +29,12 @@ function GamesSection() {
     return <div>{error.message}</div>;
   }
 
-  const { games, totalGames } = data.data.data;
+  const sports = getListOfSports();
+  const { games } = data.data.data;
+  const filteredGames = games.filter((game) => {
+    const activeSportName = sports[activeSport].toLowerCase();
+    return game.sport.name === activeSportName;
+  });
   return (
     <div className="games-section home-section">
       <button
@@ -37,12 +44,28 @@ function GamesSection() {
       >
         Create a Game
       </button>
+      <div className="row games-section__tabs">
+        {sports.map((sport, i) => {
+          return (
+            <button
+              key={sport}
+              type="button"
+              className={`games-section__tab ${
+                activeSport === i ? "games-section__tab-active" : ""
+              }`}
+              onClick={() => setActiveSport(i)}
+            >
+              {sport}
+            </button>
+          );
+        })}
+      </div>
 
       {/* Games */}
       <div className="games-section__games">
-        {totalGames > 0 ? (
-          games.map((game) => {
-            const { gameID, name, eventDate, status, players } = game;
+        {filteredGames.length > 0 ? (
+          filteredGames.map((game) => {
+            const { gameID, name, eventDate, status, players, sport } = game;
             const formattedDate = new Date(eventDate).toLocaleDateString(
               "en-US",
               {
@@ -56,7 +79,9 @@ function GamesSection() {
 
             return (
               <div key={gameID} className="games-section__game">
-                <p className="games-section__game-title">{name}</p>
+                <p className="games-section__game-title">
+                  {name} <span>({sport.name})</span>
+                </p>
                 <p className="games-section__game-info">
                   Game ID: <span>{gameID}</span>
                 </p>
