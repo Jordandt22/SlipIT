@@ -67,8 +67,70 @@ const getSportCategory = (sportName, type) => {
   }
 };
 
+// Get Default Picks
+const defaultBlitzballStats = {
+  batting: {
+    hits: 1.5,
+    hitterStrikeouts: 1.5,
+    hitterWalks: 2.5,
+    homeruns: 0.5,
+    RBI: 0.5,
+  },
+  pitching: {
+    pitcherStrikeouts: 1.5,
+    pitcherWalks: 2.5,
+    hitsAllowed: 1.5,
+    earnedRuns: 3.5,
+  },
+};
+
+const defaultSoccerStats = {
+  attacker: {
+    goalsScored: 1.5,
+  },
+  defender: {
+    goalsBlocked: 1.5,
+  },
+};
+
+const getDefaultPicks = (sportName, type) => {
+  const firstCategory = getSportCategory(sportName, 0);
+  const secondCategory = getSportCategory(sportName, 1);
+  let avgStats = {
+    [firstCategory]: {},
+    [secondCategory]: {},
+  };
+
+  let defaultStats;
+  switch (sportName) {
+    case BLITZBALL:
+      defaultStats = defaultBlitzballStats;
+      break;
+
+    case SOCCER:
+      defaultStats = defaultSoccerStats;
+      break;
+
+    default:
+      break;
+  }
+
+  if (type === 0 || type == 2)
+    avgStats[firstCategory] = {
+      ...defaultStats[firstCategory],
+    };
+
+  if (type === 1 || type == 2)
+    avgStats[secondCategory] = {
+      ...defaultStats[secondCategory],
+    };
+
+  return avgStats;
+};
+
 module.exports = {
   checkForDupPlayersAndExist,
   validateSport,
   getSportCategory,
+  getDefaultPicks,
 };

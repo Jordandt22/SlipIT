@@ -13,6 +13,7 @@ const { BLITZBALL } = require("../misc/sports");
 const {
   checkForDupPlayersAndExist,
   getSportCategory,
+  getDefaultPicks,
 } = require("../helpers/game.util");
 const PlayerModel = require("../models/player.model");
 const GameModel = require("../models/game.model");
@@ -68,6 +69,7 @@ const getAVGStats = async (type, games, playerID, gamesPlayed, sportName) => {
         playerStats[firstCategory],
         sumOfStats[firstCategory]
       );
+
       getAVGStatsHelper(
         sumOfStats[firstCategory],
         avgStats[firstCategory],
@@ -221,14 +223,21 @@ module.exports = {
       const filteredGames = games.filter((g) => g.gameID !== gameID);
       const gamesPlayed = filteredGames.length;
 
-      // Get Sums of Each Stat
-      const { avgStats } = await getAVGStats(
-        type,
-        filteredGames,
-        playerID,
-        gamesPlayed,
-        sportName
-      );
+      let avgStats;
+      if (gamesPlayed > 0) {
+        // Get Sums of Each Stat
+        const { avgStats: avgStatsData } = await getAVGStats(
+          type,
+          filteredGames,
+          playerID,
+          gamesPlayed,
+          sportName
+        );
+
+        avgStats = avgStatsData;
+      } else {
+        avgStats = getDefaultPicks(sportName, type);
+      }
 
       // Loop Through All Stats and Create Lines
       const curPlayerPicks = await generateLines(

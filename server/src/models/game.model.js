@@ -41,7 +41,7 @@ const GameSchema = new mongoose.Schema({
   sport: {
     name: String,
   },
-  isPicksGenerated: Boolean,
+  isPicksGenerated: { type: Boolean, default: false },
   players: [GamePlayerSchema],
 });
 
