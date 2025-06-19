@@ -35,6 +35,7 @@ function CreateGamePopup(props) {
             onChange={(e) => setGameName(e.target.value)}
             placeholder="Create a name for this game..."
             className="cg-popup__input"
+            autoComplete="off"
           />
         </div>
 
@@ -94,8 +95,8 @@ function CreateGamePopup(props) {
                 eventDate,
                 players: addedPlayers,
                 sport: {
-                  name: sportName
-                }
+                  name: sportName,
+                },
               });
               setCreateGamePopup({ show: false });
               refetch();

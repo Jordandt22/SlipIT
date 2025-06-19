@@ -5,7 +5,9 @@ import { NavLink } from "react-router-dom";
 import { getListOfSports } from "../../../../misc/Sports";
 
 function PlayerCardGames(props) {
-  const { games } = props;
+  const {
+    sport: { games, label },
+  } = props;
   const numOfRecentGames = 3;
 
   return (
@@ -28,7 +30,7 @@ function PlayerCardGames(props) {
             })}
         </>
       ) : (
-        <p className="player-card__none">No games Played</p>
+        <p className="player-card__none">No {label} Games Played</p>
       )}
     </>
   );
@@ -77,7 +79,7 @@ function PlayerCard(props) {
           );
         })}
       </div>
-      <PlayerCardGames games={sports[activeSport].games} />
+      <PlayerCardGames sport={sports[activeSport]} />
     </div>
   );
 }

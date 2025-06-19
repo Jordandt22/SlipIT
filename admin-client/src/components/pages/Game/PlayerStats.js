@@ -16,6 +16,8 @@ function PlayerStats(props) {
         {Object.keys(stats).map((key) => {
           const stat = stats[key];
           const statName = statNameFormatter(key);
+          const minVal = 1;
+          const maxVal = 20;
 
           return (
             <div key={playerID + key} className="player-info__stat between-row">
@@ -27,19 +29,28 @@ function PlayerStats(props) {
                 <div className="row">
                   <button
                     type="button"
-                    className="player-info__dec"
-                    onClick={async () =>
-                      await updateStat(key, stat, true, category)
-                    }
+                    className={`player-info__dec ${
+                      stat < minVal ? "player-info__dec-disabled" : ""
+                    }`}
+                    onClick={async () => {
+                      if (stat >= minVal)
+                        await updateStat(key, stat, true, category);
+                    }}
+                    disabled={stat < minVal}
                   >
                     <Arrow />
                   </button>
+
                   <button
                     type="button"
-                    className="player-info__inc"
-                    onClick={async () =>
-                      await updateStat(key, stat, false, category)
-                    }
+                    className={`player-info__inc ${
+                      stat >= maxVal ? "player-info__inc-disabled" : ""
+                    }`}
+                    onClick={async () => {
+                      if (stat < maxVal)
+                        await updateStat(key, stat, false, category);
+                    }}
+                    disabled={stat >= maxVal}
                   >
                     <Arrow />
                   </button>

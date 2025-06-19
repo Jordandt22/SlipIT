@@ -118,7 +118,7 @@ function GamesSection() {
             );
           })
         ) : (
-          <p>No Games</p>
+          <p className="games-section__none">No {sports[activeSport]} Games</p>
         )}
       </div>
 

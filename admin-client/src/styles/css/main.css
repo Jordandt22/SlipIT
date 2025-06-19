@@ -330,6 +330,16 @@ html {
   background: #19313a;
   border-color: #81d2c7;
 }
+.games-section__none {
+  color: white;
+  width: 100%;
+  text-align: center;
+  background: #19313a;
+  margin-top: 2rem;
+  padding: 0.65rem 0;
+  text-transform: capitalize;
+  border-radius: 5px;
+}
 
 .cg-popup {
   background: #0c3747;
@@ -468,6 +478,7 @@ html {
 }
 .player-card__none {
   color: #81d2c7;
+  text-transform: capitalize;
 }
 .player-card__tabs {
   gap: 1rem;
@@ -634,6 +645,7 @@ html {
   background: #ff3939;
   border-radius: 5px;
   padding: 0.5rem;
+  transition: all 200ms ease-out;
 }
 .player-info__dec svg, .player-info__inc svg {
   transform: scale(1.5);
@@ -644,6 +656,10 @@ html {
 .player-info__inc {
   background: #32cd32;
   margin-left: 1rem;
+}
+.player-info__dec-disabled, .player-info__inc-disabled {
+  background: #b3b3b3;
+  opacity: 0.5;
 }
 .player-info__prev, .player-info__next {
   outline: none;

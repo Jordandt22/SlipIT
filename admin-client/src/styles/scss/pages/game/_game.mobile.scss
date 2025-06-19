@@ -171,6 +171,7 @@
     background: $red;
     border-radius: 5px;
     padding: $spacer-small * 0.5;
+    transition: all 200ms ease-out;
 
     svg {
       transform: scale(1.5);
@@ -186,6 +187,12 @@
   &__inc {
     background: $lime;
     margin-left: $spacer-small;
+  }
+
+  &__dec-disabled,
+  &__inc-disabled {
+    background: $grey;
+    opacity: 0.5;
   }
 
   &__prev,

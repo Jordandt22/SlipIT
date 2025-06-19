@@ -107,6 +107,17 @@
     background: $dark-bg;
     border-color: $primary;
   }
+
+  &__none {
+    color: white;
+    width: 100%;
+    text-align: center;
+    background: $dark-bg;
+    margin-top: $spacer;
+    padding: $spacer-small * 0.65 0;
+    text-transform: capitalize;
+    border-radius: 5px;
+  }
 }
 
 // Create Game Popup
@@ -272,6 +283,7 @@
 
   &__none {
     color: $primary;
+    text-transform: capitalize;
   }
 
   &__tabs {
