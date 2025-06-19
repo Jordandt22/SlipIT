@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// Misc
+import { getListOfSports } from "../../../../misc/Sports";
+
 // Contexts
 import { useAPI } from "../../../../context/API/API.context";
 
@@ -13,7 +16,9 @@ function CreateGamePopup(props) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [addedPlayers, setAddedPlayers] = useState([]);
   const { createGame } = useAPI();
-  const [inputVal, setInputValue] = useState("Game 1");
+  const [gameName, setGameName] = useState("Game 1");
+  const [sportName, setSportName] = useState("blitzball");
+  const sports = getListOfSports();
 
   return (
     <div className="shadow-container center">
@@ -26,11 +31,30 @@ function CreateGamePopup(props) {
           <input
             type="text"
             name="name"
-            value={inputVal}
-            onChange={(e) => setInputValue(e.target.value)}
+            value={gameName}
+            onChange={(e) => setGameName(e.target.value)}
             placeholder="Create a name for this game..."
             className="cg-popup__input"
           />
+        </div>
+
+        {/* Sport */}
+        <div className="cg-popup__box">
+          <label className="cg-popup__label">Sport</label>
+          <select
+            name="sport"
+            value={sportName}
+            onChange={(e) => setSportName(e.target.value)}
+            className="cg-popup__dropdown"
+          >
+            {sports.map((sport) => {
+              return (
+                <option key={sport + "-dropdown-opt"} value={sport}>
+                  {sport}
+                </option>
+              );
+            })}
+          </select>
         </div>
 
         {/* Event Date */}
@@ -66,9 +90,12 @@ function CreateGamePopup(props) {
             className="cg-popup__submit"
             onClick={async () => {
               await createGame({
-                name: inputVal,
+                name: gameName,
                 eventDate,
                 players: addedPlayers,
+                sport: {
+                  name: sportName
+                }
               });
               setCreateGamePopup({ show: false });
               refetch();

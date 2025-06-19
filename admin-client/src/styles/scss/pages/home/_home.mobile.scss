@@ -147,7 +147,8 @@
     padding: $spacer-small * 0.35 $spacer;
   }
 
-  &__input {
+  &__input,
+  &__dropdown {
     outline: none;
     border: 2px solid $dark-bg;
     background: $dark-bg;
@@ -158,6 +159,15 @@
 
     &:focus {
       border: 2px solid $primary;
+    }
+  }
+
+  &__dropdown {
+    text-transform: capitalize;
+
+    option {
+      color: white;
+      text-transform: capitalize;
     }
   }
 
