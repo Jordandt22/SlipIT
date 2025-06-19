@@ -32,7 +32,7 @@ playersRouter.get(
   serverErrorCatcherWrapper(getPlayer)
 );
 
-// Get Players- Query Params: ?limit=[val]&page=[val]
+// Get Players- Query Params: ?limit=[val]&page=[val]&recent=[val]
 playersRouter.get(
   "/",
   queryValidator(GetPlayersSchema),

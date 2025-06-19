@@ -7,12 +7,6 @@ const morgan = require("morgan");
 const http = require("http");
 const rateLimiter = require("express-rate-limit");
 const slowDown = require("express-slow-down");
-const { paramsValidator } = require("./middleware/validators");
-const { GameIDSchema } = require("./schemas/game.schemas");
-const {
-  checkIfGameExists,
-  checkIfGameIsValid,
-} = require("./middleware/game.mw");
 const app = express();
 
 // MongoDB Connection
@@ -85,10 +79,7 @@ app.use(
 
 // Routes for Picks
 app.use(
-  `/v${process.env.API_VERSION}/api/game/:gameID/picks`,
-  paramsValidator(GameIDSchema),
-  checkIfGameExists,
-  checkIfGameIsValid,
+  `/v${process.env.API_VERSION}/api/picks`,
   require("./routes/picks.routes")
 );
 

@@ -1,5 +1,16 @@
 const Yup = require("yup");
 
+// ---- Request Query Schemas ----
+
+// Get Picks Schema
+const GetPicksSchema = Yup.object({
+  filter: Yup.string().min(1).max(20).required(),
+  ID: Yup.string().trim().min(1).max(100),
+  limit: Yup.number().min(1).max(20).required(),
+  page: Yup.number().min(1).max(50).required(),
+  recent: Yup.boolean().required(),
+});
+
 // ---- Request Params Schemas ----
 
 // PickID Schema
@@ -26,4 +37,5 @@ const GeneratePicksSchema = Yup.object({
 module.exports = {
   PickIDSchema,
   GeneratePicksSchema,
+  GetPicksSchema,
 };

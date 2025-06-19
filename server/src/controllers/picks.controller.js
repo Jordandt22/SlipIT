@@ -6,6 +6,9 @@ const {
     GAME_PLAYER_NOT_FOUND,
     PICKS_ALREADY_GENERATED,
     PLAYER_NOT_ADDED,
+    INVALID_PICKS_FILTER,
+    GAME_NOT_FOUND,
+    PLAYER_NOT_FOUND,
   },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
@@ -17,7 +20,7 @@ const {
 } = require("../helpers/game.util");
 const PlayerModel = require("../models/player.model");
 const GameModel = require("../models/game.model");
-const UserModel = require("../models/user.model");
+const { isValidFilter } = require("../helpers/pick.util");
 
 // Helpers for Get AVG Stats
 const getSumOfStatsHelper = (specificStats, specificSumOfStats) => {
@@ -304,5 +307,100 @@ module.exports = {
     // }
 
     res.status(200).json({ data: "success", error: null });
+  },
+  getPick: async (req, res, next) => {
+    const pick = req.pick;
+    const gameID = pick.game.gameID;
+    const { sport, eventDate, name, status } = await GameModel.findOne({
+      gameID,
+    });
+    const playerID = pick.player.playerID;
+    const { playerInfo } = await PlayerModel.findOne({
+      playerID,
+    });
+
+    res.status(200).json({
+      data: {
+        pick,
+        game: { gameID, sport, eventDate, name, status },
+        player: { playerID, playerInfo },
+      },
+      error: null,
+    });
+  },
+  getPicks: async (req, res, next) => {
+    const { filter, ID, limit, page, recent } = req.query;
+    const parsedLimit = Number(limit);
+    const parsedPage = Number(page);
+    const parsedRecent = JSON.parse(recent);
+    const skip = (parsedPage - 1) * parsedLimit;
+
+    // Check if Filter is Valid
+    const formatedFilter = filter.toLowerCase();
+    if (!isValidFilter(formatedFilter))
+      return res
+        .status(422)
+        .json(
+          customErrorHandler(
+            INVALID_PICKS_FILTER,
+            "The picks filter you provided is invalid."
+          )
+        );
+
+    let filterObject = {};
+
+    // If Filter is by Game
+    if (formatedFilter === "game") {
+      const game = await GameModel.findOne({ gameID: ID });
+      if (!game)
+        return res
+          .status(404)
+          .json(
+            customErrorHandler(
+              GAME_NOT_FOUND,
+              `Could NOT find game with gameID: ${ID}.`
+            )
+          );
+
+      filterObject = { "game.gameID": ID };
+    }
+
+    // If Filter is by Player
+    if (formatedFilter === "player") {
+      const player = await PlayerModel.findOne({ playerID: ID });
+      if (!player)
+        return res
+          .status(404)
+          .json(
+            customErrorHandler(
+              PLAYER_NOT_FOUND,
+              `Could NOT find player with playerID: ${ID}.`
+            )
+          );
+
+      filterObject = { "player.playerID": ID };
+    }
+
+    // Get a Batch of Picks
+    const picks = await PickModel.find(filterObject)
+      .sort({ eventDate: parsedRecent ? -1 : 1 })
+      .skip(skip)
+      .limit(parsedLimit);
+
+    res.status(200).json({
+      data: {
+        picks,
+        totalPicks: picks.length,
+        limit: parsedLimit,
+        page: parsedPage,
+        skipped: skip,
+        recent: parsedRecent,
+        filter: {
+          type: formatedFilter,
+          value: ID,
+        },
+      },
+      error: null,
+    });
   },
 };

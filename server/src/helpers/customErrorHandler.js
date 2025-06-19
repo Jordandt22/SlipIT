@@ -31,6 +31,7 @@ const errorCodes = {
   // Picks
   INVALID_GAME: "invalid-game",
   PICK_NOT_FOUND: "pick-not-found",
+  INVALID_PICKS_FILTER: "invalid-picks-filter",
 };
 
 module.exports = {

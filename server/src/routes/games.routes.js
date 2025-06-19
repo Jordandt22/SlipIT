@@ -32,7 +32,7 @@ const {
   GetGamesSchema,
 } = require("../schemas/game.schemas");
 
-// Get Games - Query Params: ?limit=[val]&page=[val]
+// Get Games - Query Params: ?limit=[val]&page=[val]&recent=[val]
 gamesRouter.get(
   "/",
   queryValidator(GetGamesSchema),
