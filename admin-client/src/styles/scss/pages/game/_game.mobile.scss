@@ -227,6 +227,52 @@
       transform: scale(4) rotate(90deg);
     }
   }
+
+  &__tabs {
+    background: $dark-bg;
+    margin-bottom: $spacer-small;
+    padding: $spacer-small * 0.75;
+    border-radius: 5px;
+    gap: $spacer-small;
+  }
+
+  &__tab {
+    outline: none;
+    border: none;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+    transition: all 200ms ease-out;
+    border-radius: 25px;
+    padding: $spacer-small * 0.35 $spacer-small * 1.5;
+    border-radius: 25px;
+    background: rgba($grey, 0.25);
+  }
+
+  &__tab-active {
+    background: $primary;
+  }
+
+  &__pick {
+    background: $dark-bg;
+    padding: $spacer-small * 0.75;
+    margin-bottom: $spacer-small;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 1px rgba(black, 0.15);
+  }
+
+  &__pick-line {
+    color: white;
+
+    span {
+      color: $orange;
+    }
+  }
+
+  &__pick-users {
+    color: $grey;
+    font-size: $main-fs * 0.55;
+  }
 }
 
 // Swiper

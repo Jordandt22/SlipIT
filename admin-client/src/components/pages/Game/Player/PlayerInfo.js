@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 // Misc
-import { sports } from "../../../misc/Sports";
+import { sports } from "../../../../misc/Sports";
 
 // Contexts
-import { useAPI } from "../../../context/API/API.context";
-import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
-import { useGlobal } from "../../../context/Global/Global.context";
+import { useAPI } from "../../../../context/API/API.context";
+import { GET_PLAYER_KEY } from "../../../../context/API/QueryKeys";
+import { useGlobal } from "../../../../context/Global/Global.context";
 
 // Components
-import BlitzballStats from "./blitzball/BlitzballStats";
-import SoccerStats from "./soccer/SoccerStats";
-import ErrorMessage from "../../standalone/status/ErrorMessage";
-import Loading from "../../standalone/status/Loading";
+import BlitzballStats from "./BlitzballStats";
+import SoccerStats from "./SoccerStats";
+import ErrorMessage from "../../../standalone/status/ErrorMessage";
+import Loading from "../../../standalone/status/Loading";
+import PlayerPicks from "./PlayerPicks";
 
 function PlayerInfo(props) {
   const {
@@ -23,6 +24,7 @@ function PlayerInfo(props) {
   } = props;
   const { getPlayer, removeGamePlayer } = useAPI();
   const { showLoading, hideLoading } = useGlobal();
+  const [activeTab, setActiveTab] = useState(0);
   const { isPending, isError, error, data } = useQuery({
     queryKey: [GET_PLAYER_KEY(playerID)],
     queryFn: async () => await getPlayer(playerID),
@@ -35,6 +37,7 @@ function PlayerInfo(props) {
     return <ErrorMessage message={error.message} />;
   }
 
+  const tabs = ["Stats", "Picks"];
   const {
     playerInfo: { name, image },
   } = data.data.data.player;
@@ -63,11 +66,38 @@ function PlayerInfo(props) {
         </button>
       </div>
 
-      {/* Stats */}
-      {sport.name === sports.BLITZBALL ? (
-        <BlitzballStats {...props} />
+      {/* Tabs */}
+      <div className="row player-info__tabs">
+        {tabs.map((tab, i) => {
+          const isActive = i === activeTab;
+
+          return (
+            <button
+              key={tab}
+              type="button"
+              className={`player-info__tab ${
+                isActive ? "player-info__tab-active" : ""
+              }`}
+              onClick={() => setActiveTab(i)}
+            >
+              {tab}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Main Content */}
+      {activeTab === 0 ? (
+        <>
+          {/* Stats */}
+          {sport.name === sports.BLITZBALL ? (
+            <BlitzballStats {...props} />
+          ) : (
+            <SoccerStats {...props} />
+          )}
+        </>
       ) : (
-        <SoccerStats {...props} />
+        <PlayerPicks {...props} />
       )}
     </div>
   );

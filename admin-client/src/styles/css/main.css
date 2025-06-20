@@ -692,6 +692,45 @@ html {
 .player-info__next svg {
   transform: scale(4) rotate(90deg);
 }
+.player-info__tabs {
+  background: #19313a;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 5px;
+  gap: 1rem;
+}
+.player-info__tab {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  transition: all 200ms ease-out;
+  border-radius: 25px;
+  padding: 0.35rem 1.5rem;
+  border-radius: 25px;
+  background: rgba(179, 179, 179, 0.25);
+}
+.player-info__tab-active {
+  background: #81d2c7;
+}
+.player-info__pick {
+  background: #19313a;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.15);
+}
+.player-info__pick-line {
+  color: white;
+}
+.player-info__pick-line span {
+  color: #ffac14;
+}
+.player-info__pick-users {
+  color: #b3b3b3;
+  font-size: 0.825rem;
+}
 
 .players-swiper {
   width: 100%;

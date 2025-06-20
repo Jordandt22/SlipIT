@@ -1,10 +1,10 @@
 import React from "react";
 
 // Utils
-import { statNameFormatter } from "../../../utils/formatter.util";
+import { statNameFormatter } from "../../../../utils/formatter.util";
 
 // Components
-import Arrow from "../../SVG/Arrow";
+import Arrow from "../../../SVG/Arrow";
 
 function PlayerStats(props) {
   const { title, playerID, stats, updateStat, status, category } = props;

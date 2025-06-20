@@ -66,6 +66,19 @@ export const APIContextProvider = (props) => {
       getURIPath("/players", `?limit=${limit}&page=${page}&recent=${recent}`)
     );
 
+  // ---- Picks ----
+
+  // Get Picks
+  const getPicks = async (filter, ID, limit, page, recent) =>
+    await axios.get(
+      getURIPath(
+        "/picks",
+        `?filter=${filter}${
+          filter !== "all" ? `&ID=${ID}` : ""
+        }&limit=${limit}&page=${page}&recent=${recent}`
+      )
+    );
+
   return (
     <APIContext.Provider
       value={{
@@ -83,6 +96,9 @@ export const APIContextProvider = (props) => {
         // Players
         getPlayer,
         getPlayers,
+
+        // Picks
+        getPicks,
       }}
     >
       {props.children}

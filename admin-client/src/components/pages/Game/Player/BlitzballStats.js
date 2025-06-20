@@ -5,7 +5,7 @@ import { useAPI } from "../../../../context/API/API.context";
 import { useGlobal } from "../../../../context/Global/Global.context";
 
 // Components
-import PlayerStats from "../PlayerStats";
+import PlayerStats from "./PlayerStats";
 
 function BlitzballStats(props) {
   const {
