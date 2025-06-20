@@ -21,6 +21,12 @@ const {
 const PlayerModel = require("../models/player.model");
 const GameModel = require("../models/game.model");
 const { isValidFilter } = require("../helpers/pick.util");
+const {
+  getGameKey,
+  cacheData,
+  getPicksKey,
+  getCacheData,
+} = require("../redis/redis");
 
 // Helpers for Get AVG Stats
 const getSumOfStatsHelper = (specificStats, specificSumOfStats) => {
@@ -270,15 +276,20 @@ module.exports = {
     });
 
     // Update Game
-    await GameModel.findOneAndUpdate(
+    const updatedGame = await GameModel.findOneAndUpdate(
       { gameID },
       {
         picksData: { isGenerated: true, totalPicks },
-      }
+      },
+      { new: true }
     );
 
+    // Update Game Cache
+    const { key, interval } = getGameKey(gameID);
+    await cacheData(key, interval, { game: updatedGame });
+
     res.status(200).json({
-      data: { gameID, players, picks, totalPicks },
+      data: { gameID, game: updatedGame, players, picks, totalPicks },
       error: null,
     });
   },
@@ -289,12 +300,20 @@ module.exports = {
     await PickModel.deleteMany({ "game.gameID": gameID });
 
     // Update Game
-    await GameModel.findOneAndUpdate(
+    const updatedGame = await GameModel.findOneAndUpdate(
       { gameID },
       {
         picksData: { isGenerated: false, totalPicks: 0 },
-      }
+      },
+      { new: true }
     );
+
+    // Update Game Cache
+    const { key, interval } = getGameKey(gameID);
+    await cacheData(key, interval, { game: updatedGame });
+
+    // Delete All Picks Data
+    await deleteCacheDataByPrefix("PICKS");
 
     // ! REMOVE PICKS FROM USERS
     // if (usersPlayed.length > 0) {
@@ -381,11 +400,28 @@ module.exports = {
       filterObject = { "player.playerID": ID };
     }
 
-    // Get a Batch of Picks
-    const picks = await PickModel.find(filterObject)
-      .sort({ eventDate: parsedRecent ? -1 : 1 })
-      .skip(skip)
-      .limit(parsedLimit);
+    // Cache Data
+    const { key, interval } = getPicksKey(
+      formatedFilter,
+      formatedFilter === "all" ? "none" : ID,
+      limit,
+      page,
+      recent
+    );
+    let picks;
+    const cachedData = await getCacheData(key);
+    if (cachedData) {
+      picks = cachedData.picks;
+    } else {
+      // Get a Batch of Picks
+      picks = await PickModel.find(filterObject)
+        .sort({ eventDate: parsedRecent ? -1 : 1 })
+        .skip(skip)
+        .limit(parsedLimit);
+
+      // Add Picks to Cache
+      if (picks.length > 0) await cacheData(key, interval, { picks });
+    }
 
     res.status(200).json({
       data: {
