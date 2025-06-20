@@ -1,0 +1,80 @@
+const arcjet = require("@arcjet/node");
+const { shield, detectBot, tokenBucket } = require("@arcjet/node");
+const { isSpoofedBot } = require("@arcjet/inspect");
+const {
+  errorCodes,
+  customErrorHandler,
+} = require("../helpers/customErrorHandler");
+
+const aj = arcjet.default({
+  key: process.env.ARCJET_KEY,
+  characteristics: ["ip.src"],
+  rules: [
+    shield({ mode: "LIVE" }),
+    detectBot({
+      mode: "LIVE",
+      allow:
+        process.env.NODE_ENV === "development"
+          ? ["CATEGORY:SEARCH_ENGINE", "POSTMAN"]
+          : ["CATEGORY:SEARCH_ENGINE"],
+    }),
+    tokenBucket({
+      mode: "LIVE",
+      refillRate: 15, // Refill 15 tokens per interval
+      interval: 60, // Refill every 60 seconds
+      capacity: 100, // Bucket capacity of 100 tokens
+    }),
+  ],
+});
+
+module.exports = {
+  arcjetMiddleware: async (req, res, next) => {
+    const decision = await aj.protect(req, { requested: 1 });
+    if (process.env.NODE_ENV === "development")
+      console.log(
+        `Arcjet Decision: ${decision.conclusion} - [${decision.reason.type}]`
+      );
+
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        return res
+          .status(429)
+          .json(
+            customErrorHandler(
+              errorCodes.TOO_MANY_REQUESTS,
+              "Too many requests have been sent. Please try again later."
+            )
+          );
+      } else if (decision.reason.isBot()) {
+        return res
+          .status(403)
+          .json(
+            customErrorHandler(
+              errorCodes.BOTS_DETECTED,
+              "Bots Detected. Please refrain from using bots to access our API."
+            )
+          );
+      } else {
+        return res
+          .status(403)
+          .json(
+            customErrorHandler(
+              errorCodes.ACCESS_DENIED,
+              "Your access has been denied."
+            )
+          );
+      }
+    } else if (decision.results.some(isSpoofedBot)) {
+      return res
+        .status(403)
+        .json(
+          customErrorHandler(
+            errorCodes.ACCESS_DENIED,
+            "Your access has been denied."
+          )
+        );
+    }
+
+    next();
+  },
+};

@@ -2,6 +2,9 @@ const errorCodes = {
   // Server & Validation
   SERVER_ERROR: "server-error",
   YUP_ERROR: "form-error",
+  TOO_MANY_REQUESTS: "too-many-requests",
+  BOTS_DETECTED: "bots-detected",
+  ACCESS_DENIED: "access-denied",
 
   // AUTH
   NO_ACCESS_TOKEN: "no-access-token",

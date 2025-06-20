@@ -5,8 +5,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
 const http = require("http");
-const rateLimiter = require("express-rate-limit");
-const slowDown = require("express-slow-down");
+const { arcjetMiddleware } = require("./middleware/arcjet.mw");
 const app = express();
 
 // MongoDB Connection
@@ -21,6 +20,7 @@ app.use(
     origin: [notProduction ? "http://localhost:3000" : WEB_URL, ADMIN_URL],
   })
 );
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 if (notProduction) {
   app.use(morgan("dev"));
@@ -29,27 +29,13 @@ if (notProduction) {
   app.set("trust proxy", 1);
 }
 
-// Rate & Speed Limiter Info
-const timeLimit = 1000 * 60;
-const maxReq = 300;
-const limiter = rateLimiter({
-  windowMs: timeLimit,
-  max: maxReq,
-});
-const speedLimiter = slowDown({
-  windowMs: timeLimit,
-  delayAfter: maxReq / 2,
-  delayMs: () => 250,
-});
-
-// Rate & Speed Limiters
-app.use(speedLimiter);
-app.use(limiter);
-
 // Landing Page Route
 app.get("/", (req, res) => {
   res.send("SlipIT API Server is Up and Running !");
 });
+
+// Arcjet Middleware
+app.use(arcjetMiddleware);
 
 // ---- API Routes ----
 
