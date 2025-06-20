@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
 import { GET_PLAYERS_KEY } from "../../../context/API/QueryKeys";
+import { useGlobal } from "../../../context/Global/Global.context";
 
 // Components
 import AddPlayersForm from "../../standalone/players/AddPlayersForm";
@@ -13,6 +14,7 @@ import Loading from "../../standalone/status/Loading";
 function AddPlayersPopup(props) {
   const { gameID, gamePlayers, closePopup, refetch } = props;
   const { getPlayers, addGamePlayer } = useAPI();
+  const { showLoading, hideLoading } = useGlobal();
   const [addedPlayers, setAddedPlayers] = useState([]);
   const page = 1;
   const limit = 15;
@@ -91,8 +93,10 @@ function AddPlayersPopup(props) {
               type="button"
               className="ap-popup__save"
               onClick={async () => {
+                showLoading("Adding Players to Game...");
                 await addGamePlayer(gameID, { players: [...addedPlayers] });
                 closePopup();
+                hideLoading();
                 refetch();
               }}
             >

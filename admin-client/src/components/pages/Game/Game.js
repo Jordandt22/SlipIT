@@ -11,6 +11,7 @@ import { Pagination } from "swiper/modules";
 // Contexts
 import { GET_GAME_KEY } from "../../../context/API/QueryKeys";
 import { useAPI } from "../../../context/API/API.context";
+import { useGlobal } from "../../../context/Global/Global.context";
 
 // Components
 import PlayerInfo from "./PlayerInfo";
@@ -22,6 +23,7 @@ import Loading from "../../standalone/status/Loading";
 function Game() {
   const { gameID } = useParams();
   const { getGame, deleteGame } = useAPI();
+  const { showLoading, hideLoading } = useGlobal();
   const navigate = useNavigate();
   const [playersPopup, setPlayersPopup] = useState({
     show: false,
@@ -112,7 +114,9 @@ function Game() {
         type="button"
         className="game-info__delete"
         onClick={async () => {
+          showLoading("Deleting Game...");
           await deleteGame(gameID);
+          hideLoading();
           navigate("/");
         }}
       >

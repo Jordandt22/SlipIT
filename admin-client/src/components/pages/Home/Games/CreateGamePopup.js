@@ -5,6 +5,7 @@ import { getListOfSports } from "../../../../misc/Sports";
 
 // Contexts
 import { useAPI } from "../../../../context/API/API.context";
+import { useGlobal } from "../../../../context/Global/Global.context";
 
 // Components
 import AddPlayersInput from "./AddPlayersInput";
@@ -16,6 +17,7 @@ function CreateGamePopup(props) {
   const [showCalendar, setShowCalendar] = useState(false);
   const [addedPlayers, setAddedPlayers] = useState([]);
   const { createGame } = useAPI();
+  const { showLoading, hideLoading } = useGlobal();
   const [gameName, setGameName] = useState("Game 1");
   const [sportName, setSportName] = useState("blitzball");
   const sports = getListOfSports();
@@ -90,6 +92,7 @@ function CreateGamePopup(props) {
             type="button"
             className="cg-popup__submit"
             onClick={async () => {
+              showLoading("Creating new game...");
               await createGame({
                 name: gameName,
                 eventDate,
@@ -99,6 +102,7 @@ function CreateGamePopup(props) {
                 },
               });
               setCreateGamePopup({ show: false });
+              hideLoading();
               refetch();
             }}
           >

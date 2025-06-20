@@ -2,6 +2,7 @@ import React from "react";
 
 // Contexts
 import { useAPI } from "../../../../context/API/API.context";
+import { useGlobal } from "../../../../context/Global/Global.context";
 
 // Components
 import PlayerStats from "../PlayerStats";
@@ -13,18 +14,20 @@ function SoccerStats(props) {
     refetch,
   } = props;
   const { updateGameSoccerStats } = useAPI();
+  const { showLoading, hideLoading } = useGlobal();
 
   // Update Soccer Stat
   const updateStat = async (key, val, isDec, category) => {
     const updatedStats = { ...stats };
     updatedStats.soccer[category][key] = isDec ? val - 1 : val + 1;
+    showLoading("Updating Player Stats...");
     await updateGameSoccerStats(gameID, playerID, {
       stats: {
         ...stats.soccer,
         ...updatedStats.soccer,
       },
     });
-
+    hideLoading();
     refetch();
   };
 

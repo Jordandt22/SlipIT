@@ -2,13 +2,17 @@ import React from "react";
 
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
+import { useGlobal } from "../../../context/Global/Global.context";
 
 function GameStatus(props) {
   const { gameID, status, refetch } = props;
   const { updateGameStatus } = useAPI();
+  const { showLoading, hideLoading } = useGlobal();
 
   const updateStatusHandler = async (status) => {
+    showLoading("Updating Game Status...");
     await updateGameStatus(gameID, { status });
+    hideLoading();
     refetch();
   };
 

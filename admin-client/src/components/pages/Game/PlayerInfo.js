@@ -7,6 +7,7 @@ import { sports } from "../../../misc/Sports";
 // Contexts
 import { useAPI } from "../../../context/API/API.context";
 import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
+import { useGlobal } from "../../../context/Global/Global.context";
 
 // Components
 import BlitzballStats from "./blitzball/BlitzballStats";
@@ -21,6 +22,7 @@ function PlayerInfo(props) {
     refetch,
   } = props;
   const { getPlayer, removeGamePlayer } = useAPI();
+  const { showLoading, hideLoading } = useGlobal();
   const { isPending, isError, error, data } = useQuery({
     queryKey: [GET_PLAYER_KEY(playerID)],
     queryFn: async () => await getPlayer(playerID),
@@ -51,7 +53,9 @@ function PlayerInfo(props) {
           type="button"
           className="player-info__remove"
           onClick={async () => {
+            showLoading("Removing Player from Game...");
             await removeGamePlayer(gameID, { players: [{ playerID }] });
+            hideLoading();
             refetch();
           }}
         >
