@@ -15,14 +15,22 @@ const {
   getGameKey,
   getPlayerKey,
   deleteCacheData,
+  deleteCacheDataByPrefix,
+  getGamesKey,
+  getCacheData,
 } = require("../redis/redis");
 
 // Update Game Cache
 const updateGameCache = async (gameID, game, playerIDRegex) => {
   // Update Cache for Game
-  if (gameID) {
+  if (game) {
     const { key, interval } = getGameKey(gameID);
     await cacheData(key, interval, { game });
+  }
+
+  if (gameID) {
+    // Delete the Cache Data for the GET GAMES ROUTE
+    await deleteCacheDataByPrefix("GAMES");
   }
 
   // Update Players Cache
@@ -32,6 +40,9 @@ const updateGameCache = async (gameID, game, playerIDRegex) => {
       const { key, interval } = getPlayerKey(player.playerID);
       await cacheData(key, interval, { player });
     });
+
+    // Delete the Cache Data for the GET PLAYERS ROUTE
+    await deleteCacheDataByPrefix("PLAYERS");
   }
 };
 
@@ -41,15 +52,24 @@ module.exports = {
     const parsedLimit = Number(limit);
     const parsedPage = Number(page);
     const parsedRecent = JSON.parse(recent);
-
-    // Determine Skip
     const skip = (parsedPage - 1) * parsedLimit;
 
-    // Get a Batch of Games
-    const games = await GameModel.find({})
-      .sort({ eventDate: parsedRecent ? -1 : 1 })
-      .skip(skip)
-      .limit(parsedLimit);
+    // Cache Data
+    const { key, interval } = getGamesKey(limit, page, recent);
+    let games;
+    const cachedData = await getCacheData(key);
+    if (cachedData) {
+      games = cachedData.games;
+    } else {
+      // Get a Batch of Games
+      games = await GameModel.find({})
+        .sort({ eventDate: parsedRecent ? -1 : 1 })
+        .skip(skip)
+        .limit(parsedLimit);
+
+      // Add Games to Cache
+      if (games.length > 0) await cacheData(key, interval, { games });
+    }
 
     res.status(200).json({
       data: {
@@ -324,7 +344,7 @@ module.exports = {
     await deleteCacheData(key);
 
     // Update Players' Cache
-    await updateGameCache(null, null, regex);
+    await updateGameCache(gameID, null, regex);
 
     res
       .status(200)
