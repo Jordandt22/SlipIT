@@ -19,7 +19,10 @@ import PlayerInfo from "./Player/PlayerInfo";
 function GamePicks(props) {
   const {
     gameID,
-    game: { picksData, players },
+    game: {
+      picksData: { isGenerated },
+      players,
+    },
     refetch,
   } = props;
   const { getPicks } = useAPI();
@@ -31,13 +34,15 @@ function GamePicks(props) {
     queryKey: [GET_PICKS_KEY(filter, gameID, limit, page, recent)],
     queryFn: async () => await getPicks(filter, gameID, limit, page, recent),
     retry: 3,
-    enabled: picksData.isGenerated,
+    enabled: isGenerated,
   });
 
-  if (isPending) {
-    return <Loading message="Loading Game Picks..." />;
-  } else if (isError) {
-    return <ErrorMessage message={error.message} />;
+  if (isGenerated) {
+    if (isPending) {
+      return <Loading message="Loading Game Picks..." />;
+    } else if (isError) {
+      return <ErrorMessage message={error.message} />;
+    }
   }
 
   return (
@@ -57,7 +62,7 @@ function GamePicks(props) {
                 player={player}
                 refetch={refetch}
                 game={props.game}
-                picksAPIData={data.data.data}
+                picksAPIData={isGenerated ? data.data.data : { picks: [] }}
               />
             </SwiperSlide>
           );

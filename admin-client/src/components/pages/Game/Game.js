@@ -13,6 +13,7 @@ import ErrorMessage from "../../standalone/status/ErrorMessage";
 import Loading from "../../standalone/status/Loading";
 import DeleteGamePopup from "./DeleteGamePopup";
 import GamePicks from "./GamePicks";
+import GamePicksButton from "./GamePicksButton";
 
 function Game() {
   const { gameID } = useParams();
@@ -36,7 +37,14 @@ function Game() {
   }
 
   const game = data.data.data.game;
-  const { name, eventDate, players, status, sport, picksData } = game;
+  const {
+    name,
+    eventDate,
+    players,
+    status,
+    sport,
+    picksData: { totalPicks, isGenerated },
+  } = game;
   const formattedDate = new Date(eventDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -73,8 +81,16 @@ function Game() {
         Total Players: <span>{players.length}</span>
       </p>
       <p className="game-info__info">
-        Total Game Picks: <span>{picksData.totalPicks}</span>
+        Total Game Picks: <span>{totalPicks}</span>
       </p>
+
+      {/* Delete / Generate Game Picks */}
+      <GamePicksButton
+        gameID={gameID}
+        isGenerated={isGenerated}
+        refetch={refetch}
+        players={players}
+      />
 
       {/* Change Status */}
       <GameStatus gameID={gameID} status={status} refetch={refetch} />
@@ -98,14 +114,14 @@ function Game() {
       <button
         type="button"
         className={`game-info__delete ${
-          picksData.isGenerated ? "game-info__delete-disabled" : ""
+          isGenerated ? "game-info__delete-disabled" : ""
         }`}
         onClick={() => setDeletePopup({ show: true })}
-        disabled={picksData.isGenerated}
+        disabled={isGenerated}
       >
         Delete Game
       </button>
-      {picksData.isGenerated && (
+      {isGenerated && (
         <p className="game-info__delete-msg">
           Please delete all picks for this game before deleting the entire game.
         </p>

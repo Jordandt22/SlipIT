@@ -79,6 +79,14 @@ export const APIContextProvider = (props) => {
       )
     );
 
+  // Generate Game Picks
+  const generateGamePicks = async (gameID, data) =>
+    await axios.post(getURIPath(`/picks/game/${gameID}/generate`, ""), data);
+
+  // Delete Game Picks
+  const deleteGamePicks = async (gameID) =>
+    await axios.delete(getURIPath(`/picks/game/${gameID}`, ""));
+
   return (
     <APIContext.Provider
       value={{
@@ -99,6 +107,8 @@ export const APIContextProvider = (props) => {
 
         // Picks
         getPicks,
+        generateGamePicks,
+        deleteGamePicks,
       }}
     >
       {props.children}

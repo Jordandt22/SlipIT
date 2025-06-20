@@ -26,6 +26,7 @@ const {
   cacheData,
   getPicksKey,
   getCacheData,
+  deleteCacheDataByPrefix,
 } = require("../redis/redis");
 
 // Helpers for Get AVG Stats

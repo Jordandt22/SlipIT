@@ -88,7 +88,8 @@
     background: $lime;
   }
 
-  &__delete {
+  &__delete,
+  &__generate {
     display: block;
     outline: none;
     border: none;
@@ -113,6 +114,16 @@
     line-height: $spacer-small * 1.5;
     background: $dark-bg;
     padding: $spacer-small * 0.75;
+  }
+
+  &__delete-picks,
+  &__generate {
+    margin: 0;
+    margin-top: $spacer;
+  }
+
+  &__generate {
+    background: $orange;
   }
 }
 
@@ -272,6 +283,13 @@
   &__pick-users {
     color: $grey;
     font-size: $main-fs * 0.55;
+  }
+
+  &__none {
+    background: $dark-bg;
+    color: $orange;
+    padding: $spacer-small;
+    text-align: center;
   }
 }
 

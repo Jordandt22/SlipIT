@@ -584,7 +584,7 @@ html {
 .game-info__ended {
   background: #32cd32;
 }
-.game-info__delete {
+.game-info__delete, .game-info__generate {
   display: block;
   outline: none;
   border: none;
@@ -607,6 +607,13 @@ html {
   line-height: 1.5rem;
   background: #19313a;
   padding: 0.75rem;
+}
+.game-info__delete-picks, .game-info__generate {
+  margin: 0;
+  margin-top: 2rem;
+}
+.game-info__generate {
+  background: #ffac14;
 }
 
 .player-info__img-box {
@@ -730,6 +737,12 @@ html {
 .player-info__pick-users {
   color: #b3b3b3;
   font-size: 0.825rem;
+}
+.player-info__none {
+  background: #19313a;
+  color: #ffac14;
+  padding: 1rem;
+  text-align: center;
 }
 
 .players-swiper {
