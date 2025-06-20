@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 // Swiper
@@ -11,7 +11,6 @@ import { Pagination } from "swiper/modules";
 // Contexts
 import { GET_GAME_KEY } from "../../../context/API/QueryKeys";
 import { useAPI } from "../../../context/API/API.context";
-import { useGlobal } from "../../../context/Global/Global.context";
 
 // Components
 import PlayerInfo from "./PlayerInfo";
@@ -19,13 +18,15 @@ import GameStatus from "./GameStatus";
 import AddPlayersPopup from "./AddPlayersPopup";
 import ErrorMessage from "../../standalone/status/ErrorMessage";
 import Loading from "../../standalone/status/Loading";
+import DeleteGamePopup from "./DeleteGamePopup";
 
 function Game() {
   const { gameID } = useParams();
-  const { getGame, deleteGame } = useAPI();
-  const { showLoading, hideLoading } = useGlobal();
-  const navigate = useNavigate();
+  const { getGame } = useAPI();
   const [playersPopup, setPlayersPopup] = useState({
+    show: false,
+  });
+  const [deletePopup, setDeletePopup] = useState({
     show: false,
   });
   const { isPending, isError, error, data, refetch } = useQuery({
@@ -41,7 +42,7 @@ function Game() {
   }
 
   const game = data.data.data.game;
-  const { name, eventDate, players, status, sport } = game;
+  const { name, eventDate, players, status, sport, picksData } = game;
   const formattedDate = new Date(eventDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -110,18 +111,22 @@ function Game() {
       </Swiper>
 
       {/* Delete Game */}
+
       <button
         type="button"
-        className="game-info__delete"
-        onClick={async () => {
-          showLoading("Deleting Game...");
-          await deleteGame(gameID);
-          hideLoading();
-          navigate("/");
-        }}
+        className={`game-info__delete ${
+          picksData.isGenerated ? "game-info__delete-disabled" : ""
+        }`}
+        onClick={() => setDeletePopup({ show: true })}
+        disabled={picksData.isGenerated}
       >
         Delete Game
       </button>
+      {picksData.isGenerated && (
+        <p className="game-info__delete-msg">
+          Please delete all picks for this game before deleting the entire game.
+        </p>
+      )}
 
       {/* Add Players Popup */}
       {playersPopup.show && (
@@ -130,6 +135,14 @@ function Game() {
           closePopup={() => setPlayersPopup({ show: false })}
           refetch={refetch}
           gameID={gameID}
+        />
+      )}
+
+      {/* Delete Game Popup */}
+      {deletePopup.show && (
+        <DeleteGamePopup
+          gameID={gameID}
+          closePopup={() => setDeletePopup({ show: false })}
         />
       )}
     </div>

@@ -321,7 +321,22 @@ module.exports = {
   },
   deleteGame: async (req, res, next) => {
     const { gameID } = req.params;
-    const { players, sport } = req.game;
+    const {
+      players,
+      sport,
+      picksData: { isGenerated },
+    } = req.game;
+
+    // ONLY ABLE TO DELETE if there are no picks generated for this game
+    if (isGenerated)
+      return res
+        .status(403)
+        .json(
+          customErrorHandler(
+            MUST_DELETE_PICKS,
+            "Must delete all picks for this game before deleting this entire game."
+          )
+        );
 
     // Delete Game
     await GameModel.findOneAndDelete({ gameID });

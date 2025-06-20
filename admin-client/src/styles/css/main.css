@@ -596,6 +596,18 @@ html {
   margin: 0 auto;
   margin-top: 2rem;
 }
+.game-info__delete-disabled {
+  background: #b3b3b3;
+  opacity: 0.75;
+}
+.game-info__delete-msg {
+  color: #81d2c7;
+  text-align: center;
+  margin-top: 1rem;
+  line-height: 1.5rem;
+  background: #19313a;
+  padding: 0.75rem;
+}
 
 .player-info__img-box {
   width: 10rem;
@@ -727,6 +739,7 @@ html {
 }
 .ap-popup__btns {
   margin-top: 3rem;
+  gap: 0.75rem;
 }
 .ap-popup__cancel, .ap-popup__save {
   outline: none;
@@ -738,10 +751,22 @@ html {
 }
 .ap-popup__save {
   background: #81d2c7;
-  margin-left: 1rem;
 }
 .ap-popup__no-players {
   color: #81d2c7;
+}
+.ap-popup__main-msg {
+  text-align: center;
+  color: white;
+  margin-bottom: 1rem;
+}
+.ap-popup__sub-msg {
+  text-align: center;
+  color: #ff3939;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.75rem;
+  text-transform: uppercase;
 }
 
 body {

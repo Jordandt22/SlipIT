@@ -27,6 +27,7 @@ const errorCodes = {
   INVALID_SPORT: "invalid-sport",
   PICKS_ALREADY_GENERATED: "picks-already-generated",
   PLAYER_NOT_ADDED: "player-not-added",
+  MUST_DELETE_PICKS: "must-delete-picks",
 
   // Leagues
   LEAGUE_NAME_TAKEN: "league-name-taken",

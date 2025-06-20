@@ -100,6 +100,20 @@
     margin: 0 auto;
     margin-top: $spacer;
   }
+
+  &__delete-disabled {
+    background: $grey;
+    opacity: 0.75;
+  }
+
+  &__delete-msg {
+    color: $primary;
+    text-align: center;
+    margin-top: $spacer-small;
+    line-height: $spacer-small * 1.5;
+    background: $dark-bg;
+    padding: $spacer-small * 0.75;
+  }
 }
 
 .player-info {
@@ -269,6 +283,7 @@
 
   &__btns {
     margin-top: $spacer * 1.5;
+    gap: $spacer-small * 0.75;
   }
 
   &__cancel,
@@ -283,10 +298,24 @@
 
   &__save {
     background: $primary;
-    margin-left: $spacer-small;
   }
 
   &__no-players {
     color: $primary;
+  }
+
+  &__main-msg {
+    text-align: center;
+    color: white;
+    margin-bottom: $spacer-small;
+  }
+
+  &__sub-msg {
+    text-align: center;
+    color: $red;
+    font-weight: bold;
+    font-size: $main-fs * 0.8;
+    line-height: $spacer-small * 1.75;
+    text-transform: uppercase;
   }
 }
