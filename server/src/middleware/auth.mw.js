@@ -5,6 +5,7 @@ const {
 } = require("../helpers/customErrorHandler");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const UserModel = require("../models/user.model");
+const { getCacheData, getUserKey, cacheData } = require("../redis/redis");
 
 module.exports = {
   authUser: serverErrorCatcherWrapper(async (req, res, next) => {
@@ -36,8 +37,17 @@ module.exports = {
           )
         );
 
+    // Cache Data
+    let user;
+    const { key, interval } = getUserKey(uid);
+    const cachedData = await getCacheData(key);
+    if (cachedData) {
+      user = cachedData.user;
+    } else {
+      user = await UserModel.findOne({ uid });
+    }
+
     // Check if the User Exists
-    const user = await UserModel.findOne({ uid });
     if (!user)
       return res
         .status(404)
@@ -45,6 +55,8 @@ module.exports = {
           customErrorHandler(USER_NOT_FOUND, "The user could NOT be found.")
         );
 
+    // Cache User Data
+    if (!cachedData) await cacheData(key, interval, { user });
     req.user = user;
     req.params = { ...req.params };
     req.body = { ...req.body };

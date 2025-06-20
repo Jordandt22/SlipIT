@@ -4,11 +4,21 @@ const {
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
+const { cacheData, getGameKey, getCacheData } = require("../redis/redis");
 
 module.exports = {
   checkIfGameExists: serverErrorCatcherWrapper(async (req, res, next) => {
     const { gameID } = req.params;
-    const game = await GameModel.findOne({ gameID });
+    let game;
+    const { key, interval } = getGameKey(gameID);
+    const cachedData = await getCacheData(key);
+    if (cachedData) {
+      game = cachedData.game;
+    } else {
+      game = await GameModel.findOne({ gameID });
+    }
+
+    // Check Game
     if (!game)
       return res
         .status(404)
@@ -19,6 +29,8 @@ module.exports = {
           )
         );
 
+    // Cache Game Data
+    if (!cachedData) await cacheData(key, interval, { game });
     req.game = game;
     next();
   }),

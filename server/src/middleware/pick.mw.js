@@ -4,11 +4,20 @@ const {
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
+const { getCacheData, getPickKey, cacheData } = require("../redis/redis");
 
 module.exports = {
   checkIfPickExists: serverErrorCatcherWrapper(async (req, res, next) => {
     const { pickID } = req.params;
-    const pick = await PickModel.findOne({ pickID });
+    let pick;
+    const { key, interval } = getPickKey(pickID);
+    const cachedData = await getCacheData(key);
+    if (cachedData) {
+      pick = cachedData.pick;
+    } else {
+      pick = await PickModel.findOne({ pickID });
+    }
+
     if (!pick)
       return res
         .status(404)
@@ -19,6 +28,8 @@ module.exports = {
           )
         );
 
+    // Cache Pick Data
+    if (!cachedData) await cacheData(key, interval, { pick });
     req.pick = pick;
     next();
   }),

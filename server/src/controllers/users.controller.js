@@ -14,6 +14,7 @@ const {
   createEmailUser,
   getFirebaseToken,
 } = require("../firebase/firebase.functions");
+const { cacheData, getUserKey } = require("../redis/redis");
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -140,6 +141,8 @@ module.exports = {
           )
         );
 
+    // Cache Data
+    await cacheData(getUserKey(uid), 60 * 60, { user });
     res
       .status(200)
       .json({ data: { user, customAccessToken: accessToken }, error: null });

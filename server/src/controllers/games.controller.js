@@ -10,6 +10,30 @@ const {
   validateSport,
 } = require("../helpers/game.util");
 const PickModel = require("../models/pick.model");
+const {
+  cacheData,
+  getGameKey,
+  getPlayerKey,
+  deleteCacheData,
+} = require("../redis/redis");
+
+// Update Game Cache
+const updateGameCache = async (gameID, game, playerIDRegex) => {
+  // Update Cache for Game
+  if (gameID) {
+    const { key, interval } = getGameKey(gameID);
+    await cacheData(key, interval, { game });
+  }
+
+  // Update Players Cache
+  if (playerIDRegex) {
+    const updatedPlayers = await PlayerModel.find({ playerID: playerIDRegex });
+    updatedPlayers.map(async (player) => {
+      const { key, interval } = getPlayerKey(player.playerID);
+      await cacheData(key, interval, { player });
+    });
+  }
+};
 
 module.exports = {
   getGames: async (req, res, next) => {
@@ -106,29 +130,36 @@ module.exports = {
       { $push: { [`playerStats.${sportName}.games`]: { gameID } } }
     );
 
+    // Update Cache
+    await updateGameCache(gameID, game, regex);
+
     res.status(200).json({ data: { game }, error: null });
   },
   updateGameStatus: async (req, res, next) => {
     const { gameID } = req.params;
     const { status } = req.body;
-
     const updatedGame = await GameModel.findOneAndUpdate(
       { gameID },
       { status },
       { new: true }
     );
 
+    // Update Cache
+    await updateGameCache(gameID, updatedGame, null);
+
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
   updateGameDate: async (req, res, next) => {
     const { gameID } = req.params;
     const { eventDate } = req.body;
-
     const updatedGame = await GameModel.findOneAndUpdate(
       { gameID },
       { eventDate },
       { new: true }
     );
+
+    // Update Cache
+    await updateGameCache(gameID, updatedGame, null);
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
@@ -190,6 +221,9 @@ module.exports = {
       { playerID: regex },
       { $push: { [`playerStats.${sport.name}.games`]: { gameID } } }
     );
+
+    // Update Cache
+    await updateGameCache(gameID, updatedGame, regex);
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
@@ -260,6 +294,9 @@ module.exports = {
       { new: true }
     );
 
+    // Update Cache
+    await updateGameCache(gameID, updatedGame, regex);
+
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
   deleteGame: async (req, res, next) => {
@@ -281,6 +318,13 @@ module.exports = {
     await PickModel.deleteMany({
       "game.gameID": gameID,
     });
+
+    // Delete Game Data from Cache
+    const { key } = getGameKey(gameID);
+    await deleteCacheData(key);
+
+    // Update Players' Cache
+    await updateGameCache(null, null, regex);
 
     res
       .status(200)
@@ -318,6 +362,9 @@ module.exports = {
       { players: updatedPlayers },
       { new: true }
     );
+
+    // Update Game Cache
+    await updateGameCache(gameID, updatedGame, null);
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },
