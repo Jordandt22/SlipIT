@@ -11,6 +11,7 @@ import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
 // Components
 import BlitzballStats from "./blitzball/BlitzballStats";
 import SoccerStats from "./soccer/SoccerStats";
+import ErrorMessage from "../../standalone/status/ErrorMessage";
 
 function PlayerInfo(props) {
   const {
@@ -28,7 +29,7 @@ function PlayerInfo(props) {
   if (isPending) {
     return <div>loading...</div>;
   } else if (isError) {
-    return <div>{error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const {

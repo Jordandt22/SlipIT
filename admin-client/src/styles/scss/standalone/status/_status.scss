@@ -1,0 +1,8 @@
+// Status Components Styles
+.error-message {
+  background: rgba($red, 0.75);
+  color: white;
+  border-radius: 5px;
+  padding: $spacer-small * 0.5;
+  text-align: center;
+}

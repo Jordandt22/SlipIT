@@ -16,6 +16,7 @@ import { useAPI } from "../../../context/API/API.context";
 import PlayerInfo from "./PlayerInfo";
 import GameStatus from "./GameStatus";
 import AddPlayersPopup from "./AddPlayersPopup";
+import ErrorMessage from "../../standalone/status/ErrorMessage";
 
 function Game() {
   const { gameID } = useParams();
@@ -33,8 +34,9 @@ function Game() {
   if (isPending) {
     return <div>loading...</div>;
   } else if (isError) {
-    return <div>{error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
+
   const game = data.data.data.game;
   const { name, eventDate, players, status, sport } = game;
   const formattedDate = new Date(eventDate).toLocaleDateString("en-US", {

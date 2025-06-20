@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { getListOfSports } from "../../../../misc/Sports";
 
 // Contexts
 import { useAPI } from "../../../../context/API/API.context";
@@ -8,7 +9,7 @@ import { GET_GAMES_KEY } from "../../../../context/API/QueryKeys";
 
 // Components
 import CreateGamePopup from "./CreateGamePopup";
-import { getListOfSports } from "../../../../misc/Sports";
+import ErrorMessage from "../../../standalone/status/ErrorMessage";
 
 function GamesSection() {
   const { getGames } = useAPI();
@@ -26,7 +27,7 @@ function GamesSection() {
   if (isPending) {
     return <div>loading...</div>;
   } else if (isError) {
-    return <div>{error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const sports = getListOfSports();

@@ -13,9 +13,10 @@ import { GET_PLAYERS_KEY } from "../../../../context/API/QueryKeys";
 
 // Components
 import AddPlayersForm from "../../../standalone/players/AddPlayersForm";
+import ErrorMessage from "../../../standalone/status/ErrorMessage";
 
 function AddPlayersInput(props) {
-  const {addedPlayers, setAddedPlayers} = props;
+  const { addedPlayers, setAddedPlayers } = props;
   const { getPlayers } = useAPI();
   const page = 1;
   const limit = 15;
@@ -39,7 +40,7 @@ function AddPlayersInput(props) {
   if (isPending) {
     return <div>loading...</div>;
   } else if (isError) {
-    return <div>{error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const { players } = data.data.data;

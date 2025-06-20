@@ -7,6 +7,7 @@ import { GET_PLAYERS_KEY } from "../../../context/API/QueryKeys";
 
 // Components
 import AddPlayersForm from "../../standalone/players/AddPlayersForm";
+import ErrorMessage from "../../standalone/status/ErrorMessage";
 
 function AddPlayersPopup(props) {
   const { gameID, gamePlayers, closePopup, refetch } = props;
@@ -34,9 +35,25 @@ function AddPlayersPopup(props) {
   if (isPending) {
     return <div>loading...</div>;
   } else if (isError) {
-    return <div>{error.message}</div>;
-  }
+    return (
+      <div className="shadow-container center">
+        <div className="ap-popup">
+          <h1 className="ap-popup__title">Add Players</h1>
+          <ErrorMessage message={error.message} />
 
+          <div className="ap-popup__btns row">
+            <button
+              type="button"
+              className="ap-popup__cancel"
+              onClick={closePopup}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   const { players } = data.data.data;
 
   // Filters out players already in the game

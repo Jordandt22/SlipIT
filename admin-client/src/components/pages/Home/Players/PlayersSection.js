@@ -10,13 +10,16 @@ import { Pagination } from "swiper/modules";
 // Contexts
 import { GET_PLAYERS_KEY } from "../../../../context/API/QueryKeys";
 import { useAPI } from "../../../../context/API/API.context";
+
+// Components
 import PlayerCard from "./PlayerCard";
+import ErrorMessage from "../../../standalone/status/ErrorMessage";
 
 function PlayersSection() {
   const page = 1;
   const limit = 15;
   const recent = false;
-  const { getPlayers, addGamePlayer } = useAPI();
+  const { getPlayers } = useAPI();
   const { isPending, isError, error, data } = useQuery({
     queryKey: [GET_PLAYERS_KEY(limit, page, recent)],
     queryFn: async () => await getPlayers(limit, page, recent),
@@ -26,7 +29,7 @@ function PlayersSection() {
   if (isPending) {
     return <div>loading...</div>;
   } else if (isError) {
-    return <div>{error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const { players } = data.data.data;

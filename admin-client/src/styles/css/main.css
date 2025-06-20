@@ -241,6 +241,14 @@ html {
   fill: rgba(179, 179, 179, 0.5);
 }
 
+.error-message {
+  background: rgba(255, 57, 57, 0.75);
+  color: white;
+  border-radius: 5px;
+  padding: 0.5rem;
+  text-align: center;
+}
+
 .home-section__create {
   width: 100%;
   outline: none;
