@@ -10,6 +10,7 @@ import { GET_GAMES_KEY } from "../../../../context/API/QueryKeys";
 // Components
 import CreateGamePopup from "./CreateGamePopup";
 import ErrorMessage from "../../../standalone/status/ErrorMessage";
+import Loading from "../../../standalone/status/Loading";
 
 function GamesSection() {
   const { getGames } = useAPI();
@@ -25,7 +26,7 @@ function GamesSection() {
   });
 
   if (isPending) {
-    return <div>loading...</div>;
+    return <Loading message="Loading Games..." />;
   } else if (isError) {
     return <ErrorMessage message={error.message} />;
   }

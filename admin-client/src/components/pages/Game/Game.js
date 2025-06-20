@@ -17,6 +17,7 @@ import PlayerInfo from "./PlayerInfo";
 import GameStatus from "./GameStatus";
 import AddPlayersPopup from "./AddPlayersPopup";
 import ErrorMessage from "../../standalone/status/ErrorMessage";
+import Loading from "../../standalone/status/Loading";
 
 function Game() {
   const { gameID } = useParams();
@@ -32,7 +33,7 @@ function Game() {
   });
 
   if (isPending) {
-    return <div>loading...</div>;
+    return <Loading message="Loading Game Data..." />;
   } else if (isError) {
     return <ErrorMessage message={error.message} />;
   }

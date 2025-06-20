@@ -8,6 +8,7 @@ import { GET_PLAYERS_KEY } from "../../../context/API/QueryKeys";
 // Components
 import AddPlayersForm from "../../standalone/players/AddPlayersForm";
 import ErrorMessage from "../../standalone/status/ErrorMessage";
+import Loading from "../../standalone/status/Loading";
 
 function AddPlayersPopup(props) {
   const { gameID, gamePlayers, closePopup, refetch } = props;
@@ -33,7 +34,7 @@ function AddPlayersPopup(props) {
     );
 
   if (isPending) {
-    return <div>loading...</div>;
+    return <Loading message="Loading Players..." />;
   } else if (isError) {
     return (
       <div className="shadow-container center">

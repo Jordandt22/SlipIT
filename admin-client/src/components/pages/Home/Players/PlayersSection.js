@@ -14,6 +14,7 @@ import { useAPI } from "../../../../context/API/API.context";
 // Components
 import PlayerCard from "./PlayerCard";
 import ErrorMessage from "../../../standalone/status/ErrorMessage";
+import Loading from "../../../standalone/status/Loading";
 
 function PlayersSection() {
   const page = 1;
@@ -27,7 +28,7 @@ function PlayersSection() {
   });
 
   if (isPending) {
-    return <div>loading...</div>;
+    return <Loading message="Loading Players..." />;
   } else if (isError) {
     return <ErrorMessage message={error.message} />;
   }

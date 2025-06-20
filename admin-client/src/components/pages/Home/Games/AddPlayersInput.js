@@ -14,6 +14,7 @@ import { GET_PLAYERS_KEY } from "../../../../context/API/QueryKeys";
 // Components
 import AddPlayersForm from "../../../standalone/players/AddPlayersForm";
 import ErrorMessage from "../../../standalone/status/ErrorMessage";
+import Loading from "../../../standalone/status/Loading";
 
 function AddPlayersInput(props) {
   const { addedPlayers, setAddedPlayers } = props;
@@ -38,7 +39,7 @@ function AddPlayersInput(props) {
     );
 
   if (isPending) {
-    return <div>loading...</div>;
+    return <Loading message="Loading Players for New Game..." />;
   } else if (isError) {
     return <ErrorMessage message={error.message} />;
   }

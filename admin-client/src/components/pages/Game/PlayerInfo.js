@@ -12,6 +12,7 @@ import { GET_PLAYER_KEY } from "../../../context/API/QueryKeys";
 import BlitzballStats from "./blitzball/BlitzballStats";
 import SoccerStats from "./soccer/SoccerStats";
 import ErrorMessage from "../../standalone/status/ErrorMessage";
+import Loading from "../../standalone/status/Loading";
 
 function PlayerInfo(props) {
   const {
@@ -27,7 +28,7 @@ function PlayerInfo(props) {
   });
 
   if (isPending) {
-    return <div>loading...</div>;
+    return <Loading message="Loading Player Data..." />;
   } else if (isError) {
     return <ErrorMessage message={error.message} />;
   }
