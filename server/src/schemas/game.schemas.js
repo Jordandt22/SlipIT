@@ -69,15 +69,15 @@ const GamePlayersSchema = Yup.object({
 const BlitzballStatsSchema = Yup.object({
   stats: Yup.object({
     batting: Yup.object({
-      atBats: Yup.number().min(0).max(10).required(),
+      atBats: Yup.number().min(0).max(20).required(),
       hits: Yup.number().min(0).max(20).required(),
-      hitterStrikeouts: Yup.number().min(0).max(20).required(),
+      hitterStrikeouts: Yup.number().min(0).max(30).required(),
       hitterWalks: Yup.number().min(0).max(20).required(),
       homeruns: Yup.number().min(0).max(20).required(),
       RBI: Yup.number().min(0).max(20).required(),
     }),
     pitching: Yup.object({
-      inningsPitched: Yup.number().min(0).max(10).required(),
+      inningsPitched: Yup.number().min(0).max(20).required(),
       pitcherStrikeouts: Yup.number().min(0).max(20).required(),
       pitcherWalks: Yup.number().min(0).max(20).required(),
       hitsAllowed: Yup.number().min(0).max(20).required(),
