@@ -254,15 +254,10 @@
     }
   }
 
-  &__title {
-    width: fit-content;
-    color: $orange;
+  &__profile {
     background: $sec-bg;
-    text-align: center;
-    padding: $spacer-small * 0.35 $spacer-md;
-    font-weight: 500;
-    border-radius: 10px;
-    margin-bottom: $spacer-small;
+    margin-bottom: $spacer-small * 1.5;
+    border-radius: 5px;
   }
 
   &__game {
@@ -305,6 +300,17 @@
   &__tab-active {
     border-color: $primary;
     background: $primary;
+  }
+
+  &__delete {
+    outline: none;
+    border: none;
+    background: $red;
+    color: white;
+    margin-bottom: $spacer-small;
+    padding: $spacer-small * 0.35 $spacer;
+    border-radius: 5px;
+    font-weight: bold;
   }
 }
 

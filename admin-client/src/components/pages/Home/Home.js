@@ -3,9 +3,15 @@ import React, { useState } from "react";
 // Components
 import GamesSection from "./Games/GamesSection";
 import PlayersSection from "./Players/PlayersSection";
+import DeletePlayerPopup from "./Players/DeleteGamePopup";
 
 function Home() {
   const [activeTab, setActiveTab] = useState(0);
+  const [deletePlayerPopup, setDeletePlayerPopup] = useState({
+    show: false,
+    playerID: null,
+    refetch: null,
+  });
   const tabs = [
     {
       name: "Games",
@@ -35,7 +41,25 @@ function Home() {
         })}
       </div>
 
-      {activeTab === 0 ? <GamesSection /> : <PlayersSection />}
+      {activeTab === 0 ? (
+        <GamesSection />
+      ) : (
+        <PlayersSection
+          openPopup={(playerID, refetch) =>
+            setDeletePlayerPopup({ show: true, playerID, refetch })
+          }
+        />
+      )}
+
+      {/* Delete Player Popup */}
+      {deletePlayerPopup.show && (
+        <DeletePlayerPopup
+          deletePlayerPopup={deletePlayerPopup}
+          closePopup={() =>
+            setDeletePlayerPopup({ show: false, playerID: null, refetch: null })
+          }
+        />
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ import ErrorMessage from "../../../standalone/status/ErrorMessage";
 import Loading from "../../../standalone/status/Loading";
 import CreatePlayerPopup from "./CreatePlayerPopup";
 
-function PlayersSection() {
+function PlayersSection(props) {
   const page = 1;
   const limit = 15;
   const recent = false;
@@ -45,22 +45,28 @@ function PlayersSection() {
       >
         Create a Player
       </button>
-      <Swiper
-        pagination={{
-          dynamicBullets: true,
-          clickable: false,
-        }}
-        modules={[Pagination]}
-        className="player-cards-swiper"
-      >
-        {players.map((player) => {
-          return (
-            <SwiperSlide key={player.playerID}>
-              <PlayerCard player={player} />
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
+      {players.length > 0 ? (
+        <Swiper
+          pagination={{
+            dynamicBullets: true,
+            clickable: false,
+          }}
+          modules={[Pagination]}
+          className="player-cards-swiper"
+        >
+          {players.map((player) => {
+            return (
+              <SwiperSlide key={player.playerID}>
+                <PlayerCard player={player} {...props} refetch={refetch} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      ) : (
+        <p style={{ marginTop: 0 }} className="games-section__none">
+          No Current Players
+        </p>
+      )}
 
       {/* Create Game Popup */}
       {createPlayerPopup.show && (

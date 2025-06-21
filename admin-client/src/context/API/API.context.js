@@ -70,6 +70,10 @@ export const APIContextProvider = (props) => {
       getURIPath("/players", `?limit=${limit}&page=${page}&recent=${recent}`)
     );
 
+  // Delete Player
+  const deletePlayer = async (playerID) =>
+    await axios.delete(getURIPath(`/players/${playerID}`, ""));
+
   // ---- Picks ----
 
   // Get Picks
@@ -113,6 +117,7 @@ export const APIContextProvider = (props) => {
         createPlayer,
         getPlayer,
         getPlayers,
+        deletePlayer,
 
         // Picks
         getPicksByGameAndPlayer,

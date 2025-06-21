@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 // Misc
 import { getListOfSports } from "../../../../misc/Sports";
+import DeletePlayerPopup from "./DeleteGamePopup";
 
 function PlayerCardGames(props) {
   const {
@@ -39,15 +40,22 @@ function PlayerCardGames(props) {
 function PlayerCard(props) {
   const {
     player: {
+      playerID,
       playerInfo: { name, image },
       playerStats,
     },
+    openPopup,
+    refetch,
   } = props;
   const [activeSport, setActiveSport] = useState(0);
-  const sports = getListOfSports().map((sport) => ({
-    label: sport,
-    games: playerStats[sport].games,
-  }));
+  let totalGames = 0;
+  const sports = getListOfSports().map((sport) => {
+    totalGames += playerStats[sport].games.length;
+    return {
+      label: sport,
+      games: playerStats[sport].games,
+    };
+  });
 
   return (
     <div className="player-card center-vertical">
@@ -59,10 +67,18 @@ function PlayerCard(props) {
         </div>
 
         <p className="player-card__name">{name}</p>
+        {totalGames <= 0 && (
+          <button
+            type="button"
+            className="player-card__delete"
+            onClick={() => openPopup(playerID, refetch)}
+          >
+            Delete Player
+          </button>
+        )}
       </div>
 
       {/* Games Played */}
-      <p className="player-card__title">Games Played</p>
       <div className="row player-card__tabs">
         {sports.map((sport, i) => {
           return (

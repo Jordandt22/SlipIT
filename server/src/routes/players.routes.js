@@ -3,6 +3,7 @@ const {
   createPlayer,
   getPlayer,
   getPlayers,
+  deletePlayer,
 } = require("../controllers/players.controller");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const { checkIfPlayerExists } = require("../middleware/player.mw");
@@ -37,6 +38,14 @@ playersRouter.get(
   "/",
   queryValidator(GetPlayersSchema),
   serverErrorCatcherWrapper(getPlayers)
+);
+
+// Delete Player
+playersRouter.delete(
+  "/:playerID",
+  paramsValidator(PlayerIDSchema),
+  checkIfPlayerExists,
+  serverErrorCatcherWrapper(deletePlayer)
 );
 
 module.exports = playersRouter;

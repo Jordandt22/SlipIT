@@ -460,15 +460,10 @@ html {
   font-size: 0.975rem;
   color: #b3b3b3;
 }
-.player-card__title {
-  width: fit-content;
-  color: #ffac14;
+.player-card__profile {
   background: #0c3747;
-  text-align: center;
-  padding: 0.35rem 4rem;
-  font-weight: 500;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 5px;
 }
 .player-card__game {
   width: 90%;
@@ -505,6 +500,16 @@ html {
 .player-card__tab-active {
   border-color: #81d2c7;
   background: #81d2c7;
+}
+.player-card__delete {
+  outline: none;
+  border: none;
+  background: #ff3939;
+  color: white;
+  margin-bottom: 1rem;
+  padding: 0.35rem 2rem;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
 .player-cards-swiper {

@@ -1,7 +1,7 @@
 const uuid = require("uuid");
 const PlayerModel = require("../models/player.model");
 const {
-  errorCodes: {},
+  errorCodes: { MUST_REMOVE_FROM_GAMES },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const {
@@ -10,7 +10,9 @@ const {
   getPlayersKey,
   getCacheData,
   deleteCacheDataByPrefix,
+  flushDBCache,
 } = require("../redis/redis");
+const UserModel = require("../models/user.model");
 
 module.exports = {
   createPlayer: async (req, res, next) => {
@@ -72,5 +74,36 @@ module.exports = {
       },
       error: null,
     });
+  },
+  deletePlayer: async (req, res, next) => {
+    const {
+      playerID,
+      playerStats: { blitzball, soccer },
+    } = req.player;
+
+    // MUST Remove Player from all games before deleting
+    if (blitzball.games.length > 0 || soccer.games.length > 0)
+      return res
+        .status(403)
+        .json(
+          customErrorHandler(
+            MUST_REMOVE_FROM_GAMES,
+            "Must remove the player from all games before deleting."
+          )
+        );
+
+    // Disconnect Player from User
+    await UserModel.findOneAndUpdate(
+      { playerInfo: { playerID } },
+      { playerInfo: { playerID: null, isPlayer: false } }
+    );
+
+    // Delete Player
+    await PlayerModel.findOneAndDelete({ playerID });
+
+    // Flush the Cache
+    await flushDBCache();
+
+    res.status(200).json({ data: "Successfully Deleted Player", error: null });
   },
 };

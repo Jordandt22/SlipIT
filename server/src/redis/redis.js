@@ -35,6 +35,12 @@ module.exports = {
       return pipeline.exec();
     });
   },
+  flushDBCache: async () => {
+    if (process.env.NODE_ENV === "development")
+      console.log("REDIS: Flushing Cache");
+
+    await redisClient.flushdb();
+  },
 
   // REDIS KEYS
 

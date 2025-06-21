@@ -53,29 +53,35 @@ function AddPlayersInput(props) {
     playersSections.push(players.slice(i, i + numPlayersShown));
   }
   return (
-    <Swiper
-      pagination={{
-        dynamicBullets: true,
-        clickable: false,
-      }}
-      modules={[Pagination]}
-      className="players-swiper"
-    >
-      {playersSections.map((playerSection, i) => {
-        return (
-          <SwiperSlide key={`players-section-${i}`}>
-            <div className="add-players-input">
-              <AddPlayersForm
-                players={playerSection}
-                addedPlayers={addedPlayers}
-                addPlayer={addPlayer}
-                removePlayer={removePlayer}
-              />
-            </div>
-          </SwiperSlide>
-        );
-      })}
-    </Swiper>
+    <>
+      {players.length > 0 ? (
+        <Swiper
+          pagination={{
+            dynamicBullets: true,
+            clickable: false,
+          }}
+          modules={[Pagination]}
+          className="players-swiper"
+        >
+          {playersSections.map((playerSection, i) => {
+            return (
+              <SwiperSlide key={`players-section-${i}`}>
+                <div className="add-players-input">
+                  <AddPlayersForm
+                    players={playerSection}
+                    addedPlayers={addedPlayers}
+                    addPlayer={addPlayer}
+                    removePlayer={removePlayer}
+                  />
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      ) : (
+        <p style={{ color: "white" }}>No Players Available</p>
+      )}
+    </>
   );
 }
 

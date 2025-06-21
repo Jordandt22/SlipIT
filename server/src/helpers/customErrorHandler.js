@@ -19,6 +19,7 @@ const errorCodes = {
   // Players
   PLAYER_NOT_FOUND: "player-not-found",
   PLAYER_ALREADY_CONNECTED: "player-already-connected",
+  MUST_REMOVE_FROM_GAMES: "must-remove-from-games",
 
   // Games
   GAME_PLAYER_DUPLICATES: "game-player-duplicates",
