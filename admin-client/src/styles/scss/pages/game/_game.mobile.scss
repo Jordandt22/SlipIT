@@ -264,6 +264,20 @@
     background: $primary;
   }
 
+  &__picks {
+    min-height: 40vh;
+  }
+
+  &__picks-title {
+    text-transform: capitalize;
+    margin-bottom: $spacer-small;
+    background: $dark-bg;
+    color: white;
+    text-align: center;
+    padding: $spacer-small * 0.5;
+    border-radius: 5px;
+  }
+
   &__pick {
     background: $dark-bg;
     padding: $spacer-small * 0.75;
@@ -290,6 +304,20 @@
     color: $orange;
     padding: $spacer-small;
     text-align: center;
+  }
+
+  &__pick-skel {
+    opacity: 0.65;
+    animation: skel-fade-in-out 750ms alternate infinite ease-out 200ms;
+  }
+}
+
+@keyframes skel-fade-in-out {
+  0% {
+    opacity: 0.65;
+  }
+  100% {
+    opacity: 1;
   }
 }
 

@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
+// Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+
 // Contexts
 import { GET_GAME_KEY } from "../../../context/API/QueryKeys";
 import { useAPI } from "../../../context/API/API.context";
@@ -12,8 +18,8 @@ import AddPlayersPopup from "./AddPlayersPopup";
 import ErrorMessage from "../../standalone/status/ErrorMessage";
 import Loading from "../../standalone/status/Loading";
 import DeleteGamePopup from "./DeleteGamePopup";
-import GamePicks from "./GamePicks";
 import GamePicksButton from "./GamePicksButton";
+import PlayerInfo from "./Player/PlayerInfo";
 
 function Game() {
   const { gameID } = useParams();
@@ -85,12 +91,14 @@ function Game() {
       </p>
 
       {/* Delete / Generate Game Picks */}
-      <GamePicksButton
-        gameID={gameID}
-        isGenerated={isGenerated}
-        refetch={refetch}
-        players={players}
-      />
+      {status === 0 && (
+        <GamePicksButton
+          gameID={gameID}
+          isGenerated={isGenerated}
+          refetch={refetch}
+          players={players}
+        />
+      )}
 
       {/* Change Status */}
       <GameStatus gameID={gameID} status={status} refetch={refetch} />
@@ -98,17 +106,34 @@ function Game() {
       {/* Players */}
       <div className="game-info__players row">
         <p className="game-info__title">Update Players</p>
-        <button
-          type="button"
-          className="game-info__add"
-          onClick={() => setPlayersPopup({ show: true })}
-        >
-          Add Players
-        </button>
+        {status === 0 && (
+          <button
+            type="button"
+            className="game-info__add"
+            onClick={() => setPlayersPopup({ show: true })}
+          >
+            Add Players
+          </button>
+        )}
       </div>
 
       {/* Get Picks Data */}
-      <GamePicks gameID={gameID} game={game} refetch={refetch} />
+      <Swiper
+        pagination={{
+          dynamicBullets: true,
+          clickable: true,
+        }}
+        modules={[Pagination]}
+        className="players-swiper"
+      >
+        {players.map((player) => {
+          return (
+            <SwiperSlide key={player.playerID}>
+              <PlayerInfo player={player} game={game} refetch={refetch} />
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
 
       {/* Delete Game */}
       <button

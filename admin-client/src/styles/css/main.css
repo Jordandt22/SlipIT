@@ -721,6 +721,18 @@ html {
 .player-info__tab-active {
   background: #81d2c7;
 }
+.player-info__picks {
+  min-height: 40vh;
+}
+.player-info__picks-title {
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  background: #19313a;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
 .player-info__pick {
   background: #19313a;
   padding: 0.75rem;
@@ -744,7 +756,19 @@ html {
   padding: 1rem;
   text-align: center;
 }
+.player-info__pick-skel {
+  opacity: 0.65;
+  animation: skel-fade-in-out 750ms alternate infinite ease-out 200ms;
+}
 
+@keyframes skel-fade-in-out {
+  0% {
+    opacity: 0.65;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .players-swiper {
   width: 100%;
   height: fit-content;
@@ -822,6 +846,7 @@ html {
 }
 
 body {
+  position: relative;
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;
   background: #003d53;
@@ -829,8 +854,8 @@ body {
 }
 
 .shadow-container {
-  z-index: 1000;
   position: fixed;
+  z-index: 1000;
   top: 0;
   left: 0;
   right: 0;

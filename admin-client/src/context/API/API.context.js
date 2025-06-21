@@ -69,13 +69,17 @@ export const APIContextProvider = (props) => {
   // ---- Picks ----
 
   // Get Picks
-  const getPicks = async (filter, ID, limit, page, recent) =>
+  const getPicksByGameAndPlayer = async (
+    limit,
+    page,
+    recent,
+    gameID,
+    playerID
+  ) =>
     await axios.get(
       getURIPath(
-        "/picks",
-        `?filter=${filter}${
-          filter !== "all" ? `&ID=${ID}` : ""
-        }&limit=${limit}&page=${page}&recent=${recent}`
+        `/picks/game/${gameID}/player/${playerID}`,
+        `?limit=${limit}&page=${page}&recent=${recent}`
       )
     );
 
@@ -106,7 +110,7 @@ export const APIContextProvider = (props) => {
         getPlayers,
 
         // Picks
-        getPicks,
+        getPicksByGameAndPlayer,
         generateGamePicks,
         deleteGamePicks,
       }}

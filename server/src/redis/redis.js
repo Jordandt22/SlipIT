@@ -47,8 +47,10 @@ module.exports = {
 
   // --- Picks ----
   getPickKey: (pickID) => ({ key: `PICK_PICKID:${pickID}`, interval: 60 * 60 }),
-  getPicksKey: (filter, ID, limit, page, recent) => ({
-    key: `PICKS_FILTER:${filter}&ID:${ID}&LIMIT:${limit}&PAGE:${page}&RECENT:${recent}`,
+  getPicksKey: (type, limit, page, recent, gameID, playerID) => ({
+    key: `PICKS_TYPE:${type}${gameID ? `&GAMEID:${gameID}` : ""}${
+      playerID ? `&PLAYERID:${playerID}` : ""
+    }&LIMIT:${limit}&PAGE:${page}&RECENT:${recent}`,
     interval: 60 * 60,
   }),
 

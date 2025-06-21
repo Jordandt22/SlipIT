@@ -40,6 +40,7 @@ const GameSchema = new mongoose.Schema({
   status: { type: Number, default: 0 }, // Not-Started=0, In-Progress=1, Ended=2
   sport: {
     name: String,
+    categories: [{ type: String }],
   },
   picksData: {
     isGenerated: { type: Boolean, default: false },

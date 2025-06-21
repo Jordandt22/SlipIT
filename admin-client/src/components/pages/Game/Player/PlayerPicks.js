@@ -1,36 +1,105 @@
-import React from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 // Utils
 import { statNameFormatter } from "../../../../utils/formatter.util";
 
+// Contexts
+import { useAPI } from "../../../../context/API/API.context";
+import { GET_PICKS_KEY } from "../../../../context/API/QueryKeys";
+
+// Components
+import ErrorMessage from "../../../standalone/status/ErrorMessage";
+import GamePlayerPicksSkeleton from "../../../standalone/status/GamePlayerPicksSkeleton";
+
 function PlayerPicks(props) {
   const {
-    picksAPIData: { picks },
+    player: { playerID },
+    game: {
+      gameID,
+      picksData: { isGenerated },
+      sport: { categories },
+    },
   } = props;
+  const { getPicksByGameAndPlayer } = useAPI();
+  const [page, setPage] = useState(1);
+  const limit = 20;
+  const recent = false;
+  const { isPending, isError, error, data } = useQuery({
+    queryKey: [
+      GET_PICKS_KEY("GAME-PLAYER", limit, page, recent, gameID, playerID),
+    ],
+    queryFn: async () =>
+      await getPicksByGameAndPlayer(limit, page, recent, gameID, playerID),
+    retry: 3,
+    enabled: isGenerated,
+  });
+
+  if (!isGenerated) {
+    return (
+      <div className="player-info__picks">
+        <p className="player-info__none">
+          No picks have been generated for this player
+        </p>
+      </div>
+    );
+  }
+
+  if (isGenerated) {
+    if (isPending) {
+      return <GamePlayerPicksSkeleton />;
+    } else if (isError) {
+      return <ErrorMessage message={error.message} />;
+    }
+  }
+
+  const { picks, totalPicks } = data.data.data;
   return (
     <div className="player-info__picks">
-      {picks.length > 0 ? (
+      {totalPicks > 0 ? (
         <>
-          {picks.map((pick) => {
-            const {
-              pickID,
-              line: { stat, value },
-              usersPlayed,
-            } = pick;
-            const statName = statNameFormatter(stat);
+          {categories.map((category) => {
+            const categoryPicks = picks.filter(
+              (pick) => pick.line.category === category
+            );
 
             return (
-              <div key={pickID} className="player-info__pick between-row">
-                <p className="player-info__pick-line">
-                  <span>
-                    {value} {statName}
-                  </span>
-                </p>
+              <React.Fragment key={category + "-picks"}>
+                <h2 className="player-info__picks-title">{category}</h2>
+                {categoryPicks.length > 0 ? (
+                  <>
+                    {categoryPicks.map((pick) => {
+                      const {
+                        pickID,
+                        line: { stat, value },
+                        usersPlayed,
+                      } = pick;
+                      const statName = statNameFormatter(stat);
 
-                <p className="player-info__pick-users">
-                  {usersPlayed.length} Users Played
-                </p>
-              </div>
+                      return (
+                        <div
+                          key={pickID}
+                          className="player-info__pick between-row"
+                        >
+                          <p className="player-info__pick-line">
+                            <span>
+                              {value} {statName}
+                            </span>
+                          </p>
+
+                          <p className="player-info__pick-users">
+                            {usersPlayed.length} Users Played
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <p className="player-info__none">
+                    No picks have been generated for this player
+                  </p>
+                )}
+              </React.Fragment>
             );
           })}
         </>

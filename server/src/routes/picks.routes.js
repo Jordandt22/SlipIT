@@ -4,6 +4,7 @@ const {
   deletePicks,
   getPick,
   getPicks,
+  getPicksByGameAndPlayer,
 } = require("../controllers/picks.controller");
 const { serverErrorCatcherWrapper } = require("../helpers/Wrappers");
 const {
@@ -11,12 +12,16 @@ const {
   checkIfGameIsValid,
 } = require("../middleware/game.mw");
 const { checkIfPickExists } = require("../middleware/pick.mw");
+const { checkIfPlayerExists } = require("../middleware/player.mw");
 const {
   bodyValidator,
   paramsValidator,
   queryValidator,
 } = require("../middleware/validators");
-const { GameIDSchema } = require("../schemas/game.schemas");
+const {
+  GameIDSchema,
+  GameIDAndPlayerIDSchema,
+} = require("../schemas/game.schemas");
 const {
   GeneratePicksSchema,
   PickIDSchema,
@@ -41,11 +46,14 @@ picksRouter.get(
   serverErrorCatcherWrapper(getPick)
 );
 
-// Get Multiple Picks - Query Params: ?filter=[val]&ID=[val]&limit=[val]&page=[val]&recent=[val]
+//  Get All Picks for a Specific Player for a Specific Game - Query Params: limit=[val]&page=[val]&recent=[val]
 picksRouter.get(
-  "/",
+  "/game/:gameID/player/:playerID",
+  paramsValidator(GameIDAndPlayerIDSchema),
   queryValidator(GetPicksSchema),
-  serverErrorCatcherWrapper(getPicks)
+  checkIfGameExists,
+  checkIfPlayerExists,
+  serverErrorCatcherWrapper(getPicksByGameAndPlayer)
 );
 
 // Delete All Picks for a Specific Game

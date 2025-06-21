@@ -8,6 +8,7 @@ const PlayerModel = require("../models/player.model");
 const {
   checkForDupPlayersAndExist,
   validateSport,
+  getCategories,
 } = require("../helpers/game.util");
 const PickModel = require("../models/pick.model");
 const {
@@ -139,6 +140,7 @@ module.exports = {
       players,
       sport: {
         name: sportName,
+        categories: getCategories(sportName),
       },
     });
 
@@ -316,6 +318,9 @@ module.exports = {
 
     // Update Cache
     await updateGameCache(gameID, updatedGame, regex);
+
+    // Delete Game Players' Picks Data in Cache
+    await deleteCacheDataByPrefix(`PICKS_TYPE:GAME-PLAYER&GAMEID:${gameID}`);
 
     res.status(200).json({ data: { game: updatedGame }, error: null });
   },

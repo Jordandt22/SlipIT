@@ -6,21 +6,16 @@ const {
     GAME_PLAYER_NOT_FOUND,
     PICKS_ALREADY_GENERATED,
     PLAYER_NOT_ADDED,
-    INVALID_PICKS_FILTER,
-    GAME_NOT_FOUND,
-    PLAYER_NOT_FOUND,
   },
   customErrorHandler,
 } = require("../helpers/customErrorHandler");
 const { BLITZBALL } = require("../misc/sports");
 const {
   checkForDupPlayersAndExist,
-  getSportCategory,
   getDefaultPicks,
 } = require("../helpers/game.util");
 const PlayerModel = require("../models/player.model");
 const GameModel = require("../models/game.model");
-const { isValidFilter } = require("../helpers/pick.util");
 const {
   getGameKey,
   cacheData,
@@ -57,9 +52,16 @@ const getAVGStatsHelper = (
 };
 
 // Get AVG Stats
-const getAVGStats = async (type, games, playerID, gamesPlayed, sportName) => {
-  const firstCategory = getSportCategory(sportName, 0);
-  const secondCategory = getSportCategory(sportName, 1);
+const getAVGStats = async (
+  type,
+  games,
+  playerID,
+  gamesPlayed,
+  sportName,
+  categories
+) => {
+  const firstCategory = categories[0];
+  const secondCategory = categories[1];
   let sumOfStats = { [firstCategory]: {}, [secondCategory]: {} };
   let avgStats = { [firstCategory]: {}, [secondCategory]: {} };
   for (let i = 0; i <= games.length - 1; i++) {
@@ -107,6 +109,7 @@ const getAVGStats = async (type, games, playerID, gamesPlayed, sportName) => {
 
 // Helper for Generate Lines
 const generateLinesHelper = async (
+  category,
   picks,
   specificAVGStats,
   gameID,
@@ -127,6 +130,7 @@ const generateLinesHelper = async (
         playerID,
       },
       line: {
+        category,
         stat: key,
         value: Number(specificAVGStats[key].toString().split(".")[0]) + 0.5,
       },
@@ -137,15 +141,16 @@ const generateLinesHelper = async (
 };
 
 // Generate Lines
-const generateLines = async (type, avgStats, gameID, playerID, sportName) => {
-  const firstCategory = getSportCategory(sportName, 0);
+const generateLines = async (type, avgStats, gameID, playerID, categories) => {
+  const firstCategory = categories[0];
   const firstCategoryPicks = [];
 
-  const secondCategory = getSportCategory(sportName, 1);
+  const secondCategory = categories[1];
   const secondCategoryPicks = [];
 
   if (type === 0 || type === 2) {
     await generateLinesHelper(
+      firstCategory,
       firstCategoryPicks,
       avgStats[firstCategory],
       gameID,
@@ -155,6 +160,7 @@ const generateLines = async (type, avgStats, gameID, playerID, sportName) => {
 
   if (type === 1 || type === 2) {
     await generateLinesHelper(
+      secondCategory,
       secondCategoryPicks,
       avgStats[secondCategory],
       gameID,
@@ -174,7 +180,7 @@ module.exports = {
     const { players } = req.body;
     const {
       gameID,
-      sport: { name: sportName },
+      sport: { name: sportName, categories },
       picksData,
       players: gamePlayers,
     } = req.game;
@@ -249,12 +255,13 @@ module.exports = {
           filteredGames,
           playerID,
           gamesPlayed,
-          sportName
+          sportName,
+          categories
         );
 
         avgStats = avgStatsData;
       } else {
-        avgStats = getDefaultPicks(sportName, type);
+        avgStats = getDefaultPicks(sportName, categories, type);
       }
 
       // Loop Through All Stats and Create Lines
@@ -263,7 +270,7 @@ module.exports = {
         avgStats,
         gameID,
         playerID,
-        sportName
+        categories
       );
 
       // Add the picks for this specific player to the total game picks
@@ -290,7 +297,13 @@ module.exports = {
     await cacheData(key, interval, { game: updatedGame });
 
     res.status(200).json({
-      data: { gameID, game: updatedGame, players, picks, totalPicks },
+      data: {
+        gameID,
+        game: updatedGame,
+        players,
+        picks,
+        totalPicks,
+      },
       error: null,
     });
   },
@@ -348,66 +361,22 @@ module.exports = {
       error: null,
     });
   },
-  getPicks: async (req, res, next) => {
-    const { filter, ID, limit, page, recent } = req.query;
+  getPicksByGameAndPlayer: async (req, res, next) => {
+    const { gameID, playerID } = req.params;
+    const { limit, page, recent } = req.query;
     const parsedLimit = Number(limit);
     const parsedPage = Number(page);
     const parsedRecent = JSON.parse(recent);
     const skip = (parsedPage - 1) * parsedLimit;
 
-    // Check if Filter is Valid
-    const formatedFilter = filter.toLowerCase();
-    if (!isValidFilter(formatedFilter))
-      return res
-        .status(422)
-        .json(
-          customErrorHandler(
-            INVALID_PICKS_FILTER,
-            "The picks filter you provided is invalid."
-          )
-        );
-
-    let filterObject = {};
-
-    // If Filter is by Game
-    if (formatedFilter === "game") {
-      const game = await GameModel.findOne({ gameID: ID });
-      if (!game)
-        return res
-          .status(404)
-          .json(
-            customErrorHandler(
-              GAME_NOT_FOUND,
-              `Could NOT find game with gameID: ${ID}.`
-            )
-          );
-
-      filterObject = { "game.gameID": ID };
-    }
-
-    // If Filter is by Player
-    if (formatedFilter === "player") {
-      const player = await PlayerModel.findOne({ playerID: ID });
-      if (!player)
-        return res
-          .status(404)
-          .json(
-            customErrorHandler(
-              PLAYER_NOT_FOUND,
-              `Could NOT find player with playerID: ${ID}.`
-            )
-          );
-
-      filterObject = { "player.playerID": ID };
-    }
-
     // Cache Data
     const { key, interval } = getPicksKey(
-      formatedFilter,
-      formatedFilter === "all" ? "none" : ID,
+      "GAME-PLAYER",
       limit,
       page,
-      recent
+      recent,
+      gameID,
+      playerID
     );
     let picks;
     const cachedData = await getCacheData(key);
@@ -415,7 +384,10 @@ module.exports = {
       picks = cachedData.picks;
     } else {
       // Get a Batch of Picks
-      picks = await PickModel.find(filterObject)
+      picks = await PickModel.find({
+        game: { gameID },
+        player: { playerID },
+      })
         .sort({ eventDate: parsedRecent ? -1 : 1 })
         .skip(skip)
         .limit(parsedLimit);
@@ -432,10 +404,8 @@ module.exports = {
         page: parsedPage,
         skipped: skip,
         recent: parsedRecent,
-        filter: {
-          type: formatedFilter,
-          value: ID,
-        },
+        gameID,
+        playerID,
       },
       error: null,
     });

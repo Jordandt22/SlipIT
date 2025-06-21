@@ -11,5 +11,7 @@ export const GET_PLAYERS_KEY = (limit, page, recent) =>
   `PLAYERS_LIMIT:${limit}&PAGE:${page}&RECENT:${recent}`;
 
 // Picks Keys
-export const GET_PICKS_KEY = (filter, ID, limit, page, recent) =>
-  `PLAYERS_FILTER:${filter}&ID:${ID}&LIMIT:${limit}&PAGE:${page}&RECENT:${recent}`;
+export const GET_PICKS_KEY = (type, limit, page, recent, gameID, playerID) =>
+  `PLAYERS_TYPE:${type}&LIMIT:${limit}&PAGE:${page}&RECENT:${recent}${
+    gameID ? `&GAMEID:${gameID}` : ""
+  }${playerID ? `&PLAYERID:${playerID}` : ""}`;

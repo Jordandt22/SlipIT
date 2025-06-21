@@ -11,6 +11,7 @@ const PickSchema = new mongoose.Schema({
     playerID: String,
   },
   line: {
+    category: String,
     stat: String,
     value: Number,
   },

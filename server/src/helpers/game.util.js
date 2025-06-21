@@ -45,25 +45,17 @@ const validateSport = (sport) => {
   return validSports[sport.name];
 };
 
-// Get Category
-const getSportCategory = (sportName, type) => {
+// Get Categories for a Sport
+const getCategories = (sportName) => {
   switch (sportName) {
     case BLITZBALL:
-      if (type === 0) {
-        return "batting";
-      } else {
-        return "pitching";
-      }
+      return ["batting", "pitching"];
 
     case SOCCER:
-      if (type === 0) {
-        return "attacker";
-      } else {
-        return "defender";
-      }
+      return ["attacker", "defender"];
 
     default:
-      return "";
+      return [];
   }
 };
 
@@ -93,9 +85,9 @@ const defaultSoccerStats = {
   },
 };
 
-const getDefaultPicks = (sportName, type) => {
-  const firstCategory = getSportCategory(sportName, 0);
-  const secondCategory = getSportCategory(sportName, 1);
+const getDefaultPicks = (sportName, categories, type) => {
+  const firstCategory = categories[0];
+  const secondCategory = categories[1];
   let avgStats = {
     [firstCategory]: {},
     [secondCategory]: {},
@@ -131,6 +123,6 @@ const getDefaultPicks = (sportName, type) => {
 module.exports = {
   checkForDupPlayersAndExist,
   validateSport,
-  getSportCategory,
+  getCategories,
   getDefaultPicks,
 };

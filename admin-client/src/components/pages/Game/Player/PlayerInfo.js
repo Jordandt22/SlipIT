@@ -19,7 +19,7 @@ import PlayerPicks from "./PlayerPicks";
 function PlayerInfo(props) {
   const {
     player: { playerID },
-    game: { gameID, sport },
+    game: { gameID, sport, status },
     refetch,
   } = props;
   const { getPlayer, removeGamePlayer } = useAPI();
@@ -37,7 +37,7 @@ function PlayerInfo(props) {
     return <ErrorMessage message={error.message} />;
   }
 
-  const tabs = ["Stats", "Picks"];
+  const tabs = [{ label: "Stats" }, { label: "Picks" }];
   const {
     playerInfo: { name, image },
   } = data.data.data.player;
@@ -52,35 +52,38 @@ function PlayerInfo(props) {
 
         <p className="player-info__name">{name}</p>
 
-        <button
-          type="button"
-          className="player-info__remove"
-          onClick={async () => {
-            showLoading("Removing Player from Game...");
-            await removeGamePlayer(gameID, { players: [{ playerID }] });
-            hideLoading();
-            refetch();
-          }}
-        >
-          Remove Player
-        </button>
+        {status === 0 && (
+          <button
+            type="button"
+            className="player-info__remove"
+            onClick={async () => {
+              showLoading("Removing Player from Game...");
+              await removeGamePlayer(gameID, { players: [{ playerID }] });
+              hideLoading();
+              refetch();
+            }}
+          >
+            Remove Player
+          </button>
+        )}
       </div>
 
       {/* Tabs */}
       <div className="row player-info__tabs">
         {tabs.map((tab, i) => {
+          const { label } = tab;
           const isActive = i === activeTab;
 
           return (
             <button
-              key={tab}
+              key={label}
               type="button"
               className={`player-info__tab ${
                 isActive ? "player-info__tab-active" : ""
               }`}
               onClick={() => setActiveTab(i)}
             >
-              {tab}
+              {label}
             </button>
           );
         })}
