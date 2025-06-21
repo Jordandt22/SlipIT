@@ -723,6 +723,7 @@ html {
 }
 .player-info__picks {
   min-height: 40vh;
+  margin-bottom: 3rem;
 }
 .player-info__picks-title {
   text-transform: capitalize;
