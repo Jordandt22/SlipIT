@@ -69,7 +69,7 @@ function CreatePlayerPopup(props) {
             type="button"
             className="cg-popup__submit player-form__submit"
             onClick={async () => {
-              showLoading("Creating new game...");
+              showLoading("Creating New Player...");
               await createPlayer({
                 playerInfo: {
                   ...form,
