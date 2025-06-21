@@ -9,6 +9,7 @@ const {
   getPlayerKey,
   getPlayersKey,
   getCacheData,
+  deleteCacheDataByPrefix,
 } = require("../redis/redis");
 
 module.exports = {
@@ -25,6 +26,9 @@ module.exports = {
     // Add Player to Cache
     const { key, interval } = getPlayerKey(playerID);
     await cacheData(key, interval, { player });
+
+    // Delete Players Cache Data
+    await deleteCacheDataByPrefix("PLAYERS");
 
     res.status(200).json({ data: { player }, error: null });
   },

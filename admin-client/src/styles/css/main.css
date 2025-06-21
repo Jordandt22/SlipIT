@@ -513,6 +513,10 @@ html {
   --swiper-pagination-color: #81d2c7;
 }
 
+.player-form__submit {
+  margin-top: 2rem;
+}
+
 .game-container {
   padding-bottom: 2rem;
 }

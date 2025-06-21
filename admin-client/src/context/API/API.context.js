@@ -56,6 +56,10 @@ export const APIContextProvider = (props) => {
 
   // ---- Players ----
 
+  // Create Player
+  const createPlayer = async (data) =>
+    await axios.post(getURIPath(`/players`, ""), data);
+
   // Get Player
   const getPlayer = async (playerID) =>
     await axios.get(getURIPath(`/players/${playerID}`, ""));
@@ -106,6 +110,7 @@ export const APIContextProvider = (props) => {
         deleteGame,
 
         // Players
+        createPlayer,
         getPlayer,
         getPlayers,
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 // Swiper
@@ -15,13 +15,15 @@ import { useAPI } from "../../../../context/API/API.context";
 import PlayerCard from "./PlayerCard";
 import ErrorMessage from "../../../standalone/status/ErrorMessage";
 import Loading from "../../../standalone/status/Loading";
+import CreatePlayerPopup from "./CreatePlayerPopup";
 
 function PlayersSection() {
   const page = 1;
   const limit = 15;
   const recent = false;
   const { getPlayers } = useAPI();
-  const { isPending, isError, error, data } = useQuery({
+  const [createPlayerPopup, setCreatePlayerPopup] = useState({ show: false });
+  const { isPending, isError, error, data, refetch } = useQuery({
     queryKey: [GET_PLAYERS_KEY(limit, page, recent)],
     queryFn: async () => await getPlayers(limit, page, recent),
     retry: 3,
@@ -36,6 +38,13 @@ function PlayersSection() {
   const { players } = data.data.data;
   return (
     <div className="players-section">
+      <button
+        type="button"
+        className="home-section__create"
+        onClick={() => setCreatePlayerPopup({ show: true })}
+      >
+        Create a Player
+      </button>
       <Swiper
         pagination={{
           dynamicBullets: true,
@@ -52,6 +61,14 @@ function PlayersSection() {
           );
         })}
       </Swiper>
+
+      {/* Create Game Popup */}
+      {createPlayerPopup.show && (
+        <CreatePlayerPopup
+          setCreatePlayerPopup={setCreatePlayerPopup}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 }
