@@ -142,7 +142,8 @@ module.exports = {
         );
 
     // Cache Data
-    await cacheData(getUserKey(uid), 60 * 60, { user });
+    const { key, interval } = getUserKey(uid);
+    await cacheData(key, interval, { user });
     res
       .status(200)
       .json({ data: { user, customAccessToken: accessToken }, error: null });
